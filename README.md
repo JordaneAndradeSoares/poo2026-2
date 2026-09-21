@@ -80,6 +80,7 @@ Cada tela é um par **FXML + Controller**, trocadas por um `GerenciadorDeTelas` 
 
 ## Equipe
 
+```
 Gean Augusto Lino de Oliveira - 6578
 Luiz Henrique Laudares - 6596
 Thomaz Augusto Araújo Silva - 6577
@@ -87,6 +88,7 @@ Jordane Andrade Soares - 5106
 Rafael de Matos Silva - 6575
 Mateus Henrique Braz - 6594
 Passur Caio Lélis Alves - 6590
+```
 
 ## Status do projeto
 
