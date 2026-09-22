@@ -25,9 +25,9 @@ Os **professores do curso** fazem o papel das plantas e atiram **linguagens de p
 ```
 Entidade (abstrata)
  ├── Professor (abstrata)         → vida, linha, coluna, custoCafe, cadenciaTiro
- │     ├── ProfessorPhilipe       → atira TiroPython
+ │     ├── ProfessorPhilipe       → atira Python
  │     ├── ProfessoraThais        → atira ...
- │     ├── ProfessorMarcus        → atira ...
+ │     ├── ProfessorMarcus        → atira Matlab
  │     ├── ProfessorDaniel        → atira C
  │     ├── ProfessoraGlaucia      → atira ...
  │     ├── ProfessorNacif         → atira Verilog
