@@ -1,6 +1,6 @@
 # Professores vs Zumbiversitários 🧟‍♂️☕
 
-Mini-jogo em Java, inspirado em *Plants vs Zombies*, desenvolvido como TP da disciplina de CDC. O objetivo é aplicar conceitos de POO (herança, polimorfismo, interfaces) e trabalhar em equipe com um projeto Java completo, incluindo interface gráfica.
+Mini-jogo em Java, inspirado em *Plants vs Zombies*, desenvolvido como TP da disciplina de POO. O objetivo é aplicar conceitos de POO (herança, polimorfismo, interfaces) e trabalhar em equipe com um projeto Java completo, incluindo interface gráfica.
 
 ## Tema
 
@@ -92,4 +92,4 @@ Passur Caio Lélis Alves - 6590
 
 ## Status do projeto
 
-🚧 Em desenvolvimento — TP da disciplina de CDC.
+🚧 Em desenvolvimento — TP da disciplina de POO.
