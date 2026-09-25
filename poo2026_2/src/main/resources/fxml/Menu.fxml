@@ -1,17 +1,51 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.net.URL?>
+<?import javafx.scene.Group?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.StackPane?>
 
-<VBox alignment="CENTER" prefHeight="445.0" prefWidth="543.0" spacing="20" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.poo2026_2.controller.MenuController">
+<StackPane fx:id="root" styleClass="menu-root" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.poo2026_2.controller.MenuController">
 
-    <Label text="POO 2026-2" />
+    <!-- Sem isso o menu.css nunca era aplicado: faltava essa declaracao. -->
+    <stylesheets>
+        <URL value="@../styles/menu.css" />
+    </stylesheets>
 
-    <Button onAction="#iniciarJogo" text="Iniciar Jogo" />
+    <!-- IMAGEM DE FUNDO -->
+    <ImageView fitHeight="${root.height}" fitWidth="${root.width}" pickOnBounds="true" preserveRatio="false">
+        <image>
+            <Image url="@../images/menu/menu-background.png" />
+        </image>
+    </ImageView>
 
-    <Button text="Extras" />
+    <AnchorPane fx:id="painelBotoes" maxHeight="720.0" maxWidth="1280.0" minHeight="720.0" minWidth="1280.0" pickOnBounds="false" prefHeight="720.0" prefWidth="1280.0">
 
-    <Button text="Créditos" />
+        <!--
+            Origem do vapor do cafe, alinhada com a borda da xicara na
+            imagem de fundo (coordenadas no canvas de referencia 1280x720).
+            As "baforadas" sao criadas e animadas em codigo (MenuController).
+        -->
+        <Group fx:id="vaporCafeEsquerda" layoutX="220.0" layoutY="480.0" mouseTransparent="true" />
+        <Group fx:id="vaporCafeDireita" layoutX="240.0" layoutY="480.0" mouseTransparent="true" />
 
-</VBox>
+        <!--JOGAR -->
+        <Button fx:id="btnJogar" layoutX="849.0" layoutY="101.0" onAction="#iniciarJogo" prefHeight="112.0" prefWidth="384.0" styleClass="menu-btn, menu-btn-play" />
+
+        <!--CONFIGURAÇÕES-->
+        <Button fx:id="btnConfiguracoes" layoutX="850.0" layoutY="213.0" onAction="#abrirConfiguracoes" prefHeight="112.0" prefWidth="384.0" styleClass="menu-btn, menu-btn-config" />
+
+        <!-- CRÉDITOS -->
+        <Button fx:id="btnCreditos" layoutX="850.0" layoutY="323.0" onAction="#abrirCreditos" prefHeight="112.0" prefWidth="384.0" styleClass="menu-btn, menu-btn-creditos" />
+
+        <!-- SAIR -->
+        <Button fx:id="btnSair" layoutX="849.0" layoutY="435.0" onAction="#sair" prefHeight="112.0" prefWidth="384.0" styleClass="menu-btn, menu-btn-sair" />
+
+
+    </AnchorPane>
+
+</StackPane>

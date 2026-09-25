@@ -34,6 +34,13 @@
             <version>${javafx.version}</version>
         </dependency>
 
+        <!-- Necessário para tocar audio (musica do menu, efeitos sonoros) -->
+        <dependency>
+            <groupId>org.openjfx</groupId>
+            <artifactId>javafx-media</artifactId>
+            <version>${javafx.version}</version>
+        </dependency>
+
     </dependencies>
 
     <build>

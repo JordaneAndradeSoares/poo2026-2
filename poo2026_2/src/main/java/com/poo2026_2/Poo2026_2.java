@@ -1,36 +1,92 @@
 package com.poo2026_2;
 
 import com.poo2026_2.controller.GerenciadorDeTelas;
-import com.poo2026_2.controller.MenuController;
+import com.poo2026_2.model.ConfiguracoesJogo;
 import javafx.application.Application;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
+import javafx.stage.Screen;
 import javafx.stage.Stage;
 
 public class Poo2026_2 extends Application {
 
-    @Override
-    public void start(Stage stage) throws Exception {
+    private static final double ASPECTO = 16.0 / 9.0;
 
-        FXMLLoader loader = new FXMLLoader(
-                getClass().getResource("/fxml/Menu.fxml")
+    @Override
+    public void start(Stage stage) {
+
+        stage.setTitle("Professores vs Zumbiversitários");
+
+        // O usuário não redimensiona a janela manualmente.
+        // A resolução é escolhida pelas configurações do jogo.
+        stage.setResizable(false);
+
+        double[] resolucao = obterResolucaoValida(
+                ConfiguracoesJogo.getResolucao()
         );
 
-        Parent root = loader.load();
-
-        MenuController controller = loader.getController();
+        stage.setWidth(resolucao[0]);
+        stage.setHeight(resolucao[1]);
 
         GerenciadorDeTelas gerenciadorDeTelas =
                 new GerenciadorDeTelas(stage);
 
-        controller.setGerenciadorDeTelas(gerenciadorDeTelas);
+        gerenciadorDeTelas.mudarTela("Menu.fxml");
 
-        Scene scene = new Scene(root, 800, 600);
+        stage.setFullScreen(ConfiguracoesJogo.isTelaCheia());
 
-        stage.setTitle("POO 2026-2");
-        stage.setScene(scene);
         stage.show();
+
+        // Garante que a janela comece centralizada.
+        if (!stage.isFullScreen()) {
+            stage.centerOnScreen();
+        }
+    }
+
+    /* Verifica se a resolução salva cabe no monitor.
+     * Se não couber, utiliza a maior resolução 16:9 disponível.*/
+    public static double[] obterResolucaoValida(String resolucao) {
+
+        double larguraMonitor =
+                Screen.getPrimary().getVisualBounds().getWidth();
+
+        double alturaMonitor =
+                Screen.getPrimary().getVisualBounds().getHeight();
+
+        double largura;
+        double altura;
+
+        try {
+            String[] partes = resolucao.split("x");
+
+            largura = Double.parseDouble(partes[0]);
+            altura = Double.parseDouble(partes[1]);
+
+        } catch (Exception e) {
+
+            largura = 1280;
+            altura = 720;
+        }
+
+        /* Verifica se a resolução escolhida cabe no monitor. */
+        if (largura <= larguraMonitor &&
+            altura <= alturaMonitor) {
+
+            return new double[]{largura, altura};
+        }
+
+        /* Se não couber, calcula a maior área 16:9 possível dentro do monitor. */
+        double larguraMaxima = larguraMonitor;
+        double alturaMaxima = larguraMaxima / ASPECTO;
+
+        if (alturaMaxima > alturaMonitor) {
+
+            alturaMaxima = alturaMonitor;
+            larguraMaxima = alturaMaxima * ASPECTO;
+        }
+
+        return new double[]{
+                Math.floor(larguraMaxima),
+                Math.floor(alturaMaxima)
+        };
     }
 
     public static void main(String[] args) {

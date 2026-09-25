@@ -1,14 +1,35 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import java.net.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Slider?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.VBox?>
 
-<AnchorPane id="AnchorPane" prefHeight="400.0" prefWidth="600.0" styleClass="mainFxmlClass" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.poo2026_2.controller.ExtrasController">
-    <stylesheets>
-        <URL value="@/styles/extras.css"/>
-    </stylesheets>
+<AnchorPane prefHeight="720.0" prefWidth="1280.0"
+            xmlns="http://javafx.com/javafx/26"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.poo2026_2.controller.ExtrasController"
+            styleClass="settings-root">
+
+    <Label layoutX="500.0" layoutY="60.0" text="CONFIGURAÇÕES" styleClass="settings-title" />
+
+    <VBox layoutX="410.0" layoutY="145.0" prefWidth="460.0" spacing="20.0" styleClass="settings-panel">
+        <Label text="Resolução" styleClass="settings-label" />
+        <ComboBox fx:id="comboResolucao" prefWidth="460.0" styleClass="settings-control" />
+
+        <Label text="Volume da música" styleClass="settings-label" />
+        <Slider fx:id="sliderMusica" min="0" max="100" showTickLabels="true" />
+
+        <Label text="Volume dos efeitos" styleClass="settings-label" />
+        <Slider fx:id="sliderEfeitos" min="0" max="100" showTickLabels="true" />
+
+        <CheckBox fx:id="checkMudo" text="Silenciar sons" styleClass="settings-check" />
+        <CheckBox fx:id="checkTelaCheia" text="Tela cheia" styleClass="settings-check" />
+
+        <Button text="APLICAR" onAction="#aplicar" styleClass="settings-button" />
+        <Button text="VOLTAR" onAction="#voltar" styleClass="settings-button" />
+    </VBox>
 </AnchorPane>
