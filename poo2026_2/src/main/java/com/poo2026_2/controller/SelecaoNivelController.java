@@ -4,23 +4,48 @@
  */
 package com.poo2026_2.controller;
 
+import com.poo2026_2.audio.AudioManager;
 import java.net.URL;
 import java.util.ResourceBundle;
-import javafx.fxml.Initializable;
+import javafx.fxml.FXML;
+import javafx.scene.control.Button;
 
-/**
- * FXML Controller class
- *
- * @author thoma
- */
-public class SelecaoNivelController implements Initializable {
+public class SelecaoNivelController
+        implements ControladorTela {
 
-    /**
-     * Initializes the controller class.
-     */
+    @FXML
+    private Button btnVoltar;
+
+    private GerenciadorDeTelas gerenciadorDeTelas;
+
     @Override
-    public void initialize(URL url, ResourceBundle rb) {
-        // TODO
-    }    
-    
+    public void setGerenciadorDeTelas(
+            GerenciadorDeTelas gerenciadorDeTelas) {
+
+        this.gerenciadorDeTelas = gerenciadorDeTelas;
+    }
+
+    @FXML
+    private void initialize() {
+
+        configurarSomDeHover(btnVoltar);
+    }
+
+    // Toca o mesmo som usado pelos botões do menu quando o mouse passa sobre o botão.
+    private void configurarSomDeHover(Button... botoes) {
+
+        for (Button botao : botoes) {
+
+            botao.setOnMouseEntered(
+                    event -> AudioManager.tocarSomHoverBotao()
+            );
+        }
+    }
+
+    // Volta para o menu principal.
+    @FXML
+    private void voltar() {
+
+        gerenciadorDeTelas.mudarTela("Menu.fxml");
+    }
 }

@@ -8,19 +8,34 @@ import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.fxml.Initializable;
 
+import javafx.fxml.FXML;
+
 /**
  * FXML Controller class
  *
  * @author thoma
  */
-public class CreditosController implements Initializable {
 
-    /**
-     * Initializes the controller class.
-     */
+public class CreditosController implements Initializable, ControladorTela {
+
+    private GerenciadorDeTelas gerenciadorDeTelas;
+
+    @Override
+    public void setGerenciadorDeTelas(GerenciadorDeTelas gerenciadorDeTelas) {
+
+        this.gerenciadorDeTelas = gerenciadorDeTelas;
+
+    }
+
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        // TODO
-    }    
-    
+
+    }
+
+    @FXML
+    private void voltar() {
+
+        gerenciadorDeTelas.voltarMenu();
+
+    }
 }

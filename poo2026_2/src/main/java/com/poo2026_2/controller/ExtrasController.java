@@ -20,8 +20,11 @@ public class ExtrasController implements ControladorTela {
     private Slider sliderEfeitos;
     @FXML
     private CheckBox checkMudo;
+    
+    /*
     @FXML
     private CheckBox checkTelaCheia;
+    */
 
     private GerenciadorDeTelas gerenciadorDeTelas;
 
@@ -47,9 +50,11 @@ public class ExtrasController implements ControladorTela {
                 ConfiguracoesJogo.isMudo()
         );
 
+        /*
         checkTelaCheia.setSelected(
                 ConfiguracoesJogo.isTelaCheia()
         );
+        */
     }
 
     private void carregarResolucionesDisponiveis() {
@@ -70,21 +75,23 @@ public class ExtrasController implements ControladorTela {
             "1600x900",
             "1920x1080",
             "2560x1440",
-            "3840x2160"
+            "3840x2160", 
+            "Tela cheia"
         };
 
         for (String resolucao : resolucoes) {
 
+            if (resolucao.equals("Tela cheia")) {
+                comboResolucao.getItems().add(resolucao);
+                continue;
+            }
+
             String[] partes = resolucao.split("x");
 
-            double largura
-                    = Double.parseDouble(partes[0]);
+            double largura = Double.parseDouble(partes[0]);
+            double altura = Double.parseDouble(partes[1]);
 
-            double altura
-                    = Double.parseDouble(partes[1]);
-
-            if (largura <= larguraMonitor
-                    && altura <= alturaMonitor) {
+            if (largura <= larguraMonitor && altura <= alturaMonitor) {
 
                 comboResolucao.getItems().add(resolucao);
             }
@@ -107,6 +114,7 @@ public class ExtrasController implements ControladorTela {
         }
     }
 
+    /*
     @FXML
     private void aplicar(ActionEvent event) {
         ConfiguracoesJogo.setResolucao(comboResolucao.getValue());
@@ -128,6 +136,55 @@ public class ExtrasController implements ControladorTela {
         if (!checkTelaCheia.isSelected()) {
             stage.setWidth(largura);
             stage.setHeight(altura);
+            stage.centerOnScreen();
+        }
+    }
+    */
+
+    @FXML
+    private void aplicar(ActionEvent event) {
+
+        String escolha = comboResolucao.getValue();
+
+        // Salva volumes
+        ConfiguracoesJogo.setVolumeMusica(sliderMusica.getValue() / 100.0);
+
+        ConfiguracoesJogo.setVolumeEfeitos(sliderEfeitos.getValue() / 100.0);
+
+        // Salva mudo
+        ConfiguracoesJogo.setMudo(checkMudo.isSelected());
+
+        // Atualiza música imediatamente
+        AudioManager.aplicarVolumeMusica();
+
+        Stage stage = gerenciadorDeTelas.getStage();
+
+        // Caso escolha "Tela cheia"
+        if (escolha.equals("Tela cheia")) {
+
+            ConfiguracoesJogo.setTelaCheia(true);
+
+            stage.setFullScreen(true);
+
+        } 
+        
+        // Caso escolha uma resolução normal
+        else {
+
+            ConfiguracoesJogo.setTelaCheia(false);
+
+            String[] partes = escolha.split("x");
+
+            double largura = Double.parseDouble(partes[0]);
+            double altura = Double.parseDouble(partes[1]);
+
+            ConfiguracoesJogo.setResolucao(escolha);
+
+            stage.setFullScreen(false);
+
+            stage.setWidth(largura);
+            stage.setHeight(altura);
+
             stage.centerOnScreen();
         }
     }
