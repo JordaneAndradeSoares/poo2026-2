@@ -3,7 +3,7 @@
  */
  
 .mainFxmlClass {
-    -fx-background-color: #07131b; /* cor de fundo da tela de seleção de nível */
+    -fx-background-color: green; /* cor de fundo da tela */
 }
 
 /* TÍTULO */
