@@ -5,6 +5,7 @@ import com.poo2026_2.model.ConfiguracoesJogo;
 import javafx.application.Application;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
+import javafx.scene.image.Image;
 
 public class Poo2026_2 extends Application {
 
@@ -12,11 +13,12 @@ public class Poo2026_2 extends Application {
 
     @Override
     public void start(Stage stage) {
-
+        stage.getIcons().add(
+            new Image(getClass().getResourceAsStream("/images/logo_game.png"))
+        );
         stage.setTitle("Professores vs Zumbiversitários");
 
-        // O usuário não redimensiona a janela manualmente.
-        // A resolução é escolhida pelas configurações do jogo.
+
         stage.setResizable(false);
 
         double[] resolucao = obterResolucaoValida(

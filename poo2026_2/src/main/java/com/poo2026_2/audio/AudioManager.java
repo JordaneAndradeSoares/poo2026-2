@@ -4,13 +4,24 @@ import com.poo2026_2.model.ConfiguracoesJogo;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
+
 public final class AudioManager {
 
     private static final String MUSICA_MENU = "/audio/menu-loop.mp3";
     private static final String SOM_HOVER_BOTAO = "/audio/botao-hover.m4a";
+    private static final String SOM_TROVAO1 = "/audio/trovao1.m4a";
+    private static final String SOM_TROVAO2 = "/audio/trovao2.m4a";
 
     private static MediaPlayer musicaAtual;
-    private static Media somHoverCache;
+
+    private static final Set<MediaPlayer> efeitosTocando = new HashSet<>();
+
+    /** Cache de Media por caminho, para nao recarregar o arquivo toda vez. */
+    private static final Map<String, Media> cacheMedia = new HashMap<>();
 
     private AudioManager() {
     }
@@ -66,6 +77,15 @@ public final class AudioManager {
     public static void tocarSomHoverBotao() {
         tocarEfeito(SOM_HOVER_BOTAO);
     }
+    
+    /** Toca o som do trovao. */
+    public static void tocarSomTrovao1() {
+        tocarEfeito(SOM_TROVAO1);
+    }
+    
+    public static void tocarSomTrovao2() {
+        tocarEfeito(SOM_TROVAO2);
+    }
 
     /** Toca um efeito sonoro curto uma vez (nao interrompe a musica). */
     public static void tocarEfeito(String caminhoRecurso) {
@@ -74,20 +94,10 @@ public final class AudioManager {
         }
 
         try {
-            if (SOM_HOVER_BOTAO.equals(caminhoRecurso)) {
-                if (somHoverCache == null) {
-                    somHoverCache = new Media(
-                            AudioManager.class.getResource(caminhoRecurso).toExternalForm()
-                    );
-                }
-                tocarEfeitoDescartavel(somHoverCache);
-                return;
-            }
-
-            Media media = new Media(
-                    AudioManager.class.getResource(caminhoRecurso).toExternalForm()
+            Media media = cacheMedia.computeIfAbsent(caminhoRecurso, caminho ->
+                    new Media(AudioManager.class.getResource(caminho).toExternalForm())
             );
-            tocarEfeitoDescartavel(media);
+            tocarEfeitoDescartavel(media, caminhoRecurso);
 
         } catch (Exception e) {
             System.err.println(
@@ -96,11 +106,21 @@ public final class AudioManager {
         }
     }
 
-    private static void tocarEfeitoDescartavel(Media media) {
+    private static void tocarEfeitoDescartavel(Media media, String caminho) {
         MediaPlayer player = new MediaPlayer(media);
+        efeitosTocando.add(player);   // referencia forte ate o fim
+
+        Runnable liberar = () -> {
+            efeitosTocando.remove(player);
+            player.dispose();
+        };
+
         player.setVolume(ConfiguracoesJogo.getVolumeEfeitos());
-        player.setOnEndOfMedia(player::dispose);
-        player.setOnError(player::dispose);
+        player.setOnEndOfMedia(liberar);
+        player.setOnError(() -> {
+            System.err.println("Erro ao tocar '" + caminho + "': " + player.getError());
+            liberar.run();
+        });
         player.play();
     }
 }

@@ -11,11 +11,15 @@ import javafx.fxml.FXML;
 import javafx.scene.Group;
 import javafx.scene.control.Button;
 import javafx.scene.effect.GaussianBlur;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Ellipse;
+import javafx.animation.PauseTransition;
 import javafx.util.Duration;
+
+import java.util.Random;
 
 public class MenuController implements ControladorTela {
 
@@ -23,11 +27,33 @@ public class MenuController implements ControladorTela {
     private static final double LARGURA_REFERENCIA = 1920.0;
     private static final double ALTURA_REFERENCIA = 1080.0;
 
-    /** Quantidade de "baforadas" de vapor simultaneas (efeito mais denso). */
+    /** Quantidade de baforadas de vapor simultaneas. */
     private static final int QUANTIDADE_PARTICULAS_VAPOR = 7;
+
+    /** Intervalos (em segundos) entre um trovao e o proximo. */
+    private static final int PRIMEIRO_TROVAO_MIN_S = 6;
+    private static final int PRIMEIRO_TROVAO_MAX_S = 15;
+    private static final int PROXIMO_TROVAO_MIN_S = 15;
+    private static final int PROXIMO_TROVAO_MAX_S = 25;
+
+    /** Duracao de cada audio de trovão (ms). */
+    private static final double DURACAO_TROVAO1_MS = 5300;
+    private static final double DURACAO_TROVAO2_MS = 5950;
+
+    /** No ultimo 1s do trovao, o fundo pisca 5 vezes (10 trocas de 100ms). */
+    private static final int TROCAS_FINAIS = 10;
+    private static final double MS_POR_TROCA = 100;
+
+    private final Random sorteio = new Random();
+    private PauseTransition espera;
+    private Timeline piscada;
+    private boolean proximoEhTrovao1 = true;
 
     @FXML
     private StackPane root;
+
+    @FXML
+    private ImageView fundoNoite;
 
     @FXML
     private AnchorPane painelBotoes;
@@ -55,7 +81,6 @@ public class MenuController implements ControladorTela {
     @Override
     public void setGerenciadorDeTelas(
             GerenciadorDeTelas gerenciadorDeTelas) {
-
         this.gerenciadorDeTelas = gerenciadorDeTelas;
     }
 
@@ -70,6 +95,7 @@ public class MenuController implements ControladorTela {
         );
 
         iniciarVaporCafe();
+        configurarCicloDeTrovoes();
 
         AudioManager.tocarMusicaMenu();
         configurarSomDeHover(btnJogar, btnConfiguracoes, btnCreditos, btnSair);
@@ -83,9 +109,82 @@ public class MenuController implements ControladorTela {
             );
         }
     }
+    
+    /**
+     * Comeca o ciclo de trovoes quando o menu entra na tela e para tudo
+     * quando ele sai (o root perde a Scene ao trocar de tela).
+     */
+    private void configurarCicloDeTrovoes() {
+        root.sceneProperty().addListener((obs, antiga, nova) -> {
+            if (nova != null) {
+                agendarProximoTrovao(PRIMEIRO_TROVAO_MIN_S, PRIMEIRO_TROVAO_MAX_S);
+            } else {
+                pararCicloDeTrovoes();
+            }
+        });
+    }
+
+    private void pararCicloDeTrovoes() {
+        if (espera != null) {
+            espera.stop();
+        }
+        if (piscada != null) {
+            piscada.stop();
+        }
+        fundoNoite.setVisible(false);
+    }
+
+    /** Espera um tempo aleatorio entre minS e maxS segundos e dispara o trovao. */
+    private void agendarProximoTrovao(int minS, int maxS) {
+        // nextInt(origem, limite): limite e exclusivo, por isso o +1
+        int segundos = sorteio.nextInt(minS, maxS + 1);
+
+        espera = new PauseTransition(Duration.seconds(segundos));
+        espera.setOnFinished(e -> executarTrovao());
+        espera.play();
+    }
 
     /**
-     * Cria varias "baforadas" de vapor (elipses com blur) que sobem,
+     * Toca o som, troca pro fundo noturno e, no ultimo segundo do audio,
+     * alterna entre noite/dia 5 vezes ate voltar ao fundo normal.
+     * Depois agenda o proximo (alternando trovao1 e trovao2).
+     */
+    private void executarTrovao() {
+        double duracaoMs;
+
+        if (proximoEhTrovao1) {
+            AudioManager.tocarSomTrovao1();
+            duracaoMs = DURACAO_TROVAO1_MS;
+        } else {
+            AudioManager.tocarSomTrovao2();
+            duracaoMs = DURACAO_TROVAO2_MS;
+        }
+        proximoEhTrovao1 = !proximoEhTrovao1;
+
+        double inicioPiscadaMs = duracaoMs - TROCAS_FINAIS * MS_POR_TROCA;
+
+        piscada = new Timeline();
+        piscada.getKeyFrames().add(new KeyFrame(Duration.ZERO,
+                e -> fundoNoite.setVisible(true)));
+
+        for (int i = 0; i < TROCAS_FINAIS; i++) {
+            boolean noite = (i % 2 == 0);   // 0=noite, 1=dia, 2=noite ... 9=dia
+            piscada.getKeyFrames().add(new KeyFrame(
+                    Duration.millis(inicioPiscadaMs + i * MS_POR_TROCA),
+                    e -> fundoNoite.setVisible(noite)));
+        }
+
+        // Garante o fundo normal no fim e agenda o proximo trovao.
+        piscada.getKeyFrames().add(new KeyFrame(Duration.millis(duracaoMs), e -> {
+            fundoNoite.setVisible(false);
+            agendarProximoTrovao(PROXIMO_TROVAO_MIN_S, PROXIMO_TROVAO_MAX_S);
+        }));
+
+        piscada.play();
+    }
+
+    /**
+     * Cria varias baforadas de vapor (elipses com blur) que sobem,
      * crescem e desaparecem em looping, saindo da xicara na imagem
      * de fundo.
      */

@@ -2,8 +2,6 @@
     -fx-background-color: #07131b;
 }
 
-/* Botoes do menu agora usam as artes prontas (normal / hover) da
-   referencia do design, uma imagem por estado, trocadas via :hover. */
 .menu-btn {
     -fx-background-color: transparent;
     -fx-background-insets: 0;
