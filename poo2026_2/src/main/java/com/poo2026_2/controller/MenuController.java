@@ -137,7 +137,7 @@ public class MenuController implements ControladorTela {
     /** Espera um tempo aleatorio entre minS e maxS segundos e dispara o trovao. */
     private void agendarProximoTrovao(int minS, int maxS) {
         // nextInt(origem, limite): limite e exclusivo, por isso o +1
-        int segundos = sorteio.nextInt(minS, maxS + 1);
+        int segundos = sorteio.nextInt((maxS - minS) + 1) + minS;
 
         espera = new PauseTransition(Duration.seconds(segundos));
         espera.setOnFinished(e -> executarTrovao());
