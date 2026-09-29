@@ -2,8 +2,10 @@ package com.poo2026_2.controller;
 
 import java.net.URL;
 import java.util.ResourceBundle;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
@@ -15,30 +17,40 @@ import javafx.scene.layout.StackPane;
  * @author thoma
  */
 
-public class JogoController implements Initializable {
+public class JogoController implements ControladorTela, Initializable {
 
     // deve alinhar com a imagem
-    // Coordenadas em pixels da IMAGEM ORIGINAL (1672 x 941).
+    // Coordenadas em pixels da imagem original (1672 x 941).
     private static final double LARGURA_PALCO = 1672;
     private static final double ALTURA_PALCO  = 941;
 
-    private static final int    LINHAS   = 5;
-    private static final int    COLUNAS  = 9;
-    private static final double GRADE_X  = 230;  // canto superior esquerdo da grade
-    private static final double GRADE_Y  = 245;
-    private static final double CEL_LARG = 148;  // tamanho de cada casa
-    private static final double CEL_ALT  = 132;
+    private static final int LINHAS   = 5;
+    private static final int COLUNAS  = 12;
+    private static final double GRADE_X  = 240;  // canto superior esquerdo da grade
+    private static final double GRADE_Y  = 255;
+    private static final double CEL_LARG = 110;  // tamanho de cada casa
+    private static final double CEL_ALT  = 130;
     // =================================================================
 
     @FXML private StackPane raiz;
     @FXML private Pane palco;
     @FXML private GridPane grade;
     @FXML private Pane camadaJogo;
+    
+    @FXML private Button btnVoltar;
+    
+    private GerenciadorDeTelas gerenciadorDeTelas;
+
+    @Override
+    public void setGerenciadorDeTelas(
+            GerenciadorDeTelas gerenciadorDeTelas) {
+        this.gerenciadorDeTelas = gerenciadorDeTelas;
+    }
 
     // Placeholder da view: quais casas estao ocupadas (o modelo real fica no Tabuleiro)
     private final StackPane[][] celulas = new StackPane[LINHAS][COLUNAS];
 
-    @Override
+
     public void initialize(URL url, ResourceBundle rb) {
         montarGrade();
         ajustarEscala();
@@ -55,7 +67,6 @@ public class JogoController implements Initializable {
                 celula.setMinSize(CEL_LARG, CEL_ALT);
                 celula.setMaxSize(CEL_LARG, CEL_ALT);
                 celula.getStyleClass().add("celula");
-                // xadrez sutil, igual Plants vs Zombies
                 celula.getStyleClass().add((l + c) % 2 == 0 ? "celula-clara" : "celula-escura");
 
                 final int linha = l, coluna = c;
@@ -92,5 +103,10 @@ public class JogoController implements Initializable {
         };
         raiz.widthProperty().addListener((o, a, b) -> atualizar.run());
         raiz.heightProperty().addListener((o, a, b) -> atualizar.run());
+    }
+    
+    @FXML
+    private void voltar(ActionEvent event) {
+        gerenciadorDeTelas.voltarMenu();
     }
 }

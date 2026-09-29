@@ -13,29 +13,40 @@ public final class AudioManager {
 
     private static final String MUSICA_MENU = "/audio/menu-loop.mp3";
     private static final String SOM_HOVER_BOTAO = "/audio/botao-hover.m4a";
+    private static final String CLICK_BOTAO = "/audio/clickButton.m4a";
     private static final String SOM_TROVAO1 = "/audio/trovao1.m4a";
     private static final String SOM_TROVAO2 = "/audio/trovao2.m4a";
 
     private static MediaPlayer musicaAtual;
+    private static String caminhoMusicaAtual;
 
     private static final Set<MediaPlayer> efeitosTocando = new HashSet<>();
 
-    /** Cache de Media por caminho, para nao recarregar o arquivo toda vez. */
+    /**
+     * Cache de Media por caminho, para nao recarregar o arquivo toda vez.
+     */
     private static final Map<String, Media> cacheMedia = new HashMap<>();
 
     private AudioManager() {
     }
 
-    /** Toca a musica do menu em loop infinito (para a anterior, se houver). */
+    /**
+     * Toca a musica do menu em loop infinito (para a anterior, se houver).
+     */
     public static void tocarMusicaMenu() {
         tocarMusica(MUSICA_MENU);
     }
 
     /**
-     * Toca uma musica (caminho dentro de resources) em loop infinito,
-     * parando qualquer musica que já estivesse tocando.
+     * Toca uma musica (caminho dentro de resources) em loop infinito, parando
+     * qualquer musica que já estivesse tocando.
      */
     public static void tocarMusica(String caminhoRecurso) {
+        if (musicaAtual != null && caminhoRecurso.equals(caminhoMusicaAtual)) {
+            aplicarVolumeMusica();
+            return;
+        }
+
         pararMusica();
 
         try {
@@ -44,6 +55,7 @@ public final class AudioManager {
             );
 
             musicaAtual = new MediaPlayer(media);
+            caminhoMusicaAtual = caminhoRecurso;
             musicaAtual.setCycleCount(MediaPlayer.INDEFINITE);
             aplicarVolumeMusica();
             musicaAtual.play();
@@ -60,6 +72,7 @@ public final class AudioManager {
             musicaAtual.stop();
             musicaAtual.dispose();
             musicaAtual = null;
+            caminhoMusicaAtual = null;
         }
     }
 
@@ -73,29 +86,39 @@ public final class AudioManager {
         }
     }
 
-    /** Toca o som de "mouse em cima do botão" uma vez. */
+    /**
+     * Toca o som de "mouse em cima do botão" uma vez.
+     */
     public static void tocarSomHoverBotao() {
         tocarEfeito(SOM_HOVER_BOTAO);
     }
-    
-    /** Toca o som do trovao. */
+
+    /**
+     * Toca o som do trovao.
+     */
     public static void tocarSomTrovao1() {
         tocarEfeito(SOM_TROVAO1);
     }
-    
+
     public static void tocarSomTrovao2() {
         tocarEfeito(SOM_TROVAO2);
     }
 
-    /** Toca um efeito sonoro curto uma vez (nao interrompe a musica). */
+    public static void tocarSomBotao() {
+        tocarEfeito(CLICK_BOTAO);
+    }
+
+    /**
+     * Toca um efeito sonoro curto uma vez (nao interrompe a musica).
+     */
     public static void tocarEfeito(String caminhoRecurso) {
         if (ConfiguracoesJogo.isMudo()) {
             return;
         }
 
         try {
-            Media media = cacheMedia.computeIfAbsent(caminhoRecurso, caminho ->
-                    new Media(AudioManager.class.getResource(caminho).toExternalForm())
+            Media media = cacheMedia.computeIfAbsent(caminhoRecurso, caminho
+                    -> new Media(AudioManager.class.getResource(caminho).toExternalForm())
             );
             tocarEfeitoDescartavel(media, caminhoRecurso);
 
