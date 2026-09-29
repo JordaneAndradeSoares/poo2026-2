@@ -1,14 +1,35 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
 <?import java.net.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
-<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane id="AnchorPane" prefHeight="400.0" prefWidth="600.0" styleClass="mainFxmlClass" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.poo2026_2.controller.JogoController">
+<!--
+  Raiz: StackPane que ocupa a janela toda.
+  Dentro dela, o "palco" tem tamanho FIXO (1672x941 = tamanho do background.png)
+  e é escalado pelo controller para caber em qualquer resolucao 16:9.
+  Assim a grade sempre fica alinhada com a imagem.
+-->
+<StackPane fx:id="raiz" style="-fx-background-color: black;"
+           xmlns:fx="http://javafx.com/fxml/1"
+           fx:controller="com.poo2026_2.controller.JogoController">
     <stylesheets>
         <URL value="@/styles/jogo.css"/>
     </stylesheets>
-</AnchorPane>
+
+    <Pane fx:id="palco" prefWidth="1672" prefHeight="941" minWidth="1672" minHeight="941" maxWidth="1672" maxHeight="941">
+
+        <!-- Camada 1: so visual -->
+        <ImageView fitWidth="1672" fitHeight="941" preserveRatio="false">
+            <image>
+                <Image url="@/images/game/background.png"/>
+            </image>
+        </ImageView>
+
+        <!-- Camada 2: grade logica 5 x 9 (posicao/tamanho definidos no controller) -->
+        <GridPane fx:id="grade" styleClass="grade"/>
+
+        <!-- Camada 3: zumbis e projeteis (movimento livre em pixels) -->
+        <Pane fx:id="camadaJogo" prefWidth="1672" prefHeight="941" mouseTransparent="true"/>
+    </Pane>
+</StackPane>

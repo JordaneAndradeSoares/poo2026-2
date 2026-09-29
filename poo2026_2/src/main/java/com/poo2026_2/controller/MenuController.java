@@ -21,6 +21,12 @@ import javafx.util.Duration;
 
 import java.util.Random;
 
+/**
+ * FXML Controller class
+ *
+ * @author thoma
+ */
+
 public class MenuController implements ControladorTela {
 
     /** Resolucao "de referencia" em que os botoes foram desenhados no FXML. */
@@ -75,6 +81,10 @@ public class MenuController implements ControladorTela {
 
     @FXML
     private Button btnSair;
+    
+    //remover esse
+    @FXML
+    private Button btnJogo;
 
     private GerenciadorDeTelas gerenciadorDeTelas;
 
@@ -266,6 +276,13 @@ public class MenuController implements ControladorTela {
     private void abrirCreditos(ActionEvent event) {
         gerenciadorDeTelas.mudarTela(
                 "Creditos.fxml"
+        );
+    }
+    
+    @FXML
+    private void irJogo(ActionEvent event) {
+        gerenciadorDeTelas.mudarTela(
+                "Jogo.fxml"
         );
     }
 

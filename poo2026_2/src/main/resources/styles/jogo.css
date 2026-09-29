@@ -2,6 +2,32 @@
  * Empty Stylesheet file.
  */
 
-.mainFxmlClass {
+.celula {
+    -fx-background-color: transparent;
+    -fx-border-color: rgba(255, 255, 255, 0.18);
+    -fx-border-width: 1;
+}
 
+/* xadrez sutil: alterna a claridade das casas */
+.celula-clara  { -fx-background-color: rgba(255, 255, 255, 0.07); }
+.celula-escura { -fx-background-color: rgba(0, 0, 0, 0.10); }
+
+/* destaque ao passar o mouse */
+.celula:hover {
+    -fx-background-color: rgba(255, 220, 90, 0.30);
+    -fx-border-color: rgba(255, 220, 90, 0.90);
+    -fx-border-width: 2;
+    -fx-cursor: hand;
+}
+
+/* sprite temporario para testar o clique */
+.sprite-teste {
+    -fx-background-color: #2e7d32;
+    -fx-text-fill: white;
+    -fx-font-size: 36px;
+    -fx-font-weight: bold;
+    -fx-min-width: 90;
+    -fx-min-height: 90;
+    -fx-alignment: center;
+    -fx-background-radius: 45;
 }

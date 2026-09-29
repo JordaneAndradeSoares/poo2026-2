@@ -10,6 +10,12 @@ import java.util.ResourceBundle;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 
+/**
+ * FXML Controller class
+ *
+ * @author thoma
+ */
+
 public class SelecaoNivelController
         implements ControladorTela {
 
