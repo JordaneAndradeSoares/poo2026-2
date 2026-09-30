@@ -45,6 +45,14 @@
     -fx-background-image: url("../images/menu/buttons/sair_hover.png");
 }
 
+.menu-btn-teste {
+    -fx-background-image: url("../images/menu/buttons/teste_normal.png");
+}
+.menu-btn-teste:hover {
+    -fx-background-image: url("../images/menu/buttons/teste_hover.png");
+}
+
+
 .menu-btn:hover {
     -fx-scale-x: 1.035;
     -fx-scale-y: 1.035;

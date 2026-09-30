@@ -1,14 +1,45 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import java.net.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
+<?import java.lang.String?>
+<?import java.net.URL?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.StackPane?>
 
-<AnchorPane id="AnchorPane" prefHeight="400.0" prefWidth="600.0" styleClass="mainFxmlClass" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.poo2026_2.controller.JogoController">
+<!--
+  Raiz: StackPane que ocupa a janela toda.
+  Dentro dela, o "palco" tem tamanho FIXO (1672x941 = tamanho do background.png)
+  e é escalado pelo controller para caber em qualquer resolucao 16:9.
+  Assim a grade sempre fica alinhada com a imagem.
+-->
+
+<StackPane fx:id="raiz" style="-fx-background-color: black;" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.poo2026_2.controller.JogoController">
     <stylesheets>
-        <URL value="@/styles/jogo.css"/>
+        <URL value="@../styles/jogo.css" />
     </stylesheets>
-</AnchorPane>
+
+    <Pane fx:id="palco" maxHeight="941" maxWidth="1672" minHeight="941" minWidth="1672" prefHeight="941" prefWidth="1672">
+
+        <!-- Camada 1: so visual -->
+        <ImageView fitHeight="941" fitWidth="1672" preserveRatio="false">
+            <image>
+                <Image url="@../images/game/background2.png" />
+            </image>
+        </ImageView>
+
+        <!-- Camada 2: grade logica 5 x 9 (posicao/tamanho definidos no controller) -->
+        <GridPane fx:id="grade">
+         <styleClass>
+            <String fx:value="grade" />
+            <String fx:value="pane" />
+         </styleClass></GridPane>
+
+        <!-- Camada 3: zumbis e projeteis (movimento livre em pixels) -->
+        <Pane fx:id="camadaJogo" mouseTransparent="true" prefHeight="941" prefWidth="1672" />
+
+        <Button fx:id="btnVoltar" layoutX="1132.0" layoutY="90.0" mnemonicParsing="false" onAction="#voltar" prefHeight="62.0" prefWidth="200.0" styleClass="botao-voltar" stylesheets="@../styles/jogo.css" text="voltar" />
+    </Pane>
+</StackPane>
