@@ -5,17 +5,6 @@
 /*
  * Empty Stylesheet file.
  */
- 
-.mainFxmlClass {
-    -fx-background-color: purple; /* cor de fundo da tela */
-}
-
-/* TÍTULO */
-.titulo-creditos {
-    -fx-text-fill: white;
-    -fx-font-size: 28px;
-    -fx-font-weight: bold;
-}
 
 /* BOTÃO VOLTAR */
 .botao-voltar {

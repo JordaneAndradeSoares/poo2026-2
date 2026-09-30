@@ -41,7 +41,8 @@ public class GerenciadorDeTelas {
             Parent root = loader.load();
             Object controller = loader.getController();
 
-            if (controller instanceof ControladorTela tela) {
+            if (controller instanceof ControladorTela) {
+                ControladorTela tela = (ControladorTela) controller;
                 tela.setGerenciadorDeTelas(this);
             }
 
