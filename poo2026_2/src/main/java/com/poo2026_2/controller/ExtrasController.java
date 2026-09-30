@@ -20,11 +20,6 @@ public class ExtrasController implements ControladorTela {
     private Slider sliderEfeitos;
     @FXML
     private CheckBox checkMudo;
-    
-    /*
-    @FXML
-    private CheckBox checkTelaCheia;
-    */
 
     private GerenciadorDeTelas gerenciadorDeTelas;
 
@@ -49,12 +44,6 @@ public class ExtrasController implements ControladorTela {
         checkMudo.setSelected(
                 ConfiguracoesJogo.isMudo()
         );
-
-        /*
-        checkTelaCheia.setSelected(
-                ConfiguracoesJogo.isTelaCheia()
-        );
-        */
     }
 
     private void carregarResolucionesDisponiveis() {
@@ -105,8 +94,6 @@ public class ExtrasController implements ControladorTela {
 
         } else if (!comboResolucao.getItems().isEmpty()) {
 
-            // Se a resolução salva não cabe mais no monitor,
-            // pega a maior disponível.
             comboResolucao.setValue(
                     comboResolucao.getItems()
                             .get(comboResolucao.getItems().size() - 1)
@@ -114,52 +101,20 @@ public class ExtrasController implements ControladorTela {
         }
     }
 
-    /*
-    @FXML
-    private void aplicar(ActionEvent event) {
-        ConfiguracoesJogo.setResolucao(comboResolucao.getValue());
-        ConfiguracoesJogo.setVolumeMusica(sliderMusica.getValue() / 100.0);
-        ConfiguracoesJogo.setVolumeEfeitos(sliderEfeitos.getValue() / 100.0);
-        ConfiguracoesJogo.setMudo(checkMudo.isSelected());
-        ConfiguracoesJogo.setTelaCheia(checkTelaCheia.isSelected());
-
-        // Caso alguma musica esteja tocando neste momento, atualiza o
-        // volume dela na hora (sem precisar trocar de tela).
-        AudioManager.aplicarVolumeMusica();
-
-        Stage stage = gerenciadorDeTelas.getStage();
-        String[] partes = comboResolucao.getValue().split("x");
-        double largura = Double.parseDouble(partes[0]);
-        double altura = Double.parseDouble(partes[1]);
-
-        stage.setFullScreen(checkTelaCheia.isSelected());
-        if (!checkTelaCheia.isSelected()) {
-            stage.setWidth(largura);
-            stage.setHeight(altura);
-            stage.centerOnScreen();
-        }
-    }
-    */
-
     @FXML
     private void aplicar(ActionEvent event) {
 
         String escolha = comboResolucao.getValue();
 
-        // Salva volumes
         ConfiguracoesJogo.setVolumeMusica(sliderMusica.getValue() / 100.0);
 
         ConfiguracoesJogo.setVolumeEfeitos(sliderEfeitos.getValue() / 100.0);
 
-        // Salva mudo
         ConfiguracoesJogo.setMudo(checkMudo.isSelected());
 
-        // Atualiza música imediatamente
         AudioManager.aplicarVolumeMusica();
 
         Stage stage = gerenciadorDeTelas.getStage();
-
-        // Caso escolha "Tela cheia"
         if (escolha.equals("Tela cheia")) {
 
             ConfiguracoesJogo.setTelaCheia(true);
@@ -168,7 +123,6 @@ public class ExtrasController implements ControladorTela {
 
         } 
         
-        // Caso escolha uma resolução normal
         else {
 
             ConfiguracoesJogo.setTelaCheia(false);

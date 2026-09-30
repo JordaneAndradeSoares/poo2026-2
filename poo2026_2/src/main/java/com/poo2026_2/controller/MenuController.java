@@ -21,6 +21,12 @@ import javafx.util.Duration;
 
 import java.util.Random;
 
+/**
+ * FXML Controller class
+ *
+ * @author thoma
+ */
+
 public class MenuController implements ControladorTela {
 
     /** Resolucao "de referencia" em que os botoes foram desenhados no FXML. */
@@ -75,6 +81,10 @@ public class MenuController implements ControladorTela {
 
     @FXML
     private Button btnSair;
+    
+    //remover esse
+    @FXML
+    private Button btnJogo;
 
     private GerenciadorDeTelas gerenciadorDeTelas;
 
@@ -98,7 +108,8 @@ public class MenuController implements ControladorTela {
         configurarCicloDeTrovoes();
 
         AudioManager.tocarMusicaMenu();
-        configurarSomDeHover(btnJogar, btnConfiguracoes, btnCreditos, btnSair);
+        configurarSomDeHover(btnJogar, btnConfiguracoes, btnCreditos, btnSair, btnJogo);
+        configurarClick(btnJogar, btnConfiguracoes, btnCreditos, btnSair, btnJogo);
     }
 
     /** Toca um som quando o mouse entra em cada um dos botoes passados. */
@@ -106,6 +117,14 @@ public class MenuController implements ControladorTela {
         for (Button botao : botoes) {
             botao.setOnMouseEntered(
                     event -> AudioManager.tocarSomHoverBotao()
+            );
+        }
+    }
+    
+    private void configurarClick(Button... botoes) {
+        for (Button botao : botoes) {
+            botao.setOnMousePressed(
+                    event -> AudioManager.tocarSomBotao()
             );
         }
     }
@@ -266,6 +285,13 @@ public class MenuController implements ControladorTela {
     private void abrirCreditos(ActionEvent event) {
         gerenciadorDeTelas.mudarTela(
                 "Creditos.fxml"
+        );
+    }
+    
+    @FXML
+    private void irJogo(ActionEvent event) {
+        gerenciadorDeTelas.mudarTela(
+                "Jogo.fxml"
         );
     }
 
