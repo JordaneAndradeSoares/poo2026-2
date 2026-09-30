@@ -1,5 +1,6 @@
 package com.poo2026_2.controller;
 
+import com.poo2026_2.audio.AudioManager;
 import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
@@ -50,10 +51,26 @@ public class JogoController implements ControladorTela, Initializable {
     // Placeholder da view: quais casas estao ocupadas (o modelo real fica no Tabuleiro)
     private final StackPane[][] celulas = new StackPane[LINHAS][COLUNAS];
 
-
+    private void configurarSomDeHover(Button... botoes) {
+        for (Button botao : botoes) {
+            botao.setOnMouseEntered(
+                    event -> AudioManager.tocarSomHoverBotao()
+            );
+        }
+    }
+    
+    private void configurarClick(Button... botoes) {
+        for (Button botao : botoes) {
+            botao.setOnMousePressed(
+                    event -> AudioManager.tocarSomBotao()
+            );
+        }
+    }
     public void initialize(URL url, ResourceBundle rb) {
         montarGrade();
         ajustarEscala();
+        configurarSomDeHover(btnVoltar);
+        configurarClick(btnVoltar);
     }
 
     private void montarGrade() {
@@ -67,7 +84,6 @@ public class JogoController implements ControladorTela, Initializable {
                 celula.setMinSize(CEL_LARG, CEL_ALT);
                 celula.setMaxSize(CEL_LARG, CEL_ALT);
                 celula.getStyleClass().add("celula");
-                celula.getStyleClass().add((l + c) % 2 == 0 ? "celula-clara" : "celula-escura");
 
                 final int linha = l, coluna = c;
                 celula.setOnMouseClicked(e -> aoClicarNaCelula(linha, coluna));

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.lang.String?>
 <?import java.net.URL?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.image.Image?>
@@ -25,12 +26,16 @@
         <!-- Camada 1: so visual -->
         <ImageView fitHeight="941" fitWidth="1672" preserveRatio="false">
             <image>
-                <Image url="@../images/game/background.png" />
+                <Image url="@../images/game/background2.png" />
             </image>
         </ImageView>
 
         <!-- Camada 2: grade logica 5 x 9 (posicao/tamanho definidos no controller) -->
-        <GridPane fx:id="grade" styleClass="grade" />
+        <GridPane fx:id="grade">
+         <styleClass>
+            <String fx:value="grade" />
+            <String fx:value="pane" />
+         </styleClass></GridPane>
 
         <!-- Camada 3: zumbis e projeteis (movimento livre em pixels) -->
         <Pane fx:id="camadaJogo" mouseTransparent="true" prefHeight="941" prefWidth="1672" />

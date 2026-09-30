@@ -108,8 +108,8 @@ public class MenuController implements ControladorTela {
         configurarCicloDeTrovoes();
 
         AudioManager.tocarMusicaMenu();
-        configurarSomDeHover(btnJogar, btnConfiguracoes, btnCreditos, btnSair);
-        configurarClick(btnJogar, btnConfiguracoes, btnCreditos, btnSair);
+        configurarSomDeHover(btnJogar, btnConfiguracoes, btnCreditos, btnSair, btnJogo);
+        configurarClick(btnJogar, btnConfiguracoes, btnCreditos, btnSair, btnJogo);
     }
 
     /** Toca um som quando o mouse entra em cada um dos botoes passados. */

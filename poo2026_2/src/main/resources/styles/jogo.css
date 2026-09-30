@@ -3,20 +3,15 @@
  */
 
 .celula {
-    -fx-background-color: transparent;
-    -fx-border-color: rgba(255, 255, 255, 0.18);
+    -fx-background-color: rgba(255, 255, 255, 0.10);
+    -fx-border-color: rgba(0, 0, 0, 0.50);
     -fx-border-width: 1;
 }
 
-/* xadrez sutil: alterna a claridade das casas */
-.celula-clara  { -fx-background-color: rgba(255, 255, 255, 0.07); }
-.celula-escura { -fx-background-color: rgba(0, 0, 0, 0.10); }
-
 /* destaque ao passar o mouse */
 .celula:hover {
-    -fx-background-color: rgba(255, 220, 90, 0.30);
-    -fx-border-color: rgba(255, 220, 90, 0.90);
-    -fx-border-width: 2;
+    -fx-background-color: rgba(255, 255, 255, 0.14);
+    -fx-border-color: rgba(255, 255, 255, 0.55);
     -fx-cursor: hand;
 }
 

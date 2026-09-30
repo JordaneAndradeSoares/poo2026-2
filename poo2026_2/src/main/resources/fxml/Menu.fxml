@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.lang.String?>
 <?import java.net.URL?>
 <?import javafx.scene.Group?>
 <?import javafx.scene.control.Button?>
@@ -49,7 +50,11 @@
 
         <!-- SAIR -->
         <Button fx:id="btnSair" layoutX="822.0" layoutY="447.0" onAction="#sair" prefHeight="112.0" prefWidth="384.0" styleClass="menu-btn, menu-btn-sair" />
-      <Button fx:id="btnJogo" layoutX="116.0" layoutY="176.0" mnemonicParsing="false" onAction="#irJogo" prefHeight="61.0" prefWidth="138.0" text="ir direto pro jogo" />
+      <Button fx:id="btnJogo" layoutX="42.0" layoutY="276.0" mnemonicParsing="false" onAction="#irJogo" prefHeight="123.0" prefWidth="455.0" stylesheets="@../styles/menu.css">
+         <styleClass>
+            <String fx:value="menu-btn-teste" />
+            <String fx:value="menu-btn" />
+         </styleClass></Button>
 
 
     </AnchorPane>
