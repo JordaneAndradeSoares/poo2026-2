@@ -6,6 +6,9 @@ package com.poo2026_2.controller;
 
 import java.net.URL;
 import java.util.ResourceBundle;
+
+import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 
 import javafx.scene.control.Button;
@@ -14,6 +17,8 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
+
+import com.poo2026_2.audio.AudioManager;
 
 import com.poo2026_2.model.tiros.tiro;
 
@@ -706,7 +711,8 @@ public class JogoController implements ControladorTela, Initializable {
     private void configurarClick(Button... botoes) {
 
         for (Button botao : botoes) {
-            botao.setOnMousePressed(event -> AudioManager.tocarSomBotao());
+            //botao.setOnMousePressed(event -> AudioManager.tocarEfeitobotao.setOnMousePressed(event -> AudioManager.tocarSomBotao());("/audio/botao-hover.m4a"));
+            botao.setOnMousePressed(event -> AudioManager.tocarEfeito("/audio/botao-hover.m4a"));
         }
     }
     public void initialize(URL url, ResourceBundle rb) {
