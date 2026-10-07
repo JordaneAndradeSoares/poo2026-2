@@ -11,4 +11,22 @@
     <stylesheets>
         <URL value="@/styles/selecaoprofessor.css"/>
     </stylesheets>
+
+    <!-- Label com ID e texto inicial -->
+    <Label fx:id="lblMensagem" text="Escolha um professor" />
+
+    <VBox spacing="10">
+        <children>
+
+            <!-- Botão da cafeteira -->
+            <Button fx:id="CafeteiraBotao" text="Cafeteira" onAction="#selecionarCafeteira" />
+
+            <!-- Botão do Daniel -->
+            <Button fx:id="DanielBotao" text="Daniel" onAction="#selecionarDaniel"/>
+
+            <!-- Botão do Fabricio -->
+            <Button fx:id="FabricioBotao" text="Fabrício" onAction="#selecionarFabricio" />
+        </children>
+    </VBox>
+
 </AnchorPane>
