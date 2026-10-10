@@ -1,0 +1,42 @@
+/*
+ * Empty Stylesheet file.
+ */
+ 
+.mainFxmlClass {
+    -fx-background-color: green; /* cor de fundo da tela */
+}
+
+/* TÍTULO */
+.titulo-selecao {
+    -fx-text-fill: white;
+    -fx-font-size: 28px;
+    -fx-font-weight: bold;
+}
+
+/* BOTÃO VOLTAR */
+.botao-voltar {
+    -fx-background-color: transparent;
+    -fx-background-insets: 0;
+    -fx-background-radius: 0;
+    -fx-border-width: 0;
+    -fx-padding: 0;
+    -fx-text-fill: transparent;
+    -fx-content-display: graphic-only;
+    -fx-cursor: hand;
+    -fx-background-image: url("../images/menu/buttons/voltar_normal.png");
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center;
+    -fx-background-size: 100% 100%;
+}
+
+.botao-voltar:hover {
+    -fx-background-image: url("../images/menu/buttons/voltar_hover.png");
+    -fx-scale-x: 1.08;
+    -fx-scale-y: 1.08;
+}
+
+.botao-voltar:pressed {
+    -fx-scale-x: 0.95;
+    -fx-scale-y: 0.95;
+    -fx-translate-y: 2;
+}
