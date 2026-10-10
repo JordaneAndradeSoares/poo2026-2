@@ -22,7 +22,7 @@ public class tiro {
 
     public boolean tiroEstaColidindo(Zumbi zumbi) {
 
-        // 100 é o tamanho do retangulo (tamanho do zumbi)
+        // 100 é o tamanho do zumbi
         double X = zumbi.getPosicaoXDoZumbi() + 100;
         double Y = zumbi.getPosicaoYDoZumbi() + 100;
 
