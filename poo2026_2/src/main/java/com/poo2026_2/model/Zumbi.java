@@ -1,75 +1,79 @@
 package com.poo2026_2.model;
 
-//import javafx.scene.image.Image;
-//import javafx.scene.image.ImageView;
+import com.poo2026_2.model.Entidade;
 
-public class Zumbi {
+/**
+ * Zumbi generico. A velocidade é dada em casas por "tick" de atualizacao.
+ *
+ * @author thoma
+ */
+public abstract class Zumbi extends Entidade {
+    protected static final double INTERVALO_ATAQUE = 1.0;
+    private double tempoDesdeMordida;
+    private double velocidade;
+    private int dano;
+    private double posicaoX;
+    private boolean atacando;
 
-    private double velocidadeDoZumbi;
-    private int danoDoZumbi;
-
-    private double posicaoXDoZumbi;
-    private double posicaoYDoZumbi;
-
-    private boolean zumbiAtacando;
-
-    public Zumbi(double velocidadeDoZumbi, int danoDoZumbi) {
-        this.velocidadeDoZumbi = velocidadeDoZumbi;
-        this.danoDoZumbi = danoDoZumbi;
-
-        this.posicaoXDoZumbi = 0;
-        this.posicaoYDoZumbi = 0;
-
-        this.zumbiAtacando = false;
+    public Zumbi(int vida, int linha, double velocidade, int dano) {
+        super(vida, linha, 0);
+        this.velocidade = velocidade;
+        this.dano = dano;
+        this.posicaoX = 0;
+        this.atacando = false;
+        this.tempoDesdeMordida = INTERVALO_ATAQUE;   // a primeira mordida é imediata
     }
 
-    public void moverZumbi() {
+    public double getVelocidade() {
+        return velocidade;
+    }
 
-        // zumbi anda enquanto não estiver atacando
-        if (!zumbiAtacando) {
-            posicaoXDoZumbi -= velocidadeDoZumbi;
+    protected void setVelocidade(double velocidade) {
+        this.velocidade = velocidade;
+    }
+
+    public int getDano() {
+        return dano;
+    }
+
+    protected void setDano(int dano) {
+        this.dano = dano;
+    }
+
+    public double getPosicaoX() {
+        return posicaoX;
+    }
+
+    public void setPosicaoX(double posicaoX) {
+        this.posicaoX = posicaoX;
+    }
+
+    public boolean estaAtacando() {
+        return atacando;
+    }
+
+    /** O zumbi anda para a esquerda enquanto nao estiver atacando. */
+    public void mover(double deltaTime) {
+        if (!atacando) {
+            posicaoX -= velocidade * deltaTime;
         }
     }
 
-    public void ataqueZumbi() {
-
-        // zumbi ataca
-        zumbiAtacando = true;
+    public void iniciarAtaque() {
+        atacando = true;
     }
 
-    public void pararAtaqueZumbi() {
-
-        // zumbi para de atacar
-        zumbiAtacando = false;
+    public void pararAtaque() {
+        atacando = false;
     }
 
-    // gets
-    public double getPosicaoX() {
-        return posicaoXDoZumbi;
+    public boolean atacar(Entidade alvo, double deltaTime) {
+    tempoDesdeMordida += deltaTime;
+    if (tempoDesdeMordida >= INTERVALO_ATAQUE) {
+        tempoDesdeMordida = 0;
+        alvo.receberDano(dano);
+        return true;
     }
-
-    public double getPosicaoY() {
-        return posicaoYDoZumbi;
-    }
-
-    public double getVelocidadeDoZumbi() {
-        return velocidadeDoZumbi;
-    }
-
-    public int getDanoDoZumbi() {
-        return danoDoZumbi;
-    }
-
-    // sets
-    public void setPosicaoX(double posicaoX) {
-        this.posicaoXDoZumbi = posicaoX;
-    }
-
-    public void setPosicaoY(double posicaoY) {
-        this.posicaoYDoZumbi = posicaoY;
-    }
-
-    public boolean zumbiEstaAtacando() {
-        return zumbiAtacando;
-    }
+    return false;
+}
 }

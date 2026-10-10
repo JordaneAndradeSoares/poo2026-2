@@ -1,8 +1,12 @@
 package com.poo2026_2.controller;
 
 import com.poo2026_2.audio.AudioManager;
+import com.poo2026_2.model.Fase;
+import com.poo2026_2.model.GerenciadorDeJogo;
+import com.poo2026_2.model.Tabuleiro;
 import java.net.URL;
 import java.util.ResourceBundle;
+import javafx.animation.AnimationTimer;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -17,30 +21,59 @@ import javafx.scene.layout.StackPane;
  *
  * @author thoma
  */
-
 public class JogoController implements ControladorTela, Initializable {
+
+    private GerenciadorDeJogo gerenciadorDeJogo;
+    private AnimationTimer timer;
 
     // deve alinhar com a imagem
     // Coordenadas em pixels da imagem original (1672 x 941).
     private static final double LARGURA_PALCO = 1672;
-    private static final double ALTURA_PALCO  = 941;
+    private static final double ALTURA_PALCO = 941;
 
-    private static final int LINHAS   = 5;
-    private static final int COLUNAS  = 12;
-    private static final double GRADE_X  = 240;  // canto superior esquerdo da grade
-    private static final double GRADE_Y  = 255;
+    private static final int LINHAS = 5;
+    private static final int COLUNAS = 12;
+    private static final double GRADE_X = 240;  // canto superior esquerdo da grade
+    private static final double GRADE_Y = 255;
     private static final double CEL_LARG = 110;  // tamanho de cada casa
-    private static final double CEL_ALT  = 130;
+    private static final double CEL_ALT = 130;
     // =================================================================
 
-    @FXML private StackPane raiz;
-    @FXML private Pane palco;
-    @FXML private GridPane grade;
-    @FXML private Pane camadaJogo;
-    
-    @FXML private Button btnVoltar;
-    
+    @FXML
+    private StackPane raiz;
+    @FXML
+    private Pane palco;
+    @FXML
+    private GridPane grade;
+    @FXML
+    private Pane camadaJogo;
+
+    @FXML
+    private Button btnVoltar;
+
     private GerenciadorDeTelas gerenciadorDeTelas;
+
+    private void iniciarPartida() {
+        Fase fase = new Fase(1, "Fase 1", 150);   // provisório
+        Tabuleiro tabuleiro = new Tabuleiro(LINHAS, COLUNAS);
+        gerenciadorDeJogo = new GerenciadorDeJogo(fase, tabuleiro);
+        gerenciadorDeJogo.iniciarJogo();
+
+        timer = new AnimationTimer() {
+            private long ultimo = 0;
+
+            @Override
+            public void handle(long agora) {
+                if (ultimo != 0) {
+                    double delta = (agora - ultimo) / 1_000_000_000.0;
+                    gerenciadorDeJogo.atualizar(Math.min(delta, 0.1));
+                    // redesenhar sprites aqui
+                }
+                ultimo = agora;
+            }
+        };
+        timer.start();
+    }
 
     @Override
     public void setGerenciadorDeTelas(
@@ -58,7 +91,7 @@ public class JogoController implements ControladorTela, Initializable {
             );
         }
     }
-    
+
     private void configurarClick(Button... botoes) {
         for (Button botao : botoes) {
             botao.setOnMousePressed(
@@ -66,11 +99,13 @@ public class JogoController implements ControladorTela, Initializable {
             );
         }
     }
+
     public void initialize(URL url, ResourceBundle rb) {
         montarGrade();
         ajustarEscala();
         configurarSomDeHover(btnVoltar);
         configurarClick(btnVoltar);
+        iniciarPartida(); 
     }
 
     private void montarGrade() {
@@ -111,7 +146,7 @@ public class JogoController implements ControladorTela, Initializable {
     private void ajustarEscala() {
         Runnable atualizar = () -> {
             double s = Math.min(raiz.getWidth() / LARGURA_PALCO,
-                                raiz.getHeight() / ALTURA_PALCO);
+                    raiz.getHeight() / ALTURA_PALCO);
             if (s > 0) {
                 palco.setScaleX(s);
                 palco.setScaleY(s);
@@ -120,9 +155,11 @@ public class JogoController implements ControladorTela, Initializable {
         raiz.widthProperty().addListener((o, a, b) -> atualizar.run());
         raiz.heightProperty().addListener((o, a, b) -> atualizar.run());
     }
-    
+
     @FXML
     private void voltar(ActionEvent event) {
+        timer.stop(); 
+        gerenciadorDeJogo.encerrar();
         gerenciadorDeTelas.voltarMenu();
     }
 }
