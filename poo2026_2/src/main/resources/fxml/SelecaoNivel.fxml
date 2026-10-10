@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.net.URL?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+
+<AnchorPane id="AnchorPane"
+            styleClass="mainFxmlClass"
+            xmlns:fx="http://javafx.com/fxml/1"
+            xmlns="http://javafx.com/javafx/26"
+            fx:controller="com.poo2026_2.controller.SelecaoNivelController">
+
+    <stylesheets>
+        <URL value="@/styles/selecaonivel.css" />
+    </stylesheets>
+
+    <StackPane AnchorPane.topAnchor="0.0"
+               AnchorPane.bottomAnchor="0.0"
+               AnchorPane.leftAnchor="0.0"
+               AnchorPane.rightAnchor="0.0">
+
+        <VBox alignment="CENTER"
+              spacing="40.0">
+
+
+            <VBox 
+                alignment="CENTER"
+                spacing="20.0">
+
+                <Button 
+                    fx:id="btnFase1"
+                    text="FASE 1"
+                    prefHeight="112.0"
+                    prefWidth="200.0"
+                    onAction="#fase1"
+                    styleClass="botao-fase-1" />
+
+            </VBox>
+
+            <!-- TÍTULO -->
+            <!-- <TextField text="Selecao de nivel" /> -->
+            <Label  text="Selecione um de nível"
+                    styleClass="titulo-selecao" />
+
+            <!-- BOTÃO VOLTAR -->
+            <Button fx:id="btnVoltar"
+                    prefHeight="112.0"
+                    prefWidth="384.0"
+                    onAction="#voltar"
+                    styleClass="botao-voltar" />
+
+        </VBox>
+    </StackPane>
+</AnchorPane>

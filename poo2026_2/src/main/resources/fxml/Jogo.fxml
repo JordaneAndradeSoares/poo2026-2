@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.String?>
+<?import java.net.URL?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.StackPane?>
+
+<?import javafx.scene.control.Label?>
+
+<!--
+  Raiz: StackPane que ocupa a janela toda.
+  Dentro dela, o "palco" tem tamanho FIXO (1672x941 = tamanho do background.png)
+  e é escalado pelo controller para caber em qualquer resolucao 16:9.
+  Assim a grade sempre fica alinhada com a imagem.
+-->
+
+<StackPane fx:id="raiz" style="-fx-background-color: black;" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.poo2026_2.controller.JogoController">
+    <stylesheets>
+        <URL value="@../styles/jogo.css" />
+    </stylesheets>
+
+    <Pane fx:id="palco" maxHeight="941" maxWidth="1672" minHeight="941" minWidth="1672" prefHeight="941" prefWidth="1672">
+
+        <!-- Camada 1: so visual -->
+        <ImageView fitHeight="941" fitWidth="1672" preserveRatio="false">
+            <image>
+                <Image url="@../images/game/background2.png" />
+            </image>
+        </ImageView>
+
+        <!-- Camada 2: grade logica 5 x 9 (posicao/tamanho definidos no controller) -->
+        <GridPane fx:id="grade">
+         <styleClass>
+            <String fx:value="grade" />
+            <String fx:value="pane" />
+         </styleClass></GridPane>
+
+        <!-- Camada 3: zumbis e projeteis (movimento livre em pixels) -->
+        <Pane fx:id="camadaJogo" mouseTransparent="true" prefHeight="941" prefWidth="1672" />
+
+        <!-- Botoões -->
+        <Button 
+            fx:id="btnVoltar" 
+            layoutX="1132.0" 
+            layoutY="90.0" 
+            mnemonicParsing="false" 
+            onAction="#voltar" 
+            prefHeight="62.0" 
+            prefWidth="200.0" 
+            styleClass="botao-voltar" 
+            stylesheets="@../styles/jogo.css" 
+            text="voltar" />
+
+        <!-- aumentar o Y de 70 em 70 e manter o X igual para os botões ficarem em uma coluna perfeita -->
+        <Button
+            fx:id="btnCafeteira"
+            layoutX="50"
+            layoutY="50"
+            prefHeight="62.0" 
+            prefWidth="200.0" 
+            text="Cafeteira"
+            onAction="#selecionarCafeteira"/>
+
+        <Button
+            fx:id="btnDaniel"
+            layoutX="50"
+            layoutY="120"
+            prefHeight="62.0" 
+            prefWidth="200.0" 
+            text="Daniel"
+            onAction="#selecionarDaniel"/>
+
+        <Button
+            fx:id="btnFabricio"
+            layoutX="50"
+            layoutY="190"
+            prefHeight="62.0" 
+            prefWidth="200.0" 
+            text="Fabricio"
+            onAction="#selecionarFabricio"/>
+
+        <Button
+            fx:id="btnGlaucia"
+            layoutX="50"
+            layoutY="260"
+            prefHeight="62.0"
+            prefWidth="200.0"
+            text="Glaucia"
+            onAction="#selecionarGlaucia"/>
+
+        <Button
+            fx:id="btnLucas"
+            layoutX="50"
+            layoutY="330"
+            prefHeight="62.0"
+            prefWidth="200.0"
+            text="Lucas"
+            onAction="#selecionarLucas"/>
+
+        <Button
+            fx:id="btnMarcus"
+            layoutX="50"
+            layoutY="400"
+            prefHeight="62.0"
+            prefWidth="200.0"
+            text="Marcus"
+            onAction="#selecionarMarcus"/>
+
+        <Button
+            fx:id="btnNacif"
+            layoutX="50"
+            layoutY="470"
+            prefHeight="62.0"
+            prefWidth="200.0"
+            text="Nacif"
+            onAction="#selecionarNacif"/>
+
+        <Button
+            fx:id="btnPhilipe"
+            layoutX="50"
+            layoutY="540"
+            prefHeight="62.0"
+            prefWidth="200.0"
+            text="Philipe"
+            onAction="#selecionarPhilipe"/>
+
+        <Button
+            fx:id="btnThais"
+            layoutX="50"
+            layoutY="610"
+            prefHeight="62.0"
+            prefWidth="200.0"
+            text="Thais"
+            onAction="#selecionarThais"/>
+
+        <!-- exibição da quantidade de café atual (com fundo para contraste) -->
+        <StackPane
+            layoutX="260.0"
+            layoutY="50.0"
+            prefWidth="220.0"
+            prefHeight="70.0"
+            style="-fx-background-color: rgba(0, 0, 0, 0.75); -fx-background-radius: 15;">
+
+            <Label
+                fx:id="lblCafe"
+                text="CAFÉ: 200"
+                style="-fx-text-fill: white; -fx-font-size: 24px; -fx-font-weight: bold;" />
+
+        </StackPane>
+
+    </Pane>
+</StackPane>
