@@ -13,6 +13,7 @@ public class ZumbiView extends ImageView {
 
     private AnimationTimer animacao;
 
+    /*
     private Image[] recortarSprites(Image imagem) {
 
         Image[] resultado = new Image[12];
@@ -43,6 +44,42 @@ public class ZumbiView extends ImageView {
 
         return resultado;
     }
+    */
+
+    private Image[] recortarSprites(Image imagem) {
+
+        Image[] resultado = new Image[8];
+
+        PixelReader leitor = imagem.getPixelReader();
+
+        int larguraSprite = (int) imagem.getWidth() / 3;
+        int alturaSprite = (int) imagem.getHeight() / 3;
+
+        for (int linha = 0; linha < 3; linha++) {
+            for (int coluna = 0; coluna < 3; coluna++) {
+
+                int indice = linha * 3 + coluna;
+
+                // A última posição da grade não contém um frame.
+                if (indice >= resultado.length) {
+                    continue;
+                }
+
+                int x = coluna * larguraSprite;
+                int y = linha * alturaSprite;
+
+                resultado[indice] = new WritableImage(
+                    leitor,
+                    x,
+                    y,
+                    larguraSprite,
+                    alturaSprite
+                );
+            }
+        }
+
+        return resultado;
+    }
 
     public ZumbiView(String nomeArquivo) {
 
@@ -52,9 +89,12 @@ public class ZumbiView extends ImageView {
 
         setImage(sprites[0]);
 
-        setFitWidth(80);
-        setFitHeight(130);
+        setFitWidth(300);
+        setFitHeight(400);
         setPreserveRatio(true);
+
+        setTranslateY(-130); // desloca o visual em pixels para a cima
+        setTranslateX(-15); // desloca o visual em pixels para a esquerda
 
         iniciarAnimacao();
     }
