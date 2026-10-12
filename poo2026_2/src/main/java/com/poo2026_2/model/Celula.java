@@ -20,7 +20,7 @@ public class Celula{
    }
 
    public int getColuna(){
-	return Coluna;
+	return coluna;
    }
 
    public void setColuna(int coluna){
@@ -28,20 +28,20 @@ public class Celula{
    }
 
    public Professor getProfessor(){
-	return Professor;
+	return professor;
    }
 
    public void setProfessor(Professor professor){
 	this.professor=professor;
    }
 
-   public boolean estaOcupada(int linha, int coluna){
-	return this.professor == null;
+   public boolean estaOcupada(){
+	return this.professor != null;
    }
    //Verificar se tem um professor
 
    public void instalarProfessor(Professor professor){
-   if (estaOcupada()){
+   if (!estaOcupada()){
 	   this.professor = professor;
 	}
    
@@ -52,3 +52,4 @@ public class Celula{
       this.professor = null;
    }
    //Tira o professor que estiver aqui
+}
