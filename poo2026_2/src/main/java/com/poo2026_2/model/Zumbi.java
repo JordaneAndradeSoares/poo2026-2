@@ -1,7 +1,5 @@
 package com.poo2026_2.model;
 
-import com.poo2026_2.model.Entidade;
-
 /**
  * Zumbi generico. A velocidade é dada em casas por "tick" de atualizacao.
  *
@@ -17,6 +15,14 @@ public abstract class Zumbi extends Entidade {
 
     public Zumbi(int vida, int linha, double velocidade, int dano) {
         super(vida, linha, 0);
+
+        if (dano <= 0) {
+            throw new IllegalArgumentException("O dano tem que ser maior que zero.");
+        }
+        if (velocidade <= 0 || !Double.isFinite(velocidade)) {
+            throw new IllegalArgumentException("A velociadade tem que ser maior que zero.");
+        }
+        
         this.velocidade = velocidade;
         this.dano = dano;
         this.posicaoX = 0;

@@ -17,6 +17,14 @@ public abstract class Professor extends Entidade {
 
     public Professor(int vida, int linha, int coluna, int custoCafe, double cadenciaTiro) {
         super(vida, linha, coluna);
+
+        if (custoCafe < 0) {
+            throw new IllegalArgumentException("O custo nao pode ser negativo .");
+        }
+        if (cadenciaTiro <= 0 || !Double.isFinite(cadenciaTiro)) {
+            throw new IllegalArgumentException("A cadencia de tiro tem que ser positiva e finita.");
+        }
+        
         this.custoCafe = custoCafe;
         this.cadenciaTiro = cadenciaTiro;
     }

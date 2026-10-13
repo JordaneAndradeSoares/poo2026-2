@@ -27,6 +27,23 @@ public class Cafeteira extends Entidade {
     public Cafeteira(int vida, int linha, int coluna, int cafePorCiclo,
             double intervaloProducao, double raioProducao, int custoCafe) {
         super(vida, linha, coluna);
+
+        if (cafePorCiclo <= 0) {
+            throw new IllegalArgumentException("A quantidade de cafe por ciclo tem que ser positiva.");
+        }
+
+        if (intervaloProducao <= 0 || !Double.isFinite(intervaloProducao)) {
+            throw new IllegalArgumentException("O intervalo de producao tem que ser positivo e finito.");
+        }
+
+        if (raioProducao <= 0 || !Double.isFinite(raioProducao)) {
+            throw new IllegalArgumentException("O raio de producao tem que ser positivo e finito.");
+        }
+
+        if (custoCafe < 0) {
+            throw new IllegalArgumentException("O custo de cafe nao pode ser negativo.");
+        }
+
         this.cafePorCiclo = cafePorCiclo;
         this.intervaloProducao = intervaloProducao;
         this.raioProducao = raioProducao;
@@ -42,24 +59,12 @@ public class Cafeteira extends Entidade {
         return cafePorCiclo;
     }
 
-    public void setCafePorCiclo(int cafePorCiclo) {
-        this.cafePorCiclo = cafePorCiclo;
-    }
-
     public double getIntervaloProducao() {
         return intervaloProducao;
     }
 
-    public void setIntervaloProducao(double intervaloProducao) {
-        this.intervaloProducao = intervaloProducao;
-    }
-
     public double getTempoUltimaProducao() {
         return tempoUltimaProducao;
-    }
-
-    public void setTempoUltimaProducao(double tempoUltimaProducao) {
-        this.tempoUltimaProducao = tempoUltimaProducao;
     }
 
     public double getRaioProducao() {

@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Random;
 
 /**
  * Motor do jogo: guarda o estado de uma partida e a atualiza a cada "tick".
@@ -36,9 +37,18 @@ public class GerenciadorDeJogo {
     private boolean jogoAtivo;
     private boolean vitoria;
     private boolean terminou;
+    private final Random random = new Random();
  
     // ===================== CONSTRUTOR =====================
     public GerenciadorDeJogo(Fase faseAtual, Tabuleiro tabuleiro) {
+        if (faseAtual == null) {
+            throw new IllegalArgumentException("A fase atual nao pode ser nula.");
+        }
+
+        if (tabuleiro == null) {
+            throw new IllegalArgumentException("O tabuleiro nao pode ser nulo.");
+        } 
+
         this.faseAtual = faseAtual;
         this.tabuleiro = tabuleiro;
         this.cafe = faseAtual.getCafeInicial();
@@ -52,12 +62,14 @@ public class GerenciadorDeJogo {
  
     /** Liga o jogo */
     public void iniciarJogo() {
+        if (!terminou) {
         jogoAtivo = true;
+    }
     }
  
     /** Um passo da simulacao. deltaTime em segundos. */
     public void atualizar(double deltaTime) {
-        if (!jogoAtivo) {
+        if (!jogoAtivo || terminou || deltaTime <= 0 || !Double.isFinite(deltaTime)) {
             return;
         }
         gerarZumbisDaOnda(deltaTime);
@@ -84,10 +96,25 @@ public class GerenciadorDeJogo {
  
     public void encerrar() {
         jogoAtivo = false;
+        terminou = true;
+        vitoria = false;
         zumbis.clear();
         tiros.clear();
         cafesNoChao.clear();
         tabuleiro.limpar();   // tira professores e cafeteiras dos pisos
+    }
+
+    public void reiniciarJogo() {
+        jogoAtivo = false;
+        cafe = faseAtual.getCafeInicial();
+        vitoria = false;
+        terminou = false;
+        zumbis.clear();
+        tiros.clear();
+        cafesNoChao.clear();
+        tabuleiro.limpar();
+        faseAtual.reiniciar();
+        jogoAtivo = true;
     }
  
     // ===================== PISO (professores e cafeteiras) =====================
@@ -185,7 +212,7 @@ public class GerenciadorDeJogo {
     }
  
     public List<Cafe> getCafesNoChao() {
-        return cafesNoChao;
+        return Collections.unmodifiableList(new ArrayList<>(cafesNoChao));
     }
  
     // ===================== ZUMBIS =====================
@@ -314,7 +341,7 @@ public class GerenciadorDeJogo {
             if (!z.estaVivo()) {
                 continue;
             }
-            int coluna = z.getColuna();
+            int coluna = (int) Math.floor(z.getPosicaoX());
             Entidade ocupante = (coluna >= 0 && coluna < getColunas())
                     ? ocupanteDoPiso(z.getLinha(), coluna) : null;
  
@@ -375,11 +402,11 @@ public class GerenciadorDeJogo {
     }
  
     public List<Zumbi> getZumbis() {
-        return zumbis;
+        return Collections.unmodifiableList(new ArrayList<>(zumbis));
     }
  
     public List<Tiro> getTiros() {
-        return tiros;
+        return Collections.unmodifiableList(new ArrayList<>(tiros));
     }
  
     // ====================================================================
@@ -388,48 +415,60 @@ public class GerenciadorDeJogo {
  
     /** Quantidade de colunas do tabuleiro. */
     private int getColunas() {
-        // return tabuleiro.getColunas();
-        return 12;   // provisorio: (mesmo valor qque defini em JogoController.COLUNAS)
+        return tabuleiro.getColunas();
     }
  
     /** Todos os professores instalados nos pisos. */
     private List<Professor> listarProfessores() {
-        // return tabuleiro.getProfessores();
-        return Collections.emptyList();
+        return Collections.unmodifiableList(new ArrayList<>(tabuleiro.getProfessores()));
     }
  
     /** Todas as cafeteiras instaladas nos pisos. */
     private List<Cafeteira> listarCafeteiras() {
-        // return tabuleiro.getCafeteiras();
-        return Collections.emptyList();
+        return Collections.unmodifiableList(new ArrayList<>(tabuleiro.getCafeteiras()));
     }
  
     /** Quem esta no piso (linha, coluna), ou null se vazio/invalido. */
     private Entidade ocupanteDoPiso(int linha, int coluna) {
-        // return tabuleiro.getOcupante(linha, coluna);
-        return null;
+        return tabuleiro.getOcupante(linha, coluna);
     }
  
     /** Instala a entidade no piso. @return false se invalido ou ocupado. */
     private boolean tentarInstalarNoPiso(Entidade entidade, int linha, int coluna) {
-        //  return tabuleiro.instalar(entidade, linha, coluna);
-        //   (o Tabuleiro deve tambem atualizar entidade.setLinha/setColuna)
-        return false;
+        return tabuleiro.instalar(entidade, linha, coluna);
     }
  
     private void removerOcupanteDoPiso(int linha, int coluna) {
-        // tabuleiro.remover(linha, coluna);
+        tabuleiro.remover(linha, coluna);
     }
  
-    /** Pede a Fase/Onda os zumbis que devem nascer neste instante e os adiciona. */
+    /** Gera os zumbis da onda atual em intervalos fixos. */
     private void gerarZumbisDaOnda(double deltaTime) {
-        // for (Zumbi z : faseAtual.gerarZumbis(deltaTime)) { adicionarZumbi(z); }
-        //  (a Onda controla o tempo entre spawns e a linha sorteada de cada zumbi)
+        Onda onda = faseAtual.getOndaAtual();
+
+        if (onda == null) {
+            return;
+        }
+
+        onda.atualizar(deltaTime);
+
+        // O while permite gerar mais de um zumbi se houver
+        // tempo acumulado suficiente em uma mesma atualizacao.
+        while (onda.podeGerarZumbi()) {
+            int linha = random.nextInt(tabuleiro.getLinhas());
+
+            Zumbi zumbi = onda.criarZumbi(linha);
+
+            if (zumbi != null) {
+                adicionarZumbi(zumbi);
+            }
+
+            onda.gerarZumbi();
+        }
     }
  
     /** true quando a Fase ja gerou todas as ondas. */
     private boolean faseConcluida() {
-        // return faseAtual.estaConcluida();
-        return false;
+        return faseAtual.estaConcluida();
     }
 }

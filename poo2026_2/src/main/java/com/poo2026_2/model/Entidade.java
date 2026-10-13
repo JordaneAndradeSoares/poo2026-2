@@ -15,6 +15,10 @@ public abstract class Entidade {
     private int coluna;
 
     public Entidade(int vida, int linha, int coluna) {
+        if (vida < 0) {
+            throw new IllegalArgumentException("A vida nao pode ser negativa.");
+        }
+
         this.vida = vida;
         this.linha = linha;
         this.coluna = coluna;
@@ -25,6 +29,10 @@ public abstract class Entidade {
     }
 
     public void setVida(int vida) {
+        if (vida < 0) {
+            throw new IllegalArgumentException("A vida nao pode ser negativa.");
+        }
+
         this.vida = vida;
     }
 
@@ -61,10 +69,10 @@ public abstract class Entidade {
      * @param dano quantidade de dano recebido
      */
     public void receberDano(int dano) {
-        vida -= dano;
-
-        if (vida < 0) {
-            vida = 0;
+        if (dano < 0) {
+            throw new IllegalArgumentException("O dano nao pode ser negativo.");
         }
+
+        vida = Math.max(0, vida - dano);
     }
 }

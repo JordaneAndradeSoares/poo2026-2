@@ -42,11 +42,6 @@ public class Tabuleiro {
         return colunas;
     }
 
-    public Celula getCelula(int linha, int coluna) {
-        validarPosicao(linha, coluna);
-        return celulas[linha][coluna];
-    }
-
     public Entidade getOcupante(int linha, int coluna) {
         if (!posicaoValida(linha, coluna)) {
             return null;
@@ -140,9 +135,4 @@ public class Tabuleiro {
             && coluna >= 0 && coluna < colunas;
     }
 
-    private void validarPosicao(int linha, int coluna) {
-        if (!posicaoValida(linha, coluna)) {
-            throw new IndexOutOfBoundsException("Posição fora dos limites do tabuleiro.");
-        }
-    }
 }

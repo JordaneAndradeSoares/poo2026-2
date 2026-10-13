@@ -5,8 +5,6 @@
 package com.poo2026_2.controller;
 
 import com.poo2026_2.audio.AudioManager;
-import java.net.URL;
-import java.util.ResourceBundle;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 

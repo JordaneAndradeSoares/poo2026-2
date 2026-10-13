@@ -34,7 +34,7 @@ public class Celula{
    return ocupante;
    }
 
-   public void setOcupante(Entidade ocupante) {
+   private void setOcupante(Entidade ocupante) {
       if (ocupante != null && !tipoPermitido(ocupante)) {
          throw new IllegalArgumentException("A célula só pode armazenar professores ou cafeteiras.");
       }
@@ -55,16 +55,12 @@ public class Celula{
       return null;
    }
 
-   public void setProfessor(Professor professor) {
-      setOcupante(professor);
-   }
-
    public boolean estaOcupada(){
 	return ocupante != null;
    }
    //Verificar se tem um professor
 
-   public boolean instalar(Entidade entidade) {
+   boolean instalar(Entidade entidade) {
       if (entidade == null || !tipoPermitido(entidade) || estaOcupada()) {
          return false;
       }
@@ -72,11 +68,6 @@ public class Celula{
       setOcupante(entidade);
       return true;
    }
-
-   public boolean instalarProfessor(Professor professor) {
-      return instalar(professor);
-   }
-   //Coloca o professor escolhido se estaOcupado for igual a false
 
    public Entidade remover() {
       Entidade removido = ocupante;
