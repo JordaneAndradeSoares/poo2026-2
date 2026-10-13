@@ -130,6 +130,7 @@ public class JogoController implements ControladorTela, Initializable {
                         cafeteiras.get(c),
                         agora
                     );
+
                     cafes.add(cafe);
 
                     // visual do cafe
@@ -270,8 +271,8 @@ public class JogoController implements ControladorTela, Initializable {
                             */
 
                             // colidiu (professor com zumbi)
-                            if ((xDoProfessor <= (zumbi.getPosicaoXDoZumbi() + 100))
-                                    && ((xDoProfessor + CEL_LARG) >= zumbi.getPosicaoXDoZumbi())) {
+                            // a parte da divisão "(CEL_LARG / 5)" pode variar a depender do tamanho da imagem
+                            if ((xDoProfessor <= zumbi.getPosicaoXDoZumbi()) && ((xDoProfessor + (CEL_LARG / 5)) >= zumbi.getPosicaoXDoZumbi())) {
 
                                 if (professorMaisProximo == null) {
                                     professorMaisProximo = professor;
@@ -337,15 +338,15 @@ public class JogoController implements ControladorTela, Initializable {
                             && cafeteira.cafeteiraEstaViva()) {
 
                         // Calcula o X da cafeteira pela sua coluna
-                        double xDaCafeteira = GRADE_X
-                                + cafeteira.getColunaNoTabuleiroDaCafeteira() * CEL_LARG;
-
+                        double xDaCafeteira = GRADE_X + cafeteira.getColunaNoTabuleiroDaCafeteira() * CEL_LARG;
+ 
                         if (xDaCafeteira < zumbi.getPosicaoXDoZumbi()) {
 
                             // colidiu (cafeteira com zumbi)
+                            // a parte da divisão "(CEL_LARG / 5)" pode variar a depender do tamanho da imagem
+                            
                             // if ((xDoProfessor <= (zumbi.getPosicaoXDoZumbi() + 100)) && ((xDoProfessor + CEL_LARG) >= zumbi.getPosicaoXDoZumbi())) {
-                            if ((xDaCafeteira <= (zumbi.getPosicaoXDoZumbi() + 100))
-                                    && ((xDaCafeteira + CEL_LARG) >= zumbi.getPosicaoXDoZumbi())) {
+                            if ((xDaCafeteira <= zumbi.getPosicaoXDoZumbi()) && ((xDaCafeteira + (CEL_LARG / 5)) >= zumbi.getPosicaoXDoZumbi())) {
 
                                 if (cafeteiraMaisProxima == null) {
                                     cafeteiraMaisProxima = cafeteira;
@@ -748,42 +749,42 @@ public class JogoController implements ControladorTela, Initializable {
         switch (sorteio) {
             case 0:
                 novoZumbi = new ZumbiCalouro();
-                nomeArquivo = "calouro.png";
+                nomeArquivo = "calouro";
                 break;
 
             case 1:
                 novoZumbi = new ZumbiCalouroBlindado();
-                nomeArquivo = "calouroBlindado.png";
+                nomeArquivo = "calouroBlindado";
                 break;
 
             case 2:
                 novoZumbi = new ZumbiCalouroProtegido();
-                nomeArquivo = "calouroProtegido.png";
+                nomeArquivo = "calouroProtegido";
                 break;
 
             case 3:
                 novoZumbi = new ZumbiDoutorando();
-                nomeArquivo = "doutorando.png";
+                nomeArquivo = "doutorando";
                 break;
 
             case 4:
                 novoZumbi = new ZumbiFormando();
-                nomeArquivo = "formando.png";
+                nomeArquivo = "formando";
                 break;
 
             case 5:
                 novoZumbi = new ZumbiTrote();
-                nomeArquivo = "trote.png";
+                nomeArquivo = "trote";
                 break;
 
             case 6:
                 novoZumbi = new ZumbiVibeCoder();
-                nomeArquivo = "vibeCoder.png";
+                nomeArquivo = "vibeCoder";
                 break;
 
             case 7:
                 novoZumbi = new ZumbiViciado();
-                nomeArquivo = "viciado.png";
+                nomeArquivo = "viciado";
                 break;
 
             default:
@@ -804,7 +805,8 @@ public class JogoController implements ControladorTela, Initializable {
         novoZumbi.criarZumbi(posicaoXDoZumbi, posicaoYDoZumbi);
         zumbis.add(novoZumbi);
 
-        ZumbiView zumbiVisual = new ZumbiView(nomeArquivo);
+        //ZumbiView zumbiVisual = new ZumbiView(nomeArquivo);
+        ZumbiView zumbiVisual = new ZumbiView(nomeArquivo, novoZumbi);
         zumbiVisual.setLayoutX(posicaoXDoZumbi);
         zumbiVisual.setLayoutY(posicaoYDoZumbi);
 
