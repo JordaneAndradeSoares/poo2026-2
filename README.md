@@ -1,10 +1,10 @@
 # Professores vs Zumbiversitários 🧟‍♂️☕
 
-Mini-jogo em Java, inspirado em *Plants vs Zombies*, desenvolvido como TP da disciplina de CDC. O objetivo é aplicar conceitos de POO (herança, polimorfismo, interfaces) e trabalhar em equipe com um projeto Java completo, incluindo interface gráfica.
+Mini-jogo em Java, inspirado em *Plants vs Zombies*, desenvolvido como TP da disciplina de POO. O objetivo é aplicar conceitos de POO (herança, polimorfismo, interfaces) e trabalhar em equipe com um projeto Java completo, incluindo interface gráfica.
 
 ## Tema
 
-Os **professores do curso** fazem o papel das plantas e atiram **linguagens de programação** nos zumbis (alunos zumbis, sobrecarregados de provas, trabalhos, prazos e TCC). O chão é substituído por **tomadas**, e os girassóis (fonte de recurso) viram **cafeteiras**, já que o dinheiro do jogo é **café**.
+Os **professores do curso** fazem o papel das plantas e atiram **linguagens de programação** nos zumbis (alunos zumbis, sobrecarregados de provas, trabalhos, prazos e TCC). Os girassóis (fonte de recurso) viram **cafeteiras**, já que o dinheiro do jogo é **café**.
 
 ## Telas do jogo
 
@@ -24,26 +24,56 @@ Os **professores do curso** fazem o papel das plantas e atiram **linguagens de p
 
 ```
 Entidade (abstrata)
- ├── Professor (abstrata)         → vida, linha, coluna, custoCafe, cadenciaTiro
- │     ├── ProfessorPhilipe       → atira Python
- │     ├── ProfessoraThais        → atira ...
- │     ├── ProfessorMarcus        → atira Matlab
- │     ├── ProfessorDaniel        → atira C
- │     ├── ProfessoraGlaucia      → atira JavaScript
- │     ├── ProfessorNacif         → atira Verilog
- │     ├── ProfessorFabricio      → atira Scalla
- │     ├── ProfessorLucas         → atira ...
+ ├── Professor (abstrata)         → vida, linha, coluna, custoCafe, cadenciaTiro, hp - 300
+ │     ├── ProfessorPhilipe       → atira Python - custo 150 café
+                                    dano: 20hp
+                                    cadência: 1.5s
+                                    efeito: causa lentidão no zumbi afetado
+ │     ├── ProfessoraThais        → a decidir - cereja bomba ou lança-milho
+                                    dano:
+                                    cadência:
+                                    efeito:
+ │     ├── ProfessorMarcus        → atira Matlab - custo 150 cafe
+                                    hp: 4000
+                                    dano: 0
+                                    cadência: 0
+                                    efeito: invoca matriz pra tankar muito dano
+ │     ├── ProfessorDaniel        → atira C - custo 100 cafe
+                                    dano: 20hp
+                                    cadência: 1.5s
+                                    efeito: tiro padrão
+ │     ├── ProfessoraGlaucia      → atira JavaScript - custo 100 cafe
+                                    dano: 40hp
+                                    efeito: disparo de fogo, queima os inimigos
+                                    cadência: 1.5s
+ │     ├── ProfessorNacif         → Verilog - custo 50 cafe
+                                    dano: 1800hp
+                                    cadência: 15s pra armar
+                                    efeito: entrega um fpga bomba pro aluno
+ │     ├── ProfessorFabricio      → Scalla - custo 300 cafe
+                                    dano: 100hp
+                                    cadência: 1.5s
+                                    efeito: tiro padrão, em 3 linhas
+ │     ├── ProfessorLucas         → melee Skate
+                                    dano: hitkill
+                                    cadência: 17s
+                                    efeito: da uma skatedada no zumbi e depois fica carregando
  │     ├── ...                    → (até 8 professores)
  │     └── Cafeteira              → produz café periodicamente (não atira)
- └── Zumbi (abstrata)             → vida, velocidade, dano, linha
-       ├── ZumbiVibeCoder         → fraco, rápido, atrapalhado
-       ├── ZumbiCalouro           → comum
-       ├── ZumbiCalouroprotegido  → comum porém cone
-       ├── ZumbiCalouroblindado   → comum porém balde de ferro
-       ├── ZumbiViciado           → comum porém fica rápido, perigoso e extressado ao quebrar seu telefone
-       ├── ZumbiTrote             → rápido, pouca vida
-       ├── ZumbiFormando          → minitanque (bastante vida, lento)
-       └── ZumbiDoutorando        → tanque (extrema vida, extremamente lento)
+ └── Zumbi (abstrata)             → vida, velocidade, dano - 100, cadência - 1s, linha
+       ├── ZumbiVibeCoder         → fraco, rápido, atrapalhado - 200hp
+       ├── ZumbiCalouro           → comum - 200hp
+       ├── ZumbiCalouroprotegido  → comum porém cone - 650hp
+       ├── ZumbiCalouroblindado   → comum porém balde de ferro 1370hp
+       ├── ZumbiViciado           → comum porém fica rápido, perigoso e extressado ao quebrar seu telefone - 200hp + 150hp do telefone
+                                    cadência - 0.5s
+       ├── ZumbiTrote             → rápido, lanceiro - 400hp
+                                    efeito: corre bem rápido, pula o primeiro professor
+       ├── ZumbiFormando          → minitanque (bastante vida, lento) 1670hp
+                                    dano: hitkill
+       └── ZumbiDoutorando        → tanque (extrema vida, extremamente lento) 3000hp
+                                    dano: hitkill
+
 ```
 
 - **Tiro / Projetil** — classe (ou hierarquia) responsável pelo disparo. Atributos configuráveis: velocidade, dano, sprite, efeito visual e som — pensados para serem fáceis de ajustar sem mexer na lógica de movimento (via config/enum).
@@ -92,4 +122,4 @@ Passur Caio Lélis Alves - 6590
 
 ## Status do projeto
 
-🚧 Em desenvolvimento — TP da disciplina de CDC.
+🚧 Em desenvolvimento — TP da disciplina de POO.
