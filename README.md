@@ -59,7 +59,10 @@ Entidade (abstrata)
                                     cadência: 17s
                                     efeito: da uma skatedada no zumbi e depois fica carregando
  │     ├── ...                    → (até 8 professores)
- │     └── Cafeteira              → produz café periodicamente (não atira)
+ │     └── Cafeteira              → produz café periodicamente (não atira) - custo 50 cafe
+                                    efeito: cospe um simbolo de café
+                                    total produzido: 25 cafe
+                                    cadência: 24s
  └── Zumbi (abstrata)             → vida, velocidade, dano - 100, cadência - 1s, linha
        ├── ZumbiVibeCoder         → fraco, rápido, atrapalhado - 200hp
        ├── ZumbiCalouro           → comum - 200hp
