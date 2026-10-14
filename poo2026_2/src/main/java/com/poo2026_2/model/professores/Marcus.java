@@ -4,12 +4,15 @@ public class Marcus extends Professor {
 
     // Construtor
     public Marcus(int linhaNoTabuleiroDoProfessor, int colunaNoTabuleiroDoProfessor ) {
-        super(50, 
-            1_500_000_000L, 
-            100, 
+
+        super(
+            150, 
+            1_500_000_000, 
+            4000, 
             linhaNoTabuleiroDoProfessor, 
-            colunaNoTabuleiroDoProfessor);
+            colunaNoTabuleiroDoProfessor
+        );
             
-        setDanoDoProfessor(40); // Definindo o dano do professor Marcus
+        //setDanoDoProfessor(40); // Definindo o dano do professor Marcus
     }
 }

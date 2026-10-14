@@ -23,6 +23,7 @@ public class Professor {
 
     // Construtor
     public Professor(int custoCafe, long cadenciaTiroDoProfessor, int vidaDoProfessor, int linhaNoTabuleiroDoProfessor, int colunaNoTabuleiroDoProfessor) {
+        
         this.custoCafe = custoCafe;
         this.cadenciaTiroDoProfessor = cadenciaTiroDoProfessor;
         this.vidaDoProfessor = vidaDoProfessor;
@@ -43,7 +44,7 @@ public class Professor {
     public void setVidaDoProfessor(int vidaDoProfessor) {this.vidaDoProfessor = vidaDoProfessor;}
     public void setColunaNoTabuleiroDoProfessor(int colunaNoTabuleiroDoProfessor) {this.colunaNoTabuleiroDoProfessor = colunaNoTabuleiroDoProfessor;}
     public void setLinhaNoTabuleiroDoProfessor(int linhaNoTabuleiroDoProfessor) {this.linhaNoTabuleiroDoProfessor = linhaNoTabuleiroDoProfessor;}
-    public void setDanoDoProfessor(double danoDoProfessor) {this.danoDoProfessor = danoDoProfessor;}
+    //public void setDanoDoProfessor(double danoDoProfessor) {this.danoDoProfessor = danoDoProfessor;}
 
     public void professorRecebeDano(double dano) {
         this.vidaDoProfessor -= dano;
@@ -61,15 +62,16 @@ public class Professor {
     public tiro professorAtacaZumbi(Zumbi zumbi, double posicaoXDoTiro, double posicaoYDoTiro) {
 
         if (professorEstaVivo() == true) {
-                return new tiro(
-                    posicaoXDoTiro, 
-                    posicaoYDoTiro,
-                    this.danoDoProfessor, 
-                    1 // Velocidade do tiro é 1
+            return new tiro(
+                posicaoXDoTiro, 
+                posicaoYDoTiro,
+                this.danoDoProfessor, 
+                1 // Velocidade do tiro
             ); 
         } 
         
-        return null; // retorna null se o professor não estiver vivo, indicando que ele não pode atacar
+        // retorna null se o professor não estiver vivo, indicando que ele não pode atacar
+        return null; 
     }
 
     public boolean podeAtirar(long agora) {

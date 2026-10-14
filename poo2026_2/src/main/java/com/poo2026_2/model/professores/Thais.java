@@ -10,6 +10,6 @@ public class Thais extends Professor {
             linhaNoTabuleiroDoProfessor, 
             colunaNoTabuleiroDoProfessor);
             
-        setDanoDoProfessor(40); // Definindo o dano do professor Thais
+        //setDanoDoProfessor(40); // Definindo o dano do professor Thais
     }
 }

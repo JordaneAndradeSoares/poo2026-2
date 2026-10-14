@@ -4,6 +4,9 @@
  */
 package com.poo2026_2.controller;
 
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+
 import java.net.URL;
 import java.util.ResourceBundle;
 
@@ -54,11 +57,14 @@ import javafx.scene.image.ImageView;
 import java.util.ArrayList;
 import java.util.Random;
 
-import javafx.scene.shape.Circle; // Importação da classe Circle para criar visuais dos tiros
-import javafx.scene.shape.Rectangle; // Importação da classe Rectangle para criar visuais dos zumbis
+//import javafx.scene.shape.Circle; // Importação da classe Circle para criar visuais dos tiros
+//import javafx.scene.shape.Rectangle; // Importação da classe Rectangle para criar visuais dos zumbis
+
+import com.poo2026_2.model.tiros.python; // tiro de python
 
 import com.poo2026_2.view.professores.ProfessorView; // Visual dos professores
 import com.poo2026_2.view.professores.CafeteiraView;// Visual da cafeteira
+
 import javafx.animation.AnimationTimer;
 import javafx.scene.Node;
 
@@ -107,7 +113,9 @@ public class JogoController implements ControladorTela, Initializable {
     //private ArrayList<Circle> cafesVisual = new ArrayList<>();
 
     private ArrayList<tiro> tiros = new ArrayList<>(); // Lista para armazenar TODOS os tiros disparados pelos professores
-    private ArrayList<Circle> visuaisDosTiros = new ArrayList<>(); // Lista para armazenar os visuais dos tiros (apenas para teste)
+    private ArrayList<ImageView> visuaisDosTiros = new ArrayList<>();
+
+    //private ArrayList<Circle> visuaisDosTiros = new ArrayList<>(); // Lista para armazenar os visuais dos tiros (apenas para teste)
     //private ArrayList<Rectangle> visuaisDosZumbis = new ArrayList<>(); // Lista para armazenar os visuais dos zumbis (apenas para teste)
 
     private AnimationTimer timer = new AnimationTimer() {
@@ -457,10 +465,8 @@ public class JogoController implements ControladorTela, Initializable {
 
                 if (professorMaisProximo != null && cafeteiraMaisProxima != null) {
 
-                    double xDaCafeteiraMaisProxima = GRADE_X
-                            + cafeteiraMaisProxima.getColunaNoTabuleiroDaCafeteira() * CEL_LARG;
-                    double xDoProfessorMaisProximo = GRADE_X
-                            + professorMaisProximo.getColunaNoTabuleiroDoProfessor() * CEL_LARG;
+                    double xDaCafeteiraMaisProxima = GRADE_X + cafeteiraMaisProxima.getColunaNoTabuleiroDaCafeteira() * CEL_LARG;
+                    double xDoProfessorMaisProximo = GRADE_X + professorMaisProximo.getColunaNoTabuleiroDoProfessor() * CEL_LARG;
 
                     if (xDaCafeteiraMaisProxima > xDoProfessorMaisProximo) {
                         professorBloqueando = true;
@@ -634,10 +640,23 @@ public class JogoController implements ControladorTela, Initializable {
 
             // Atualiza a posição de cada tiro
             for (int i = 0; i < tiros.size(); i++) {
+
                 tiro tiroAtual = tiros.get(i);
                 boolean tiroFoiRemovido = false;
 
+                //double xAntes = tiroAtual.getPosicaoXDoTiro();
+                
                 tiroAtual.moverTiro(); // movendo o tiro
+
+                //double xDepois = tiroAtual.getPosicaoXDoTiro();
+                //System.out.println("X antes: " + xAntes + " | X depois: " + xDepois);
+
+                ImageView tiroVisual = visuaisDosTiros.get(i);
+
+                tiroVisual.setLayoutX(tiroAtual.getPosicaoXDoTiro() - 15);
+                tiroVisual.setLayoutY(tiroAtual.getPosicaoYDoTiro() - 15);
+
+                //System.out.println("Modelo X: " + tiroAtual.getPosicaoXDoTiro() + " | Visual X: " + tiroVisual.getLayoutX());
 
                 for (int j = 0; j < zumbis.size(); j++) {
 
@@ -651,6 +670,7 @@ public class JogoController implements ControladorTela, Initializable {
 
                         // verificação de morte do zumbi (remove o zumbi morto)
                         if (zumbi.zumbiEstaVivo() == false) {
+
                             //Rectangle zumbiVisual = visuaisDosZumbis.get(j);
 
                             ZumbiView zumbiVisual = visuaisDosZumbis.get(j);
@@ -663,9 +683,18 @@ public class JogoController implements ControladorTela, Initializable {
                         }
 
                         // removendo o visual dos tiros (circulo de teste)
-                        Circle tiroVisual = visuaisDosTiros.get(i);
+                        //Circle tiroVisual = visuaisDosTiros.get(i);
+                        //camadaJogo.getChildren().remove(tiroVisual);
+                        //visuaisDosTiros.remove(i);
+
+                        // removendo o visual dos tiros
                         camadaJogo.getChildren().remove(tiroVisual);
                         visuaisDosTiros.remove(i);
+                        
+                        // ativando o efeito do tiro de python (philipe)
+                        if (zumbi.zumbiEstaVivo() && tiroAtual instanceof python) {
+                            ((python) tiroAtual).aplicarLentidaoNoZumbi(zumbi);
+                        }
 
                         // removendo o tiro que acertou o zumbi
                         tiros.remove(i);
@@ -678,12 +707,13 @@ public class JogoController implements ControladorTela, Initializable {
                     }
                 }
 
-                if (tiroFoiRemovido == false
-                        && (tiroAtual.getPosicaoXDoTiro() > LARGURA_PALCO
-                        || tiroAtual.getPosicaoXDoTiro() < 0)) {
+                if (tiroFoiRemovido == false && (tiroAtual.getPosicaoXDoTiro() > LARGURA_PALCO || tiroAtual.getPosicaoXDoTiro() < 0)) {
 
                     // removendo o visual dos tiros (circulo de teste)
-                    Circle tiroVisual = visuaisDosTiros.get(i);
+                    //Circle tiroVisual = visuaisDosTiros.get(i);
+                    //camadaJogo.getChildren().remove(tiroVisual);
+                    //visuaisDosTiros.remove(i);
+
                     camadaJogo.getChildren().remove(tiroVisual);
                     visuaisDosTiros.remove(i);
 
@@ -697,14 +727,14 @@ public class JogoController implements ControladorTela, Initializable {
                     continue;
                 }
 
-                Circle tiroVisual = visuaisDosTiros.get(i); // visual do tiro (apenas para teste)
-                tiroVisual.setCenterX(tiroAtual.getPosicaoXDoTiro());
-                tiroVisual.setCenterY(tiroAtual.getPosicaoYDoTiro());
+                //Circle tiroVisual = visuaisDosTiros.get(i); // visual do tiro (apenas para teste)
+                //tiroVisual.setCenterX(tiroAtual.getPosicaoXDoTiro());
+                //tiroVisual.setCenterY(tiroAtual.getPosicaoYDoTiro());
             }
         }
     };
 
-    // criando um novo tiro
+    /*
     public void adicionarTiro(tiro novoTiro, double posicaoXDoTiro, double posicaoYDoTiro) {
         tiros.add(novoTiro);
 
@@ -714,6 +744,84 @@ public class JogoController implements ControladorTela, Initializable {
         tiroVisual.setCenterY(posicaoYDoTiro);
         camadaJogo.getChildren().add(tiroVisual);
         visuaisDosTiros.add(tiroVisual);
+    }
+    */
+
+   /*
+   public void adicionarTiro(tiro novoTiro, double posicaoXDoTiro, double posicaoYDoTiro) {
+
+        //System.out.println("Classe do tiro: " + novoTiro.getClass().getName());
+        //System.out.println("Imagem do tiro: " + novoTiro.getCaminhoImagem());
+        
+        tiros.add(novoTiro);
+
+        var recurso = getClass().getResource(novoTiro.getCaminhoImagem());
+        System.out.println("Recurso encontrado: " + recurso);
+
+        Image imagemTiro = new Image(getClass().getResourceAsStream(novoTiro.getCaminhoImagem()));
+
+        ImageView tiroVisual = new ImageView(imagemTiro);
+
+        tiroVisual.setFitWidth(100);
+        tiroVisual.setFitHeight(100);
+
+        tiroVisual.setLayoutX(posicaoXDoTiro);
+        tiroVisual.setLayoutY(posicaoYDoTiro);
+
+        camadaJogo.getChildren().add(tiroVisual);
+
+        tiroVisual.setViewOrder(-1000);
+        tiroVisual.toFront();
+
+        visuaisDosTiros.add(tiroVisual);
+
+        System.out.println("Posição X do tiro: " + tiroVisual.getLayoutX());
+        System.out.println("Posição Y do tiro: " + tiroVisual.getLayoutY());
+        System.out.println("Largura da camada do tiro: " + camadaJogo.getWidth());
+        System.out.println("Altura da camada do tiro: " + camadaJogo.getHeight());
+    }
+    */
+
+    // criando um novo tiro
+    public void adicionarTiro(tiro novoTiro, double posicaoXDoTiro, double posicaoYDoTiro) {
+
+        URL caminho = getClass().getResource(novoTiro.getCaminhoImagem());
+        
+        if (caminho == null) {
+            System.err.println("Imagem não encontrada: " + novoTiro.getCaminhoImagem());
+            return;
+        }
+        
+        Image imagemTiro = new Image(caminho.toExternalForm());
+
+        if (imagemTiro.isError()) {
+            System.err.println("Erro ao carregar: " + novoTiro.getCaminhoImagem());
+
+            if (imagemTiro.getException() != null) {
+                imagemTiro.getException().printStackTrace();
+            }
+
+            return;
+        }
+
+        ImageView tiroVisual = new ImageView(imagemTiro);
+        
+        System.out.println("Caminho da imagem: " + caminho);
+        System.out.println("Imagem carregada: " + !imagemTiro.isError());
+        System.out.println("Dimensões: " + imagemTiro.getWidth() + " x " + imagemTiro.getHeight());
+        
+        tiros.add(novoTiro);
+
+        tiroVisual.setFitWidth(30);
+        tiroVisual.setFitHeight(30);
+        tiroVisual.setPreserveRatio(true);
+
+        tiroVisual.setLayoutX(posicaoXDoTiro - 15);
+        tiroVisual.setLayoutY(posicaoYDoTiro - 15);
+
+        camadaJogo.getChildren().add(tiroVisual);
+        visuaisDosTiros.add(tiroVisual);
+        tiroVisual.toFront();
     }
 
     // método para "pedir" ao professor para atacar o zumbi

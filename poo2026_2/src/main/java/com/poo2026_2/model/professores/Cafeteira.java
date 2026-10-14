@@ -18,7 +18,7 @@ public class Cafeteira {
     // Construtor
     public Cafeteira(int linhaNoTabuleiroDaCafeteira, int colunaNoTabuleiroDaCafeteira) {
 
-        this.cafePorCiclo = 50;
+        this.cafePorCiclo = 100;
         this.intervaloProducao = 10_000_000_000L;
         this.temperatura = 6_000_000_000L;
 

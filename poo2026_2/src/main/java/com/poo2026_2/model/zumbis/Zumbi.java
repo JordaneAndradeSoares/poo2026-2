@@ -15,8 +15,12 @@ public class Zumbi {
     private boolean zumbiAtacando;
     private boolean ZumbiFoiAtingido;
 
+    private boolean zumbiNaoEstaLento = true;
+
     public Zumbi(double velocidadeDoZumbi, double danoDoZumbi, double vidaDoZumbi, long cadenciaDoZumbi) {
-        this.velocidadeDoZumbi = velocidadeDoZumbi;
+
+        setVelocidadeDoZumbi(velocidadeDoZumbi);
+
         this.danoDoZumbi = danoDoZumbi;
 
         this.vidaDoZumbi = vidaDoZumbi; // Valor inicial de vida do zumbi
@@ -32,7 +36,9 @@ public class Zumbi {
     public boolean zumbiEstaVivo() {return this.vidaDoZumbi > 0;}
     public boolean foiAtingido() {return this.ZumbiFoiAtingido;}
 
-    // gets
+    public boolean getZumbiLento() {return zumbiNaoEstaLento;}
+    public void setZumbiLento(boolean zumbiNaoEstaLento) {this.zumbiNaoEstaLento = zumbiNaoEstaLento;}
+
     public double getPosicaoXDoZumbi() {return posicaoXDoZumbi;}
     public double getPosicaoYDoZumbi() {return posicaoYDoZumbi;}
     public double getVelocidadeDoZumbi() {return velocidadeDoZumbi;}
@@ -40,11 +46,11 @@ public class Zumbi {
     public long getUltimaMordidaDoZumbi() {return ultimaMordida;}
     public double getDanoDoZumbi() {return danoDoZumbi;}
     public double getVidaDoZumbi() {return vidaDoZumbi;}
-    
-    // sets
+
     public void setPosicaoXDoZumbi(double posicaoXDoZumbi) {this.posicaoXDoZumbi = posicaoXDoZumbi;}
     public void setPosicaoYDoZumbi(double posicaoYDoZumbi) {this.posicaoYDoZumbi = posicaoYDoZumbi;}
     public void setVidaDoZumbi(double vidaDoZumbi) {this.vidaDoZumbi = vidaDoZumbi;}
+    public void setVelocidadeDoZumbi(double velocidadeDoZumbi) {this.velocidadeDoZumbi = velocidadeDoZumbi;}
     public void setCadenciaDoZumbi(long cadenciaDoZumbi) {this.cadenciaDoZumbi = cadenciaDoZumbi;}
     public void setUltimaMordidaDoZumbi(long ultimaMordida) {this.ultimaMordida = ultimaMordida;}
 
