@@ -54,7 +54,7 @@ Entidade (abstrata)
                                     dano: 100hp
                                     cadência: 1.5s
                                     efeito: tiro padrão, em 3 linhas
- │     ├── ProfessorLucas         → melee Skate
+ │     ├── ProfessorLucas         → melee Skate - custo 150 cafe
                                     dano: hitkill
                                     cadência: 17s
                                     efeito: da uma skatedada no zumbi e depois fica carregando
