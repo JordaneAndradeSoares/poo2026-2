@@ -28,6 +28,8 @@ public class Glaucia extends Professor {
         );
 
         //setDanoDoProfessor(40); // Definindo o dano do professor Glaucia
+
+        setEsseProfessorDeveAtacarOsZumbis(true);
     }
 
     @Override

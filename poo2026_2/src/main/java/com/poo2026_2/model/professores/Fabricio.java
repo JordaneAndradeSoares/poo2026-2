@@ -28,6 +28,8 @@ public class Fabricio extends Professor {
         );
                 
         //setDanoDoProfessor(40); // Definindo o dano do professor Fabricio
+
+        setEsseProfessorDeveAtacarOsZumbis(true);
     }
 
     @Override

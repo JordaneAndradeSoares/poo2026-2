@@ -9,7 +9,7 @@ public class ZumbiCalouroBlindado extends ZumbiCalouro {
         super(
             0.6,
             40,
-            200,
+            1370,
             1_000_000_000L
         );
     }

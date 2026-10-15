@@ -7,7 +7,7 @@ public class ZumbiDoutorando extends Zumbi {
 
         super(
             0.2,
-            40,
+            999999, // estou usando um dano alto para causar hitkill (idealmente devia usar o valor exata da vida do alvo)
             300,
             1_000_000_000L
         );

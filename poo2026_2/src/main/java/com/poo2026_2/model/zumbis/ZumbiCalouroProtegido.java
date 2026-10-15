@@ -9,7 +9,7 @@ public class ZumbiCalouroProtegido extends ZumbiCalouro {
         super(
             0.6,
             40,
-            150,
+            650,
             1_000_000_000L
         );
     }

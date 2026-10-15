@@ -31,6 +31,8 @@ public class Philipe extends Professor {
         );
             
         //setDanoDoProfessor(danoPhilipe); // Definindo o dano do professor Philipe
+
+        setEsseProfessorDeveAtacarOsZumbis(true);
     }
 
     @Override

@@ -17,6 +17,7 @@ public class Zumbi {
 
     private boolean zumbiNaoEstaLento = true;
 
+    // vida, velocidade, dano - 100, cadência - 1s, linha
     public Zumbi(double velocidadeDoZumbi, double danoDoZumbi, double vidaDoZumbi, long cadenciaDoZumbi) {
 
         setVelocidadeDoZumbi(velocidadeDoZumbi);

@@ -24,7 +24,7 @@ public class ZumbiCalouro extends Zumbi {
         super(
             0.6,
             40,
-            100,
+            200,
             1_000_000_000L
         );
     }

@@ -11,5 +11,7 @@ public class Thais extends Professor {
             colunaNoTabuleiroDoProfessor);
             
         //setDanoDoProfessor(40); // Definindo o dano do professor Thais
+
+        setEsseProfessorDeveAtacarOsZumbis(true);
     }
 }

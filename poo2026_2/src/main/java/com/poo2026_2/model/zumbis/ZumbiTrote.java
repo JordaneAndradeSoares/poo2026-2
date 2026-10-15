@@ -8,7 +8,7 @@ public class ZumbiTrote extends Zumbi {
          super(
             1.0,
             40,
-            60,
+            400,
             1_000_000_000L
         );
     }

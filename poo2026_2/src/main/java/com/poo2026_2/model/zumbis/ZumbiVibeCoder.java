@@ -8,7 +8,7 @@ public class ZumbiVibeCoder extends Zumbi {
          super(
             1.5,
             20,
-            60,
+            200,
             1_000_000_000L
         );
     }

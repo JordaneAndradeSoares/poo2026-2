@@ -588,23 +588,24 @@ public class JogoController implements ControladorTela, Initializable {
 
                 for (Zumbi zumbiAtual : zumbis) {
 
-                    if (professor.getLinhaNoTabuleiroDoProfessor()
-                            == (int) ((zumbiAtual.getPosicaoYDoZumbi() - GRADE_Y) / CEL_ALT)) {
-
-                        if ((GRADE_X + professor.getColunaNoTabuleiroDoProfessor() * CEL_LARG)
-                                <= zumbiAtual.getPosicaoXDoZumbi()) {
-
-                            if (zumbiAlvoDoTiroDoProfessor == null) {
-
-                                zumbiAlvoDoTiroDoProfessor = zumbiAtual;
-
-                            } else {
-
-                                if (zumbiAtual.getPosicaoXDoZumbi()
-                                        < zumbiAlvoDoTiroDoProfessor.getPosicaoXDoZumbi()) {
-
-                                    // troca o alvo
+                    if (professor.getEsseProfessorDeveAtacarOsZumbis()) {
+                        
+                        if (professor.getLinhaNoTabuleiroDoProfessor() == (int) ((zumbiAtual.getPosicaoYDoZumbi() - GRADE_Y) / CEL_ALT)) {
+    
+                            if ((GRADE_X + professor.getColunaNoTabuleiroDoProfessor() * CEL_LARG) <= zumbiAtual.getPosicaoXDoZumbi()) {
+    
+                                if (zumbiAlvoDoTiroDoProfessor == null) {
+    
                                     zumbiAlvoDoTiroDoProfessor = zumbiAtual;
+    
+                                } else {
+    
+                                    if (zumbiAtual.getPosicaoXDoZumbi()
+                                            < zumbiAlvoDoTiroDoProfessor.getPosicaoXDoZumbi()) {
+    
+                                        // troca o alvo
+                                        zumbiAlvoDoTiroDoProfessor = zumbiAtual;
+                                    }
                                 }
                             }
                         }

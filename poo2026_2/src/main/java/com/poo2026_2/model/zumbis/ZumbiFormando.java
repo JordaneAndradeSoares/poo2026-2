@@ -7,8 +7,8 @@ public class ZumbiFormando extends Zumbi {
 
         super(
             0.4,
-            40,
-            250,
+            999999, // estou usando um dano alto para causar hitkill (idealmente deveria usar o valor exata da vida do alvo)
+            1670,
             1_000_000_000L
         );
     }

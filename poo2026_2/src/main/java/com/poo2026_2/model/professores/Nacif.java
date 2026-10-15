@@ -13,5 +13,7 @@ public class Nacif extends Professor {
         );
             
         //setDanoDoProfessor(40); // Definindo o dano do professor Nacif
+
+        setEsseProfessorDeveAtacarOsZumbis(true);
     }
 }

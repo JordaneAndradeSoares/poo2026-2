@@ -26,8 +26,10 @@ public class Daniel extends Professor {
             linhaNoTabuleiroDoProfessor, 
             colunaNoTabuleiroDoProfessor
         );
-            
+        
         //setDanoDoProfessor(40); // Definindo o dano do professor Daniel
+
+        setEsseProfessorDeveAtacarOsZumbis(true);
     }
 
     @Override

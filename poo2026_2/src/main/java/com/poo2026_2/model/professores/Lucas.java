@@ -15,6 +15,8 @@ public class Lucas extends Professor {
             colunaNoTabuleiroDoProfessor);
 
         //setDanoDoProfessor(40); // Definindo o dano do professor Lucas
+
+        setEsseProfessorDeveAtacarOsZumbis(true);
     }
 
     @Override

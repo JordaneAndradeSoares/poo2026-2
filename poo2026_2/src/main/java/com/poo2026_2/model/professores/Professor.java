@@ -8,8 +8,9 @@ import com.poo2026_2.controller.JogoController; // Importação da classe JogoCo
 
 public class Professor {
 
-    // Atributos do diagrama
     private int custoCafe;
+
+    private boolean esseProfessorDeveAtacarOsZumbis; // esse atributo define se um professor deve ou não atacar
 
     private long cadenciaTiroDoProfessor;
     private long ultimoTiro; // Atributo para armazenar o tempo do último tiro
@@ -32,13 +33,15 @@ public class Professor {
     }
 
     // Getters e Setters
-    public int getCustoCafe() {return custoCafe;}
-    public double getDanoDoProfessor() {return danoDoProfessor;}
-    public double getCadenciaTiro() {return cadenciaTiroDoProfessor;}
-    public int getVidaDoProfessor() {return vidaDoProfessor;}
-    public int getLinhaNoTabuleiroDoProfessor() {return linhaNoTabuleiroDoProfessor;}
-    public int getColunaNoTabuleiroDoProfessor() {return colunaNoTabuleiroDoProfessor;}
+    public int getCustoCafe() {return this.custoCafe;}
+    public double getDanoDoProfessor() {return this.danoDoProfessor;}
+    public double getCadenciaTiro() {return this.cadenciaTiroDoProfessor;}
+    public int getVidaDoProfessor() {return this.vidaDoProfessor;}
+    public int getLinhaNoTabuleiroDoProfessor() {return this.linhaNoTabuleiroDoProfessor;}
+    public int getColunaNoTabuleiroDoProfessor() {return this.colunaNoTabuleiroDoProfessor;}
+    public boolean getEsseProfessorDeveAtacarOsZumbis() {return this.esseProfessorDeveAtacarOsZumbis;}
 
+    public void setEsseProfessorDeveAtacarOsZumbis(boolean esseProfessorDeveAtacarOsZumbis) {this.esseProfessorDeveAtacarOsZumbis = esseProfessorDeveAtacarOsZumbis;}
     public void setCustoCafe(int custoCafe) {this.custoCafe = custoCafe;}
     public void setCadenciaTiroProfessor(long cadenciaTiroDoProfessor) {this.cadenciaTiroDoProfessor = cadenciaTiroDoProfessor;}
     public void setVidaDoProfessor(int vidaDoProfessor) {this.vidaDoProfessor = vidaDoProfessor;}
