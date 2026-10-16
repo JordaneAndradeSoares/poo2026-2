@@ -1,21 +1,19 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/javafx/FXMLController.java to edit this template
- */
 package com.poo2026_2.controller;
 
 import com.poo2026_2.audio.AudioManager;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 
-/**
- * FXML Controller class
- *
- * @author thoma
- */
+public class SelecaoNivelController implements ControladorTela {
 
-public class SelecaoNivelController
-        implements ControladorTela {
+    @FXML
+    private Button btnNivel1;
+
+    @FXML
+    private Button btnNivel2;
+
+    @FXML
+    private Button btnNivel3;
 
     @FXML
     private Button btnVoltar;
@@ -23,33 +21,47 @@ public class SelecaoNivelController
     private GerenciadorDeTelas gerenciadorDeTelas;
 
     @Override
-    public void setGerenciadorDeTelas(
-            GerenciadorDeTelas gerenciadorDeTelas) {
-
+    public void setGerenciadorDeTelas(GerenciadorDeTelas gerenciadorDeTelas) {
         this.gerenciadorDeTelas = gerenciadorDeTelas;
     }
 
     @FXML
     private void initialize() {
-
-        configurarSomDeHover(btnVoltar);
+        // Aplica o som ao passar o cursor sobre todos os botões
+        configurarSomDeHover(btnNivel1, btnNivel2, btnNivel3, btnVoltar);
     }
 
-    // Toca o mesmo som usado pelos botões do menu quando o mouse passa sobre o botão.
     private void configurarSomDeHover(Button... botoes) {
-
         for (Button botao : botoes) {
-
             botao.setOnMouseEntered(
                     event -> AudioManager.tocarSomHoverBotao()
             );
         }
     }
 
-    // Volta para o menu principal.
+    @FXML
+    private void selecionarNivel1() {
+        iniciarNivel(1);
+    }
+
+    @FXML
+    private void selecionarNivel2() {
+        iniciarNivel(2);
+    }
+
+    @FXML
+    private void selecionarNivel3() {
+        iniciarNivel(3);
+    }
+
+    private void iniciarNivel(int nivel) {
+        // Redireciona para a tela do jogo passando o nível selecionado
+        // (Ajuste o nome do arquivo FXML da tela do jogo conforme configurado no projeto)
+        gerenciadorDeTelas.mudarTela("Jogo.fxml");
+    }
+
     @FXML
     private void voltar() {
-
         gerenciadorDeTelas.mudarTela("Menu.fxml");
     }
 }
