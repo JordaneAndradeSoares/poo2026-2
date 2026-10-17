@@ -15,6 +15,7 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
+import javafx.scene.image.ImageView;
 
 /**
  * FXML Controller class
@@ -47,9 +48,14 @@ public class JogoController implements ControladorTela, Initializable {
     private GridPane grade;
     @FXML
     private Pane camadaJogo;
-
     @FXML
     private Button btnVoltar;
+    @FXML
+    private StackPane camadaResultado;
+    @FXML
+    private ImageView imagemVitoria;
+    @FXML
+    private ImageView imagemDerrota;
 
     private GerenciadorDeTelas gerenciadorDeTelas;
 
@@ -67,6 +73,8 @@ public class JogoController implements ControladorTela, Initializable {
                 if (ultimo != 0) {
                     double delta = (agora - ultimo) / 1_000_000_000.0;
                     gerenciadorDeJogo.atualizar(Math.min(delta, 0.1));
+                    mostrarResultado();
+
                     // redesenhar sprites aqui
                 }
                 ultimo = agora;
@@ -161,5 +169,26 @@ public class JogoController implements ControladorTela, Initializable {
         timer.stop(); 
         gerenciadorDeJogo.encerrar();
         gerenciadorDeTelas.voltarMenu();
+    }
+
+    private void mostrarResultado() {
+        if (!gerenciadorDeJogo.terminou()) {
+            return;
+        }
+
+        boolean venceu = gerenciadorDeJogo.isVitoria();
+
+        imagemVitoria.setVisible(venceu);
+        imagemDerrota.setVisible(!venceu);
+        camadaResultado.setVisible(true);
+    }
+
+    @FXML
+    private void jogarNovamente() {
+        camadaResultado.setVisible(false);
+        imagemVitoria.setVisible(false);
+        imagemDerrota.setVisible(false);
+
+        gerenciadorDeJogo.reiniciarJogo();
     }
 }

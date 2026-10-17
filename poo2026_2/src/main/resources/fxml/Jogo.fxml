@@ -1,13 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.String?>
 <?import java.net.URL?>
+<?import java.lang.String?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
 
 <!--
   Raiz: StackPane que ocupa a janela toda.
@@ -32,14 +33,71 @@
 
         <!-- Camada 2: grade logica 5 x 9 (posicao/tamanho definidos no controller) -->
         <GridPane fx:id="grade">
-         <styleClass>
-            <String fx:value="grade" />
-            <String fx:value="pane" />
-         </styleClass></GridPane>
+            <styleClass>
+                <String fx:value="grade" />
+                <String fx:value="pane" />
+            </styleClass>
+        </GridPane>
 
         <!-- Camada 3: zumbis e projeteis (movimento livre em pixels) -->
         <Pane fx:id="camadaJogo" mouseTransparent="true" prefHeight="941" prefWidth="1672" />
 
-        <Button fx:id="btnVoltar" layoutX="1132.0" layoutY="90.0" mnemonicParsing="false" onAction="#voltar" prefHeight="62.0" prefWidth="200.0" styleClass="botao-voltar" stylesheets="@../styles/jogo.css" text="voltar" />
-    </Pane>
+            <Button 
+                fx:id="btnVoltar" 
+                layoutX="1132.0" 
+                layoutY="90.0" 
+                mnemonicParsing="false" 
+                onAction="#voltar" 
+                prefHeight="62.0" 
+                prefWidth="200.0" 
+                styleClass="botao-voltar" 
+                stylesheets="@../styles/jogo.css" 
+                text="voltar" />
+
+        </Pane>
+
+    <!-- Camada 4: tela de resultado do jogo (vitoria ou derrota) -->
+    <StackPane 
+        fx:id="camadaResultado"
+        prefWidth="1672"
+        prefHeight="941"
+        visible="false"
+        managed="false"
+        style="-fx-background-color: rgba(0, 0, 0, 0.55);">
+
+        <!-- Imagem da vitória -->
+        <ImageView
+            fx:id="imagemVitoria"
+            fitWidth="700"
+            fitHeight="600"
+            preserveRatio="true"
+            visible="false"
+            mouseTransparent="true">
+
+            <image>
+                <Image url="@../images/telas/vitoria.png"/>
+            </image>
+        </ImageView>
+
+        <!-- Imagem da derrota -->
+        <ImageView 
+            fx:id="imagemDerrota"
+            fitWidth="700"
+            fitHeight="600"
+            preserveRatio="true"
+            visible="false"
+            mouseTransparent="true">
+
+            <image>
+                <Image url="@../images/telas/derrota.png"/>
+            </image>
+        </ImageView>
+
+        <!-- Botões da tela final -->
+        <VBox alignment="CENTER" spacing="15" translateY="200">
+            <Button text="Jogar novamente" onAction="#jogarNovamente"/>
+            <Button text="Voltar ao menu" onAction="#voltar"/>
+        </VBox>
+
+    </StackPane>
 </StackPane>

@@ -116,7 +116,7 @@ public class GerenciadorDeJogo {
         faseAtual.reiniciar();
         jogoAtivo = true;
     }
- 
+
     // ===================== PISO (professores e cafeteiras) =====================
  
     /**
@@ -363,6 +363,8 @@ public class GerenciadorDeJogo {
         if (terminou) {
             return;
         }
+
+        // verifica se não há mais zumbis (vitoria)
         if (faseConcluida() && zumbis.isEmpty()) {
             vitoria = true;
             terminou = true;
@@ -378,6 +380,8 @@ public class GerenciadorDeJogo {
         if (terminou) {
             return;
         }
+
+        // verifica se algum zumbi passou (derrota)  
         for (Zumbi z : zumbis) {
             if (z.estaVivo() && z.getPosicaoX() <= 0) {
                 vitoria = false;
@@ -387,6 +391,7 @@ public class GerenciadorDeJogo {
             }
         }
     }
+
     public boolean terminou() {
         return terminou;
     }
