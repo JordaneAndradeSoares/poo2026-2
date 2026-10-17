@@ -4,17 +4,6 @@ import com.poo2026_2.model.tiros.c;
 import com.poo2026_2.model.tiros.tiro;
 import com.poo2026_2.model.zumbis.Zumbi;
 
-
-/*
-
-atira C - custo 100 cafe
-
-dano: 20hp
-cadência: 1.5s
-efeito: tiro padrão
-                                    
-*/
-
 public class Daniel extends Professor {
 
     // Construtor
@@ -26,8 +15,6 @@ public class Daniel extends Professor {
             linhaNoTabuleiroDoProfessor, 
             colunaNoTabuleiroDoProfessor
         );
-        
-        //setDanoDoProfessor(40); // Definindo o dano do professor Daniel
 
         setEsseProfessorDeveAtacarOsZumbis(true);
     }

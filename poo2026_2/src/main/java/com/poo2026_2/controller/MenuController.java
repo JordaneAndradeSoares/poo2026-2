@@ -16,10 +16,7 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Ellipse;
 import javafx.util.Duration;
-
 import java.util.Random;
-
-//import javax.swing.text.html.ImageView;
 import javafx.scene.image.ImageView;
 import javafx.animation.PauseTransition;
 
@@ -77,6 +74,7 @@ public class MenuController implements ControladorTela {
 
     @FXML
     private void initialize() {
+        
         painelBotoes.scaleXProperty().bind(
                 root.widthProperty().divide(LARGURA_REFERENCIA)
         );
@@ -105,39 +103,6 @@ public class MenuController implements ControladorTela {
             );
         }
     }
-
-    /* 
-    private void alternarFundoAleatoriamente() {
-
-        int intervalo = random.nextInt(21) + 10;
-
-        temporizadorFundo.setDuration(Duration.seconds(intervalo));
-
-        temporizadorFundo.setOnFinished(event -> {
-
-            fundoNoturnoAtivo = !fundoNoturnoAtivo;
-
-            fundoDia.setVisible(!fundoNoturnoAtivo);
-            fundoNoite.setVisible(fundoNoturnoAtivo);
-
-            alternarFundoAleatoriamente();
-        });
-
-        if (fundoNoturnoAtivo) {
-
-            String[] trovoes = {
-                "/audio/trovao1.m4a",
-                "/audio/trovao2.m4a"
-            };
-
-            String trovaEscolhido = trovoes[random.nextInt(trovoes.length)];
-
-            AudioManager.tocarEfeito(trovaEscolhido);
-        }
-
-        temporizadorFundo.playFromStart();
-    }
-    */
 
     private void alternarFundoAleatoriamente() {
 

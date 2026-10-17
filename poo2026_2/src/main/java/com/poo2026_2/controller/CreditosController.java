@@ -38,23 +38,6 @@ public class CreditosController implements Initializable, ControladorTela {
         btnVoltar.setOnMouseEntered(event -> AudioManager.tocarSomHoverBotao() );
     }
 
-    /* 
-    @FXML
-    private void voltar() {
-
-        AudioManager.tocarEfeito("/audio/botao-hover.m4a"); 
-
-        if (gerenciadorDeTelas == null) { 
-
-            System.err.println( "Erro: GerenciadorDeTelas não foi configurado nos créditos."); 
-            return; 
-        }
-
-        gerenciadorDeTelas.voltarMenu();
-
-    }
-    */
-
     @FXML
     private void voltar() {
 

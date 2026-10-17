@@ -4,17 +4,6 @@ import com.poo2026_2.model.tiros.javaScript;
 import com.poo2026_2.model.tiros.tiro;
 import com.poo2026_2.model.zumbis.Zumbi;
 
-/*
-
-Professora Glaucia
-
-atira JavaScript - custo 100 cafe
-dano: 40hp
-efeito: disparo de fogo, queima os inimigos
-cadência: 1.5s
-
-*/
-
 public class Glaucia extends Professor {
 
     // Construtor
@@ -26,8 +15,6 @@ public class Glaucia extends Professor {
             linhaNoTabuleiroDoProfessor, 
             colunaNoTabuleiroDoProfessor
         );
-
-        //setDanoDoProfessor(40); // Definindo o dano do professor Glaucia
 
         setEsseProfessorDeveAtacarOsZumbis(true);
     }

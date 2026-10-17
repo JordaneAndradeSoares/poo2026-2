@@ -57,11 +57,7 @@ import javafx.scene.image.ImageView;
 import java.util.ArrayList;
 import java.util.Random;
 
-//import javafx.scene.shape.Circle; // Importação da classe Circle para criar visuais dos tiros
-//import javafx.scene.shape.Rectangle; // Importação da classe Rectangle para criar visuais dos zumbis
-
 import com.poo2026_2.model.tiros.python; // tiro de python
-
 import com.poo2026_2.view.professores.ProfessorView; // Visual dos professores
 import com.poo2026_2.view.professores.CafeteiraView;// Visual da cafeteira
 
@@ -110,13 +106,9 @@ public class JogoController implements ControladorTela, Initializable {
     private ArrayList<Cafeteira> cafeteiras = new ArrayList<>(); // Lista para armazenar todas as cafeteiras
     private ArrayList<CafeteiraView> cafeteirasVisual = new ArrayList<>(); // Lista do visual das cafeteiras
     private ArrayList<Cafe> cafes = new ArrayList<>(); // Lista para armazenar todas as cafes
-    //private ArrayList<Circle> cafesVisual = new ArrayList<>();
 
     private ArrayList<tiro> tiros = new ArrayList<>(); // Lista para armazenar TODOS os tiros disparados pelos professores
     private ArrayList<ImageView> visuaisDosTiros = new ArrayList<>();
-
-    //private ArrayList<Circle> visuaisDosTiros = new ArrayList<>(); // Lista para armazenar os visuais dos tiros (apenas para teste)
-    //private ArrayList<Rectangle> visuaisDosZumbis = new ArrayList<>(); // Lista para armazenar os visuais dos zumbis (apenas para teste)
 
     private AnimationTimer timer = new AnimationTimer() {
 
@@ -143,20 +135,6 @@ public class JogoController implements ControladorTela, Initializable {
 
                     // visual do cafe
                     cafeteirasVisual.get(c).mostrarCheia();
-
-                    // visual provisorio do cafe
-                    //Circle cafeVisual = new Circle(20, Color.BROWN);
-
-                    //cafeVisual.setFill(Color.BROWN);
-
-                    //int linhaCafe = cafe.getPosicaoLinhaCafe();
-                    //int colunaCafe = cafe.getPosicaoColunaCafe();
-
-                    //StackPane celulaCafe = celulas[linhaCafe][colunaCafe];
-
-                    //celulaCafe.getChildren().add(cafeVisual);
-                    //cafeVisual.toFront();
-                    //cafesVisual.add(cafeVisual);
                 }
             }
 
@@ -166,32 +144,12 @@ public class JogoController implements ControladorTela, Initializable {
                 // removendo a cafe frio
                 if (!cafes.get(c).cafeEstaQuente(agora)) {
 
-                    //int linhaCafeFrio = cafes.get(c).getPosicaoLinhaCafe();
-                    //int colunaCafeFrio = cafes.get(c).getPosicaoColunaCafe();
-
-                    /*
-                    Circle cafeVisualParaRemover = cafesVisual.get(c);
-                    celulas[linhaCafeFrio][colunaCafeFrio].getChildren().remove(cafeVisualParaRemover);
-                    cafesVisual.remove(c);
-                    cafes.remove(c);
-                    c--;
-                    */
-
                     Cafeteira cafeteiraDoCafeFrio = cafes.get(c).getCafeteira();
                     int indiceCafeteira = cafeteiras.indexOf(cafeteiraDoCafeFrio);
 
                     if (indiceCafeteira >= 0 && indiceCafeteira < cafeteirasVisual.size()) {
                         cafeteirasVisual.get(indiceCafeteira).mostrarVazia();
                     }
-
-                    /*
-                    Circle cafeVisualParaRemover = cafesVisual.get(c);
-
-                    celulas[linhaCafeFrio][colunaCafeFrio].getChildren().remove(cafeVisualParaRemover);
-
-                    cafesVisual.remove(c);
-                    cafes.remove(c);
-                    */
 
                     System.out.println("Removendo café frio: índice " + c);
 
@@ -211,7 +169,6 @@ public class JogoController implements ControladorTela, Initializable {
 
                 // removendo zumbi que saí da tela
                 if (zumbi.getPosicaoXDoZumbi() + 100 < 0) {
-                    //Rectangle zumbiVisual = visuaisDosZumbis.get(i);
 
                     ZumbiView zumbiVisual = visuaisDosZumbis.get(i);
 
@@ -224,13 +181,6 @@ public class JogoController implements ControladorTela, Initializable {
                     i--;
                     continue;
                 }
-
-                // Atualiza a posição visual do zumbi (apenas para teste)
-                /*
-                Rectangle zumbiVisual = visuaisDosZumbis.get(i);
-                zumbiVisual.setX(zumbi.getPosicaoXDoZumbi());
-                zumbiVisual.setY(zumbi.getPosicaoYDoZumbi());
-                */
 
                 ZumbiView zumbiVisual = visuaisDosZumbis.get(i);
                 zumbiVisual.setLayoutX(zumbi.getPosicaoXDoZumbi());
@@ -255,28 +205,7 @@ public class JogoController implements ControladorTela, Initializable {
                         double xDoProfessor = GRADE_X
                                 + professor.getColunaNoTabuleiroDoProfessor() * CEL_LARG;
 
-                        /*
-                        if (zumbi.getPosicaoXDoZumbi() <= xDoProfessor + CEL_LARG) {
-
-                            // zumbi topou com um professor
-                            professorBloqueando = true;
-
-                            // O zumbi está atacando o professor, então ele para de se mover
-                            zumbi.ataqueZumbi();
-                        }
-                        */
-
                         if (xDoProfessor < zumbi.getPosicaoXDoZumbi()) {
-
-                            /*
-                            Professor:
-                            esquerda = xDoProfessor
-                            direita  = xDoProfessor + CEL_LARG
-
-                            Zumbi:
-                            esquerda = xDoZumbi
-                            direita  = xDoZumbi + 100
-                            */
 
                             // colidiu (professor com zumbi)
                             // a parte da divisão "(CEL_LARG / 5)" pode variar a depender do tamanho da imagem
@@ -321,21 +250,6 @@ public class JogoController implements ControladorTela, Initializable {
                     }
                 }
 
-                /*
-                if (professorMaisProximo != null) {
-                    double xDoProfessorMaisProximo = GRADE_X + professorMaisProximo.getColunaNoTabuleiroDoProfessor() * CEL_LARG;
-
-                    if(zumbi.getPosicaoXDoZumbi() <= xDoProfessorMaisProximo + CEL_LARG){
-                        professorBloqueando = true;
-                        zumbi.ataqueZumbi();
-                    }
-                }
-
-                if (zumbi.zumbiEstaAtacando() && zumbi.podeMorder(agora)){
-                    professorMaisProximo.professorRecebeDano(zumbi.getDanoDoZumbi());
-                }
-                */
-
                 Cafeteira cafeteiraMaisProxima = null;
 
                 for (int c = 0; c < cafeteiras.size(); c++) {
@@ -351,9 +265,6 @@ public class JogoController implements ControladorTela, Initializable {
                         if (xDaCafeteira < zumbi.getPosicaoXDoZumbi()) {
 
                             // colidiu (cafeteira com zumbi)
-                            // a parte da divisão "(CEL_LARG / 5)" pode variar a depender do tamanho da imagem
-                            
-                            // if ((xDoProfessor <= (zumbi.getPosicaoXDoZumbi() + 100)) && ((xDoProfessor + CEL_LARG) >= zumbi.getPosicaoXDoZumbi())) {
                             if ((xDaCafeteira <= zumbi.getPosicaoXDoZumbi()) && ((xDaCafeteira + (CEL_LARG / 5)) >= zumbi.getPosicaoXDoZumbi())) {
 
                                 if (cafeteiraMaisProxima == null) {
@@ -382,18 +293,6 @@ public class JogoController implements ControladorTela, Initializable {
 
                             Node filho = cafeteiraParaRemover.getChildren().get(k);
 
-                            /*
-                            if (filho instanceof Label) {
-
-                                Label spriteCafeteira = (Label) filho;
-
-                                if ("C".equals(spriteCafeteira.getText())) {
-                                    cafeteiraParaRemover.getChildren().remove(k);
-                                    break;
-                                }
-                            }
-                            */
-
                             if (filho instanceof CafeteiraView) {
                                 cafeteiraParaRemover.getChildren().remove(k);
                                 break;
@@ -406,63 +305,6 @@ public class JogoController implements ControladorTela, Initializable {
                     }
                 }
 
-                //if ((cafeteiraMaisProxima != null) || (professorMaisProximo != null)) {
-
-                /*
-                if (cafeteiraMaisProxima != null) {
-
-                    double xDaCafeteiraMaisProxima = GRADE_X + cafeteiraMaisProxima.getColunaNoTabuleiroDaCafeteira() * CEL_LARG;
-
-                    if (professorMaisProximo != null) {
-                        double xDoProfessorMaisProximo = GRADE_X + professorMaisProximo.getColunaNoTabuleiroDoProfessor() * CEL_LARG;
-
-                        if((zumbi.getPosicaoXDoZumbi() <= xDaCafeteiraMaisProxima + CEL_LARG) && (xDaCafeteiraMaisProxima > xDoProfessorMaisProximo)){
-
-                            cafeteiraBloqueando = true;
-                            zumbi.ataqueZumbi();
-                        }
-                    }
-                }
-
-                if (professorMaisProximo != null) {
-                    double xDoProfessorMaisProximo = GRADE_X + professorMaisProximo.getColunaNoTabuleiroDoProfessor() * CEL_LARG;
-
-                    if (professorMaisProximo != null) {
-                        double xDaCafeteiraMaisProxima = GRADE_X + cafeteiraMaisProxima.getColunaNoTabuleiroDaCafeteira() * CEL_LARG;
-
-                        if((zumbi.getPosicaoXDoZumbi() <= xDoProfessorMaisProximo + CEL_LARG) && (xDaCafeteiraMaisProxima > xDoProfessorMaisProximo)){
-
-                            professorBloqueando = true;
-                            zumbi.ataqueZumbi();
-                        }
-                    }
-                }
-                */
-
-                /*
-                if (professorMaisProximo != null) {
-
-                    if (cafeteiraMaisProxima != null) {
-
-                        double xDaCafeteiraMaisProxima = GRADE_X + cafeteiraMaisProxima.getColunaNoTabuleiroDaCafeteira() * CEL_LARG;
-                        double xDoProfessorMaisProximo = GRADE_X + professorMaisProximo.getColunaNoTabuleiroDoProfessor() * CEL_LARG;
-
-                        if (xDaCafeteiraMaisProxima > xDoProfessorMaisProximo) {
-                            professorBloqueando = true;
-                            zumbi.ataqueZumbi();
-                        }
-                    } else {
-                        double xDaCafeteiraMaisProxima = GRADE_X + cafeteiraMaisProxima.getColunaNoTabuleiroDaCafeteira() * CEL_LARG;
-                        double xDoProfessorMaisProximo = GRADE_X + professorMaisProximo.getColunaNoTabuleiroDoProfessor() * CEL_LARG;
-
-                        if (xDaCafeteiraMaisProxima < xDoProfessorMaisProximo) {
-                            cafeteiraBloqueando = true;
-                            zumbi.ataqueZumbi();
-                        }
-                    }
-                }
-                */
-
                 if (professorMaisProximo != null && cafeteiraMaisProxima != null) {
 
                     double xDaCafeteiraMaisProxima = GRADE_X + cafeteiraMaisProxima.getColunaNoTabuleiroDaCafeteira() * CEL_LARG;
@@ -471,7 +313,6 @@ public class JogoController implements ControladorTela, Initializable {
                     if (xDaCafeteiraMaisProxima > xDoProfessorMaisProximo) {
                         professorBloqueando = true;
                         zumbi.ataqueZumbi();
-                        //professorMaisProximo.professorRecebeDano(zumbi.getDanoDoZumbi());
 
                         // zumbi morde o professor mais proximo dele
                         if (zumbi.zumbiEstaAtacando() && zumbi.podeMorder(agora)) {
@@ -480,7 +321,6 @@ public class JogoController implements ControladorTela, Initializable {
                     } else {
                         cafeteiraBloqueando = true;
                         zumbi.ataqueZumbi();
-                        //cafeteiraMaisProxima.cafeteiraRecebeDano(zumbi.getDanoDoZumbi());
 
                         // zumbi morde a cafeteira mai proxima dele
                         if (zumbi.zumbiEstaAtacando() && zumbi.podeMorder(agora)) {
@@ -492,7 +332,6 @@ public class JogoController implements ControladorTela, Initializable {
 
                     professorBloqueando = true;
                     zumbi.ataqueZumbi();
-                    //professorMaisProximo.professorRecebeDano(zumbi.getDanoDoZumbi());
 
                     // zumbi morde o professor mais proximo dele
                     if (zumbi.zumbiEstaAtacando() && zumbi.podeMorder(agora)) {
@@ -503,68 +342,12 @@ public class JogoController implements ControladorTela, Initializable {
 
                     cafeteiraBloqueando = true;
                     zumbi.ataqueZumbi();
-                    //cafeteiraMaisProxima.cafeteiraRecebeDano(zumbi.getDanoDoZumbi());
 
                     // zumbi morde a cafeteira mai proxima dele
                     if (zumbi.zumbiEstaAtacando() && zumbi.podeMorder(agora)) {
                         cafeteiraMaisProxima.cafeteiraRecebeDano(zumbi.getDanoDoZumbi());
                     }
                 }
-
-                /*
-                if (zumbi.zumbiEstaAtacando() && zumbi.podeMorder(agora)){
-                    professorMaisProximo.p
-
-                for (int c = 0; c < cafeteiras.size(); c++) {
-                    Cafeteira cafeteira = cafeteiras.get(c);
-
-                    if (cafeteira.getLinhaNoTabuleiroDaCafeteira() == linhaDoZumbi) {
-
-                        double xDaCafeteira = GRADE_X + cafeteira.getColunaNoTabuleiroDaCafeteira() * CEL_LARG;
-
-                        if (zumbi.getPosicaoXDoZumbi() <= xDaCafeteira + CEL_LARG) {
-
-                            // zumbi topou com uma cafeteira
-                            System.out.println("ZUMBI ENCONTROU CAFETEIRA");
-                            cafeteiraBloqueando = true;
-
-                            // O zumbi está atacando a cafeteira, então ele para de se mover
-                            zumbi.ataqueZumbi();
-                        }
-
-                        if (zumbi.zumbiEstaAtacando() && zumbi.podeMorder(agora)){
-                            cafeteira.cafeteiraRecebeDano(zumbi.getDanoDoZumbi());
-                        }
-
-                        // removendo a cafeteira morta
-                        if (!cafeteira.cafeteiraEstaViva()) {
-
-                            int linhaCafeteiraMorta = cafeteira.getLinhaNoTabuleiroDaCafeteira();
-                            int colunaCafeteiraMorta = cafeteira.getColunaNoTabuleiroDaCafeteira();
-
-                            StackPane cafeteiraParaRemover = celulas[linhaCafeteiraMorta][colunaCafeteiraMorta];
-
-                            for (int k = 0; k < cafeteiraParaRemover.getChildren().size(); k++) {
-
-                                Node filho = cafeteiraParaRemover.getChildren().get(k);
-
-                                if (filho instanceof Label) {
-
-                                    Label spriteCafeteira = (Label) filho;
-
-                                    if ("C".equals(spriteCafeteira.getText())) {
-                                        cafeteiraParaRemover.getChildren().remove(k);
-                                        break;
-                                    }
-                                }
-                            }
-
-                            cafeteiras.remove(c);
-                            c--;
-                        }
-                    }
-                }
-                */
 
                 if (!professorBloqueando && !cafeteiraBloqueando) {
                     zumbi.pararAtaqueZumbi();
@@ -612,17 +395,6 @@ public class JogoController implements ControladorTela, Initializable {
                     }
                 }
 
-                /*
-                if (zumbiAlvoDoTiroDoProfessor != null && professor.podeAtirar(agora)) {
-
-                    if (professor.getLinhaNoTabuleiroDoProfessor() == (int) ((zumbiAtual.getPosicaoYDoZumbi() - GRADE_Y) / CEL_ALT)) {
-                        if ((GRADE_X + professor.getColunaNoTabuleiroDoProfessor() * CEL_LARG) <= zumbiAtual.getPosicaoXDoZumbi()){
-                            zumbiAlvoDoTiroDoProfessor = zumbiAtual;
-                        }
-                    }
-                }
-                */
-
                 if (zumbiAlvoDoTiroDoProfessor != null && professor.podeAtirar(agora)) {
                     double posicaoXDoTiro = professor.getColunaNoTabuleiroDoProfessor()
                             * CEL_LARG + GRADE_X + CEL_LARG / 2;
@@ -644,20 +416,13 @@ public class JogoController implements ControladorTela, Initializable {
 
                 tiro tiroAtual = tiros.get(i);
                 boolean tiroFoiRemovido = false;
-
-                //double xAntes = tiroAtual.getPosicaoXDoTiro();
                 
                 tiroAtual.moverTiro(); // movendo o tiro
-
-                //double xDepois = tiroAtual.getPosicaoXDoTiro();
-                //System.out.println("X antes: " + xAntes + " | X depois: " + xDepois);
 
                 ImageView tiroVisual = visuaisDosTiros.get(i);
 
                 tiroVisual.setLayoutX(tiroAtual.getPosicaoXDoTiro() - 15);
                 tiroVisual.setLayoutY(tiroAtual.getPosicaoYDoTiro() - 15);
-
-                //System.out.println("Modelo X: " + tiroAtual.getPosicaoXDoTiro() + " | Visual X: " + tiroVisual.getLayoutX());
 
                 for (int j = 0; j < zumbis.size(); j++) {
 
@@ -683,11 +448,6 @@ public class JogoController implements ControladorTela, Initializable {
                             zumbis.remove(j);
                         }
 
-                        // removendo o visual dos tiros (circulo de teste)
-                        //Circle tiroVisual = visuaisDosTiros.get(i);
-                        //camadaJogo.getChildren().remove(tiroVisual);
-                        //visuaisDosTiros.remove(i);
-
                         // removendo o visual dos tiros
                         camadaJogo.getChildren().remove(tiroVisual);
                         visuaisDosTiros.remove(i);
@@ -710,11 +470,6 @@ public class JogoController implements ControladorTela, Initializable {
 
                 if (tiroFoiRemovido == false && (tiroAtual.getPosicaoXDoTiro() > LARGURA_PALCO || tiroAtual.getPosicaoXDoTiro() < 0)) {
 
-                    // removendo o visual dos tiros (circulo de teste)
-                    //Circle tiroVisual = visuaisDosTiros.get(i);
-                    //camadaJogo.getChildren().remove(tiroVisual);
-                    //visuaisDosTiros.remove(i);
-
                     camadaJogo.getChildren().remove(tiroVisual);
                     visuaisDosTiros.remove(i);
 
@@ -727,61 +482,9 @@ public class JogoController implements ControladorTela, Initializable {
                     i--;
                     continue;
                 }
-
-                //Circle tiroVisual = visuaisDosTiros.get(i); // visual do tiro (apenas para teste)
-                //tiroVisual.setCenterX(tiroAtual.getPosicaoXDoTiro());
-                //tiroVisual.setCenterY(tiroAtual.getPosicaoYDoTiro());
             }
         }
     };
-
-    /*
-    public void adicionarTiro(tiro novoTiro, double posicaoXDoTiro, double posicaoYDoTiro) {
-        tiros.add(novoTiro);
-
-        // visual provizorio do tiro (apenas para teste)
-        Circle tiroVisual = new Circle(5, Color.YELLOW);
-        tiroVisual.setCenterX(posicaoXDoTiro);
-        tiroVisual.setCenterY(posicaoYDoTiro);
-        camadaJogo.getChildren().add(tiroVisual);
-        visuaisDosTiros.add(tiroVisual);
-    }
-    */
-
-   /*
-   public void adicionarTiro(tiro novoTiro, double posicaoXDoTiro, double posicaoYDoTiro) {
-
-        //System.out.println("Classe do tiro: " + novoTiro.getClass().getName());
-        //System.out.println("Imagem do tiro: " + novoTiro.getCaminhoImagem());
-        
-        tiros.add(novoTiro);
-
-        var recurso = getClass().getResource(novoTiro.getCaminhoImagem());
-        System.out.println("Recurso encontrado: " + recurso);
-
-        Image imagemTiro = new Image(getClass().getResourceAsStream(novoTiro.getCaminhoImagem()));
-
-        ImageView tiroVisual = new ImageView(imagemTiro);
-
-        tiroVisual.setFitWidth(100);
-        tiroVisual.setFitHeight(100);
-
-        tiroVisual.setLayoutX(posicaoXDoTiro);
-        tiroVisual.setLayoutY(posicaoYDoTiro);
-
-        camadaJogo.getChildren().add(tiroVisual);
-
-        tiroVisual.setViewOrder(-1000);
-        tiroVisual.toFront();
-
-        visuaisDosTiros.add(tiroVisual);
-
-        System.out.println("Posição X do tiro: " + tiroVisual.getLayoutX());
-        System.out.println("Posição Y do tiro: " + tiroVisual.getLayoutY());
-        System.out.println("Largura da camada do tiro: " + camadaJogo.getWidth());
-        System.out.println("Altura da camada do tiro: " + camadaJogo.getHeight());
-    }
-    */
 
     // criando um novo tiro
     public void adicionarTiro(tiro novoTiro, double posicaoXDoTiro, double posicaoYDoTiro) {
@@ -900,21 +603,9 @@ public class JogoController implements ControladorTela, Initializable {
                 throw new IllegalArgumentException("Tipo de zumbi inválido: " + sorteio);
         }
 
-        // visual provizorio do zumbi (apenas para teste)
-        //Rectangle zumbiVisual = new Rectangle(100, 100);
-        //zumbiVisual.setFill(Color.GREEN);
-
-        /*
-        zumbiVisual.setX(posicaoXDoZumbi);
-        zumbiVisual.setY(posicaoYDoZumbi);
-        camadaJogo.getChildren().add(zumbiVisual);
-        visuaisDosZumbis.add(zumbiVisual);
-        */
-
         novoZumbi.criarZumbi(posicaoXDoZumbi, posicaoYDoZumbi);
         zumbis.add(novoZumbi);
 
-        //ZumbiView zumbiVisual = new ZumbiView(nomeArquivo);
         ZumbiView zumbiVisual = new ZumbiView(nomeArquivo, novoZumbi);
         zumbiVisual.setLayoutX(posicaoXDoZumbi);
         zumbiVisual.setLayoutY(posicaoYDoZumbi);
@@ -925,8 +616,7 @@ public class JogoController implements ControladorTela, Initializable {
 
     // criando uma nova orda de zumbis
     public void criarOrdaDeZumbis() {
-        //System.out.println("Criando horda com " + quantidadeDeZumbisPorOrda + " zumbis");
-
+   
         for (int i = 0; i < quantidadeDeZumbisPorOrda; i++) {
 
             // Posição Y aleatória para o zumbi; fonte(acesso em 01/10/2026): https://www.devmedia.com.br/numeros-aleatorios-em-java-a-classe-java-util-random/26355
@@ -986,8 +676,6 @@ public class JogoController implements ControladorTela, Initializable {
         criarOrdaDeZumbis(); // Cria ordas de zumbis
         timer.start(); // Inicia o timer para atualizar a posição de zumbis e tiros
 
-        //atualizarCafe(); // Descontando o café
-
         // exibe o valor do café na tela
         lblCafe.setText("CAFÉ: " + valorDeCafe);
     }
@@ -1033,13 +721,7 @@ public class JogoController implements ControladorTela, Initializable {
             }
         }
 
-        //if (celula.getChildren().isEmpty()) {
         if (!celulaOcupada) {
-            /*
-            Label sprite = new Label("P");
-            sprite.getStyleClass().add("sprite-teste");
-            celula.getChildren().add(sprite);
-            */
 
             if ("Cafeteira".equals(professorSelecionado)) {
                 Cafeteira cafeteira = new Cafeteira(linha, coluna);
@@ -1048,17 +730,7 @@ public class JogoController implements ControladorTela, Initializable {
                 if (cafeteira.getCustoCafe() <= valorDeCafe) {
                     cafeteiras.add(cafeteira);
 
-                    /*
-                    Label sprite = new Label("C");
-                    sprite.getStyleClass().add("sprite-teste");
-                    celula.getChildren().add(sprite);
-                    */
-
-                    // NOVA cafeteira
-                    //Cafeteira cafeteira = new Cafeteira(linha, coluna);
-                    //cafeteiras.add(cafeteira);
-
-                    // VISUAL da NOVA cafeteira
+                    // VISUAL da cafeteira
                     CafeteiraView spriteCafeteira = new CafeteiraView();
 
                     spriteCafeteira.setOnMouseClicked(event -> {
@@ -1115,12 +787,6 @@ public class JogoController implements ControladorTela, Initializable {
                 if (professorDaniel.getCustoCafe() <= valorDeCafe) {
                     professores.add(professorDaniel);
 
-                    /*
-                    Label sprite = new Label("D");
-                    sprite.getStyleClass().add("sprite-teste");
-                    celula.getChildren().add(sprite);
-                    */
-
                     ProfessorView spriteProfessor = new ProfessorView("daniel_sprites.png");
                     celula.getChildren().add(spriteProfessor);
 
@@ -1136,12 +802,6 @@ public class JogoController implements ControladorTela, Initializable {
 
                 if (professorFabricio.getCustoCafe() <= valorDeCafe) {
                     professores.add(professorFabricio);
-
-                    /*
-                    Label sprite = new Label("F");
-                    sprite.getStyleClass().add("sprite-teste");
-                    celula.getChildren().add(sprite);
-                    */
 
                     ProfessorView spriteProfessor = new ProfessorView("fabricio_sprites.png");
                     celula.getChildren().add(spriteProfessor);
@@ -1159,12 +819,6 @@ public class JogoController implements ControladorTela, Initializable {
                 if (professorGlaucia.getCustoCafe() <= valorDeCafe) {
                     professores.add(professorGlaucia);
 
-                    /*
-                    Label sprite = new Label("G");
-                    sprite.getStyleClass().add("sprite-teste");
-                    celula.getChildren().add(sprite);
-                    */
-
                     ProfessorView spriteProfessor = new ProfessorView("glaucia_sprites.png");
                     celula.getChildren().add(spriteProfessor);
 
@@ -1180,12 +834,6 @@ public class JogoController implements ControladorTela, Initializable {
 
                 if (professorLucas.getCustoCafe() <= valorDeCafe) {
                     professores.add(professorLucas);
-
-                    /*
-                    Label sprite = new Label("L");
-                    sprite.getStyleClass().add("sprite-teste");
-                    celula.getChildren().add(sprite);
-                    */
 
                     ProfessorView spriteProfessor = new ProfessorView("lucas_sprites.png");
                     celula.getChildren().add(spriteProfessor);
@@ -1203,12 +851,6 @@ public class JogoController implements ControladorTela, Initializable {
                 if (professorMarcus.getCustoCafe() <= valorDeCafe) {
                     professores.add(professorMarcus);
 
-                    /*
-                    Label sprite = new Label("M");
-                    sprite.getStyleClass().add("sprite-teste");
-                    celula.getChildren().add(sprite);
-                    */
-
                     ProfessorView spriteProfessor = new ProfessorView("marcus_sprites.png");
                     celula.getChildren().add(spriteProfessor);
 
@@ -1224,12 +866,6 @@ public class JogoController implements ControladorTela, Initializable {
 
                 if (professorNacif.getCustoCafe() <= valorDeCafe) {
                     professores.add(professorNacif);
-
-                    /*
-                    Label sprite = new Label("N");
-                    sprite.getStyleClass().add("sprite-teste");
-                    celula.getChildren().add(sprite);
-                    */
 
                     ProfessorView spriteProfessor = new ProfessorView("nacif_sprites.png");
                     celula.getChildren().add(spriteProfessor);
@@ -1247,11 +883,6 @@ public class JogoController implements ControladorTela, Initializable {
                 if (professorPhilipe.getCustoCafe() <= valorDeCafe) {
                     professores.add(professorPhilipe);
 
-                    //Label sprite = new Label("P");
-                    //sprite.getStyleClass().add("sprite-teste");
-                    //celula.getChildren().add(sprite);
-                    //PhilipeView spriteProfessor = new PhilipeView();
-
                     ProfessorView spriteProfessor = new ProfessorView("philipe_sprites.png");
                     celulas[linha][coluna].getChildren().add(spriteProfessor);
 
@@ -1267,12 +898,6 @@ public class JogoController implements ControladorTela, Initializable {
 
                 if (professorThais.getCustoCafe() <= valorDeCafe) {
                     professores.add(professorThais);
-
-                    /*
-                    Label sprite = new Label("T");
-                    sprite.getStyleClass().add("sprite-teste");
-                    celula.getChildren().add(sprite);
-                    */
 
                     ProfessorView spriteProfessor = new ProfessorView("thais_sprites.png");
                     celula.getChildren().add(spriteProfessor);

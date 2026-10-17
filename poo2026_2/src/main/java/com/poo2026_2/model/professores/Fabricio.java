@@ -4,17 +4,6 @@ import com.poo2026_2.model.tiros.scala;
 import com.poo2026_2.model.tiros.tiro;
 import com.poo2026_2.model.zumbis.Zumbi;
 
-/* 
-
-ProfessorFabricio
-
-Scalla - custo 300 cafe
-dano: 100hp
-cadência: 1.5s
-efeito: tiro padrão, mas em 3 linhas
-
-*/
-
 public class Fabricio extends Professor {
 
     // Construtor
@@ -26,9 +15,7 @@ public class Fabricio extends Professor {
             linhaNoTabuleiroDoProfessor, 
             colunaNoTabuleiroDoProfessor
         );
-                
-        //setDanoDoProfessor(40); // Definindo o dano do professor Fabricio
-
+        
         setEsseProfessorDeveAtacarOsZumbis(true);
     }
 

@@ -11,8 +11,6 @@ public class Nacif extends Professor {
             linhaNoTabuleiroDoProfessor, 
             colunaNoTabuleiroDoProfessor
         );
-            
-        //setDanoDoProfessor(40); // Definindo o dano do professor Nacif
 
         setEsseProfessorDeveAtacarOsZumbis(true);
     }

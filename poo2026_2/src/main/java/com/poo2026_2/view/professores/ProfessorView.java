@@ -19,15 +19,6 @@ public class ProfessorView extends ImageView {
 
         PixelReader leitor = imagem.getPixelReader();
 
-        //int inicioX = 40;
-        //int inicioY = 90;
-
-        //int larguraSprite = 240;
-        //int alturaSprite = 400;
-         
-        //int larguraSprite = 256;
-        //int alturaSprite = 512;
-
         int larguraSprite = (int) imagem.getWidth() / 6;
         int alturaSprite = (int) imagem.getHeight() / 2;
 
@@ -36,9 +27,6 @@ public class ProfessorView extends ImageView {
             for (int coluna = 0; coluna < 6; coluna++) {
 
                 int indice = linha * 6 + coluna;
-
-                //int x = inicioX + coluna * larguraSprite;
-                //int y = inicioY + linha * alturaSprite;
 
                 int x = coluna * larguraSprite;
                 int y = linha * alturaSprite;
@@ -63,10 +51,6 @@ public class ProfessorView extends ImageView {
         sprites = recortarSprites(imagemOriginal);
 
         setImage(sprites[0]);
-
-        //setFitWidth(90);
-        //setFitHeight(110);
-
         setFitWidth(80);
         setFitHeight(130);
         setPreserveRatio(true);

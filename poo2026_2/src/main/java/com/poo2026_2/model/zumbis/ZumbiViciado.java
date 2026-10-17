@@ -13,17 +13,7 @@ public class ZumbiViciado extends Zumbi {
         );
     }
 
-    /*
-    private void ativarHabilidade() {
-
-        if ((this.getVidaDoZumbi() < vidaOriginalDoZumbiViciado) && (zumbiEstaVivo())) {
-
-            // Aumenta a velocidade do zumbi
-            aumentarVelocidadeDoZumbi(0.4);
-        }
-    }
-    */
-    
+    // habilidade do zumbi viciado (fica mais rapido sempre que recebe dano)
     @Override
     public void zumbiRecebeDano(double dano) {
         super.zumbiRecebeDano(dano);

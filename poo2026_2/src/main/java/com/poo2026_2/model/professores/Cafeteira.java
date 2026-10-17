@@ -18,12 +18,12 @@ public class Cafeteira {
     // Construtor
     public Cafeteira(int linhaNoTabuleiroDaCafeteira, int colunaNoTabuleiroDaCafeteira) {
 
-        this.cafePorCiclo = 100;
-        this.intervaloProducao = 10_000_000_000L;
-        this.temperatura = 6_000_000_000L;
+        this.cafePorCiclo = 100; // quanto café uma cafeteira produz de cada vez
+        this.intervaloProducao = 10_000_000_000L; // quanto tempo leva para a cafeteira produzir café em nanossegundos
+        this.temperatura = 6_000_000_000L; // quanto tempo um café dura em nanossegundos
 
-        this.custoCafeCafeteira = 50;
-        this.vidaDaCafeteira = 100;
+        this.custoCafeCafeteira = 50; // custo para plantar uma cafeteira
+        this.vidaDaCafeteira = 100; // vida inteira da cafeteira
 
         this.linhaNoTabuleiroDaCafeteira = linhaNoTabuleiroDaCafeteira;
         this.colunaNoTabuleiroDaCafeteira = colunaNoTabuleiroDaCafeteira;
@@ -39,6 +39,7 @@ public class Cafeteira {
     public void setUltimoMomentoDeProducao(long agora) {this.ultimoMomentoDeProducao = agora;}
 
     public boolean cafeteiraEstaViva() {
+
         if (this.vidaDaCafeteira <= 0) {
             return false;
         } else {
@@ -49,9 +50,11 @@ public class Cafeteira {
     public boolean podeProduzir(long agora) {
 
         if((agora - ultimoMomentoDeProducao) >= intervaloProducao){
+
             ultimoMomentoDeProducao = agora;
             return true;
         } else {
+
             return false;
         }
     }

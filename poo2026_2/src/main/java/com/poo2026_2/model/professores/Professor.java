@@ -12,8 +12,8 @@ public class Professor {
 
     private boolean esseProfessorDeveAtacarOsZumbis; // esse atributo define se um professor deve ou não atacar
 
-    private long cadenciaTiroDoProfessor;
-    private long ultimoTiro; // Atributo para armazenar o tempo do último tiro
+    private long cadenciaTiroDoProfessor; // de quanto em quanto tempo o professor deve atacar
+    private long ultimoTiro; // atributo para armazenar o tempo do último tiro
 
     private double danoDoProfessor; // os professores podem atacar os zumbis, então eles têm que ter dano (sei que esse valor não estava no diagrama)
     private int vidaDoProfessor; // os professores podem ser atacados pelos zumbis, então eles têm que ter vida (sei que esse valor não estava no diagrama)
@@ -47,7 +47,6 @@ public class Professor {
     public void setVidaDoProfessor(int vidaDoProfessor) {this.vidaDoProfessor = vidaDoProfessor;}
     public void setColunaNoTabuleiroDoProfessor(int colunaNoTabuleiroDoProfessor) {this.colunaNoTabuleiroDoProfessor = colunaNoTabuleiroDoProfessor;}
     public void setLinhaNoTabuleiroDoProfessor(int linhaNoTabuleiroDoProfessor) {this.linhaNoTabuleiroDoProfessor = linhaNoTabuleiroDoProfessor;}
-    //public void setDanoDoProfessor(double danoDoProfessor) {this.danoDoProfessor = danoDoProfessor;}
 
     public void professorRecebeDano(double dano) {
         this.vidaDoProfessor -= dano;
@@ -77,34 +76,17 @@ public class Professor {
         return null; 
     }
 
+    // Verifica se o professor pode atirar com base na cadência de tiro
     public boolean podeAtirar(long agora) {
 
-        // Verifica se o professor pode atirar com base na cadência de tiro
         if (agora - ultimoTiro >=  cadenciaTiroDoProfessor) {
+            
             ultimoTiro = agora; // Atualiza o tempo do último tiro
             return true; // Permite o tiro
         }
         
         return false; // Retorna false se o professor não pode atirar
     }
-
-    /*
-    public void desenharAtacarZumbi(Graphics graphics, int x, int y) {
-
-        // Desenha o ataque do professor
-        graphics.setColor(java.awt.Color.RED);
-        graphics.fillRect(x, y, 20, 20); 
-    }
-    
-    public java.awt.Rectangle getBounds(double larguraDaCelula, double alturaDaCelula) {
-        return new java.awt.Rectangle(
-            this.linhaNoTabuleiroDoProfessor * alturaDaCelula,
-            this.colunaNoTabuleiroDoProfessor * larguraDaCelula,
-            larguraDaCelula, 
-            alturaDaCelula
-        );
-    }
-    */
 
     public void desenharProfessor(Graphics graphics, int x, int y) {
 

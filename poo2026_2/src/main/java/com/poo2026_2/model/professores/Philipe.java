@@ -4,20 +4,7 @@ import com.poo2026_2.model.tiros.python;
 import com.poo2026_2.model.tiros.tiro;
 import com.poo2026_2.model.zumbis.Zumbi;
 
-/*
-
-ProfessorPhilipe (atira Python)
-
-efeito: causa lentidão no zumbi afetado
-custo 150 café
-dano: 20hp
-cadência: 1.5s
-                                                     
-*/
-
 public class Philipe extends Professor {
-
-    //private int danoPhilipe = 20;
 
     // Construtor
     public Philipe(int linhaNoTabuleiroDoProfessor, int colunaNoTabuleiroDoProfessor) {
@@ -30,8 +17,6 @@ public class Philipe extends Professor {
             colunaNoTabuleiroDoProfessor
         );
             
-        //setDanoDoProfessor(danoPhilipe); // Definindo o dano do professor Philipe
-
         setEsseProfessorDeveAtacarOsZumbis(true);
     }
 

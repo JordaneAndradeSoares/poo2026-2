@@ -17,7 +17,6 @@ public class Zumbi {
 
     private boolean zumbiNaoEstaLento = true;
 
-    // vida, velocidade, dano - 100, cadência - 1s, linha
     public Zumbi(double velocidadeDoZumbi, double danoDoZumbi, double vidaDoZumbi, long cadenciaDoZumbi) {
 
         setVelocidadeDoZumbi(velocidadeDoZumbi);
@@ -83,6 +82,7 @@ public class Zumbi {
     }
 
     public void zumbiRecebeDano(double dano) {
+        
         this.ZumbiFoiAtingido = true; // Marca que o zumbi foi atingido
         this.vidaDoZumbi -= dano;
 
