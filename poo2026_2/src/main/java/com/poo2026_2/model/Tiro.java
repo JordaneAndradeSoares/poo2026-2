@@ -21,14 +21,15 @@ public class Tiro {
     private String efeitoVisual;
     private String som;
 
-    public Tiro(double x, double y, double velocidade, int dano,
-                String sprite, String efeitoVisual, String som) {
+    public Tiro(double x, double y, double velocidade, int dano, String sprite, String efeitoVisual, String som) {
+
         if (dano <= 0) {
             throw new IllegalArgumentException("O dano tem que ser maior que zero.");
         }
         if (velocidade <= 0 || !Double.isFinite(velocidade)) {
             throw new IllegalArgumentException("A velociadade tem que ser maior que zero.");
         }
+
         this.x = x;
         this.y = y;
         this.velocidade = velocidade;
@@ -97,6 +98,7 @@ public class Tiro {
             x += velocidade * deltaTime;
         }
     }
+    
     /** Causa dano no alvo e some. */
     public void atingir(Entidade alvo) {
         alvo.receberDano(dano);

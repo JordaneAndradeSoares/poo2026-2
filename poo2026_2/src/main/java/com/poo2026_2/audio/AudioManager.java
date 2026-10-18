@@ -12,10 +12,10 @@ import java.util.Set;
 public final class AudioManager {
 
     private static final String MUSICA_MENU = "/audio/menu-loop.mp3";
-    private static final String SOM_HOVER_BOTAO = "/audio/botao-hover.m4a";
-    private static final String CLICK_BOTAO = "/audio/clickButton.m4a";
-    private static final String SOM_TROVAO1 = "/audio/trovao1.m4a";
-    private static final String SOM_TROVAO2 = "/audio/trovao2.m4a";
+    private static final String SOM_HOVER_BOTAO = "/audio/botao-hover.mp3";
+    private static final String CLICK_BOTAO = "/audio/clickButton.mp3";
+    private static final String SOM_TROVAO1 = "/audio/trovao1.mp3";
+    private static final String SOM_TROVAO2 = "/audio/trovao2.mp3";
 
     private static MediaPlayer musicaAtual;
     private static String caminhoMusicaAtual;
@@ -128,10 +128,10 @@ public final class AudioManager {
             );
         }
     }
-
+    
     private static void tocarEfeitoDescartavel(Media media, String caminho) {
         MediaPlayer player = new MediaPlayer(media);
-        efeitosTocando.add(player);   // referencia forte ate o fim
+        efeitosTocando.add(player); // referencia forte ate o fim
 
         Runnable liberar = () -> {
             efeitosTocando.remove(player);

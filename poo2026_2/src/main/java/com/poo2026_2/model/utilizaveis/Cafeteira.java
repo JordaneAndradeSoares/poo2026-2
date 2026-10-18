@@ -19,13 +19,13 @@ public class Cafeteira extends Entidade {
     private double tempoUltimaProducao;
     private double raioProducao;
 
-    public Cafeteira(int vida, int linha, int coluna, int cafePorCiclo,
-            double intervaloProducao, double raioProducao) {
+    public Cafeteira(int vida, int linha, int coluna, int cafePorCiclo, double intervaloProducao, double raioProducao) {
+        
         this(vida, linha, coluna, cafePorCiclo, intervaloProducao, raioProducao, CUSTO_CAFE_PADRAO);
     }
 
-    public Cafeteira(int vida, int linha, int coluna, int cafePorCiclo,
-            double intervaloProducao, double raioProducao, int custoCafe) {
+    public Cafeteira(int vida, int linha, int coluna, int cafePorCiclo, double intervaloProducao, double raioProducao, int custoCafe) {
+
         super(vida, linha, coluna);
 
         if (cafePorCiclo <= 0) {
@@ -99,7 +99,9 @@ public class Cafeteira extends Entidade {
      *
      * @return novo café produzido pela cafeteira
      */
+
     public Cafe produzirCafe() {
-        return new Cafe(cafePorCiclo, 0.0, 0.0, 10.0);
+
+        return new Cafe(cafePorCiclo, 0.0, 0.0, 8.0);
     }
 }

@@ -40,3 +40,72 @@
     -fx-scale-y: 0.95;
     -fx-translate-y: 2;
 }
+
+/* BOTÕES DAS FASES */
+.botao-fase1 {
+    -fx-background-color: transparent;
+    -fx-background-insets: 0;
+    -fx-background-radius: 0;
+    -fx-border-width: 0;
+    -fx-padding: 0;
+    -fx-text-fill: transparent;
+    -fx-content-display: graphic-only;
+    -fx-cursor: hand;
+    -fx-background-image: url("../images/menu/buttons/fase1_normal.png");
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center;
+    -fx-background-size: 100% 100%;
+}
+
+.botao-fase1:hover {
+    -fx-background-image: url("../images/menu/buttons/fase1_hover.png");
+    -fx-scale-x: 1.08;
+    -fx-scale-y: 1.08;
+}
+
+.botao-fase2 {
+    -fx-background-color: transparent;
+    -fx-background-insets: 0;
+    -fx-background-radius: 0;
+    -fx-border-width: 0;
+    -fx-padding: 0;
+    -fx-text-fill: transparent;
+    -fx-content-display: graphic-only;
+    -fx-cursor: hand;
+    -fx-background-image: url("../images/menu/buttons/fase2_normal.png");
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center;
+    -fx-background-size: 100% 100%;
+}
+
+.botao-fase2:hover {
+    -fx-background-image: url("../images/menu/buttons/fase2_hover.png");
+    -fx-scale-x: 1.08;
+    -fx-scale-y: 1.08;
+}
+
+.botao-fase3 {
+    -fx-background-color: transparent;
+    -fx-background-insets: 0;
+    -fx-background-radius: 0;
+    -fx-border-width: 0;
+    -fx-padding: 0;
+    -fx-text-fill: transparent;
+    -fx-content-display: graphic-only;
+    -fx-cursor: hand;
+    -fx-background-image: url("../images/menu/buttons/fase3_normal.png");
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center;
+    -fx-background-size: 100% 100%;
+}
+
+.botao-fase3:hover {
+    -fx-background-image: url("../images/menu/buttons/fase3_hover.png");
+    -fx-scale-x: 1.08;
+    -fx-scale-y: 1.08;
+}
+
+.botao-fase1, .botao-fase2, .botao-fase3:pressed {
+    -fx-scale-x: 0.96;
+    -fx-scale-y: 0.96;
+}

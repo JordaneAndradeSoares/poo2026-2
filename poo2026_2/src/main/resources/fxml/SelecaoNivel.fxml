@@ -7,6 +7,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.layout.HBox?>
 
 <AnchorPane id="AnchorPane"
             styleClass="mainFxmlClass"
@@ -27,9 +28,31 @@
               spacing="40.0">
 
             <!-- TÍTULO -->
-            <!-- <TextField text="Selecao de nivel" /> -->
             <Label  text="Seleção de nível"
                     styleClass="titulo-selecao" />
+
+            <!-- BOTÕES DAS FASES -->
+            <HBox alignment="CENTER" spacing="20.0">
+
+                <Button text="Fase 1"
+                        prefHeight="92.0" prefWidth="180.0"
+                        fx:id="btnNivel1"
+                        onAction="#selecionarFase1"
+                        styleClass="botao-fase1" />
+
+                <Button text="Fase 2"
+                        prefHeight="92.0" prefWidth="180.0"
+                        fx:id="btnNivel2"
+                        onAction="#selecionarFase2"
+                        styleClass="botao-fase2" />
+
+                <Button text="Fase 3"
+                        prefHeight="92.0" prefWidth="180.0"
+                        fx:id="btnNivel3"
+                        onAction="#selecionarFase3"
+                        styleClass="botao-fase3" />
+
+            </HBox>
 
             <!-- BOTÃO VOLTAR -->
             <Button fx:id="btnVoltar"

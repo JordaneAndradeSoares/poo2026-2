@@ -1,7 +1,5 @@
 package com.poo2026_2.model.zumbis;
 
-import com.poo2026_2.model.Zumbi;
-
 /**
  * Minitanque: muita vida e lento. (valores provisorios: ajustar no balanceamento)
  *
@@ -10,6 +8,6 @@ import com.poo2026_2.model.Zumbi;
 public class Formando extends Zumbi {
 
     public Formando(int linha) {
-        super(100, linha, 0.006, 10);
+        super(100, linha, 0.6, 10);
     }
 }

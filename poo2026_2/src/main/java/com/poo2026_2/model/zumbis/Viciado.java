@@ -1,7 +1,5 @@
 package com.poo2026_2.model.zumbis;
 
-import com.poo2026_2.model.Zumbi;
-
 /**
  * Comum, mas quando o telefone quebra (vida chega na metade)
  * fica rapido, perigoso e estressado.
@@ -15,7 +13,7 @@ public class Viciado extends Zumbi {
     private boolean estressado;
 
     public Viciado(int linha) {
-        super(VIDA_INICIAL, linha, 0.006, 10);
+        super(VIDA_INICIAL, linha, 1, 10);
         this.estressado = false;
     }
 

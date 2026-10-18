@@ -1,4 +1,6 @@
-package com.poo2026_2.model;
+package com.poo2026_2.model.zumbis;
+
+import com.poo2026_2.model.Entidade;
 
 /**
  * Zumbi generico. A velocidade é dada em casas por "tick" de atualizacao.

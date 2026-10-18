@@ -6,6 +6,8 @@ package com.poo2026_2.model;
 
 import java.util.function.IntFunction;
 
+import com.poo2026_2.model.zumbis.Zumbi;
+
 /**
  *
  * @author Mateus
@@ -14,8 +16,8 @@ public class Onda {
 
     private int numero;
     private int quantidadeZumbis;
-    private double intervaloSpawn;   // segundos entre cada zumbi
-    private double tempoDecorrido;   // tempo acumulado desde o último spawn
+    private double intervaloSpawn; // segundos entre cada zumbi
+    private double tempoDecorrido; // tempo acumulado desde o último spawn
     private int zumbisGerados;
     private boolean concluida;
 

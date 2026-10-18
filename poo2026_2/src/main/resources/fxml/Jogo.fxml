@@ -9,6 +9,7 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.control.Label?>
 
 <!--
   Raiz: StackPane que ocupa a janela toda.
@@ -18,51 +19,115 @@
 -->
 
 <StackPane fx:id="raiz" style="-fx-background-color: black;" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.poo2026_2.controller.JogoController">
+
     <stylesheets>
         <URL value="@../styles/jogo.css" />
     </stylesheets>
 
-    <Pane fx:id="palco" maxHeight="941" maxWidth="1672" minHeight="941" minWidth="1672" prefHeight="941" prefWidth="1672">
+    <Pane
+        fx:id="palco"
+        maxHeight="941" maxWidth="1672"
+        minHeight="941" minWidth="1672"
+        prefHeight="941" prefWidth="1672">
 
-        <!-- Camada 1: so visual -->
+        <!-- Imagem de fundo -->
         <ImageView fitHeight="941" fitWidth="1672" preserveRatio="false">
             <image>
-                <Image url="@../images/game/background2.png" />
+                <Image url="@../images/game/background2.png"/>
             </image>
         </ImageView>
 
-        <!-- Camada 2: grade logica 5 x 9 (posicao/tamanho definidos no controller) -->
+        <!-- Grade -->
         <GridPane fx:id="grade">
             <styleClass>
-                <String fx:value="grade" />
-                <String fx:value="pane" />
+                <String fx:value="grade"/>
+                <String fx:value="pane"/>
             </styleClass>
         </GridPane>
 
-        <!-- Camada 3: zumbis e projeteis (movimento livre em pixels) -->
-        <Pane fx:id="camadaJogo" mouseTransparent="true" prefHeight="941" prefWidth="1672" />
+        <Pane
+            fx:id="camadaJogo"
+            layoutX="0"
+            layoutY="0"
+            prefWidth="1672"
+            prefHeight="941"
+            mouseTransparent="true"
+        />
 
-            <Button 
-                fx:id="btnVoltar" 
-                layoutX="1132.0" 
-                layoutY="90.0" 
-                mnemonicParsing="false" 
-                onAction="#voltar" 
-                prefHeight="62.0" 
-                prefWidth="200.0" 
-                styleClass="botao-voltar" 
-                stylesheets="@../styles/jogo.css" 
-                text="voltar" />
+        <!-- Indicador de café disponível -->
+        <Label 
+            fx:id="lblCafe"
+            layoutX="20"
+            layoutY="30"
+            text="Café: 150"
+            
+            style = 
+                "-fx-background-color: yellow;
+                -fx-text-fill: black;
+                -fx-font-size: 24px;
+                -fx-font-weight: bold;
+                -fx-padding: 10 18 10 18;
+                -fx-background-radius: 10;"/>
 
-        </Pane>
+        <!-- Seleção dos personagens -->
+        <VBox 
+            layoutX="20" 
+            layoutY="180" 
+            spacing="10"
+            prefHeight="400.0" 
+            prefWidth="150.0"
+            alignment="CENTER">
 
-    <!-- Camada 4: tela de resultado do jogo (vitoria ou derrota) -->
-    <StackPane 
+            <Button prefWidth="300" text="Cafeteira"
+                    onAction="#selecionarCafeteira"/>
+
+            <Button prefWidth="300" text="Daniel"
+                    onAction="#selecionarDaniel"/>
+
+            <Button prefWidth="300" text="Fabrício"
+                    onAction="#selecionarFabricio"/>
+
+            <Button prefWidth="300" text="Gláucia"
+                    onAction="#selecionarGlaucia"/>
+
+            <Button prefWidth="300" text="Lucas"
+                    onAction="#selecionarLucas"/>
+
+            <Button prefWidth="300" text="Marcus"
+                    onAction="#selecionarMarcus"/>
+
+            <Button prefWidth="300" text="Nacif"
+                    onAction="#selecionarNacif"/>
+
+            <Button prefWidth="300" text="Philipe"
+                    onAction="#selecionarPhilipe"/>
+
+            <Button prefWidth="300" text="Thaís"
+                    onAction="#selecionarThais"/>
+
+        </VBox>
+
+        <!-- Botão Voltar -->
+        <Button fx:id="btnVoltar"
+                layoutX="1132" layoutY="90"
+                prefHeight="62" prefWidth="200"
+                mnemonicParsing="false"
+                onAction="#voltar"
+                styleClass="botao-voltar"
+                stylesheets="@../styles/jogo.css"
+                text="voltar"/>
+
+    </Pane>
+
+    <!-- Tela de resultado do jogo (vitoria ou derrota) -->
+    <StackPane
         fx:id="camadaResultado"
         prefWidth="1672"
         prefHeight="941"
         visible="false"
-        managed="false"
+        maxWidth="Infinity"
+        maxHeight="Infinity"
+        alignment="CENTER"
         style="-fx-background-color: rgba(0, 0, 0, 0.55);">
 
         <!-- Imagem da vitória -->
@@ -100,4 +165,5 @@
         </VBox>
 
     </StackPane>
+
 </StackPane>

@@ -2,6 +2,8 @@ package com.poo2026_2.model;
 
 import com.poo2026_2.model.utilizaveis.Cafeteira;
 import com.poo2026_2.model.utilizaveis.Cafe;
+import com.poo2026_2.model.zumbis.Zumbi;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
@@ -25,8 +27,9 @@ public class GerenciadorDeJogo {
     /**
      * true: o cafe produzido ja entra direto no saldo do jogador.
      * false: o Cafe fica em cafesNoChao ate o jogador clicar (coletarCafe).
-     */
-    private static final boolean COLETA_AUTOMATICA = true;
+     * 
+     * private static final boolean COLETA_AUTOMATICA = false;
+    */
  
     private Fase faseAtual;
     private Tabuleiro tabuleiro;
@@ -141,6 +144,11 @@ public class GerenciadorDeJogo {
     public void removerDoPiso(int linha, int coluna) {
         removerOcupanteDoPiso(linha, coluna);
     }
+
+    /** Retorna quem ocupa o piso, ou null se estiver vazio. */
+    public Entidade getOcupante(int linha, int coluna) {
+        return tabuleiro.getOcupante(linha, coluna);
+    }
  
     private boolean instalarNoPiso(Entidade entidade, int custo, int linha, int coluna) {
         if (cafe < custo) {
@@ -180,23 +188,29 @@ public class GerenciadorDeJogo {
      */
     public void gerarCafe(double deltaTime) {
         for (Cafeteira cafeteira : listarCafeteiras()) {
-            if (!cafeteira.estaVivo() || !cafeteira.podeProduzir(deltaTime)) {
+            if (!cafeteira.estaVivo()) {
                 continue;
             }
+
+            if (!cafeteira.podeProduzir(deltaTime)) {
+                continue;
+            }
+
             Cafe produzido = cafeteira.produzirCafe();
-            if (COLETA_AUTOMATICA) {
-                adicionarCafe(produzido.getQuantidade());
-            } else {
+
+            if (produzido != null) {
                 produzido.setPosicaoX(cafeteira.getColuna() + 0.5);
                 produzido.setPosicaoY(cafeteira.getLinha() + 0.5);
                 cafesNoChao.add(produzido);
             }
         }
     }
- 
+
     /** Diminui o tempo de vida dos cafes no chao e remove os que "esfriaram". */
     private void atualizarCafesNoChao(double deltaTime) {
+
         Iterator<Cafe> it = cafesNoChao.iterator();
+
         while (it.hasNext()) {
             if (!it.next().atualizar(deltaTime)) {
                 it.remove();
@@ -206,6 +220,7 @@ public class GerenciadorDeJogo {
  
     /** Jogador clicou no cafe do chao: soma ao saldo. */
     public void coletarCafe(Cafe cafeColetado) {
+
         if (cafesNoChao.remove(cafeColetado)) {
             adicionarCafe(cafeColetado.getQuantidade());
         }
@@ -222,7 +237,7 @@ public class GerenciadorDeJogo {
         if (zumbi == null) {
             return;
         }
-        zumbi.setPosicaoX(getColunas() + 0.5);   // logo fora da tela, a direita
+        zumbi.setPosicaoX(getColunas() + 0.8);// logo fora da tela, a direita
         zumbis.add(zumbi);
     }
  
