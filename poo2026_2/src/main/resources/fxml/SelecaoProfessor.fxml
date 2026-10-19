@@ -1,14 +1,71 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import java.net.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
 
-<AnchorPane id="AnchorPane" prefHeight="400.0" prefWidth="600.0" styleClass="mainFxmlClass" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.poo2026_2.controller.SelecaoProfessorController">
-    <stylesheets>
-        <URL value="@/styles/selecaoprofessor.css"/>
-    </stylesheets>
-</AnchorPane>
+<BorderPane xmlns="http://javafx.com/javafx/21"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.poo2026_2.controller.SelecaoProfessorController"
+            fx:id="raiz"
+            styleClass="selecao-root"
+            stylesheets="@../styles/selecaoprofessor.css">
+
+    <top>
+        <VBox spacing="6" styleClass="cabecalho">
+            <padding>
+                <Insets top="22" right="28" bottom="18" left="28"/>
+            </padding>
+            <Label fx:id="tituloFase" text="SELEÇÃO DE PROFESSORES"
+                   styleClass="titulo"/>
+            <Label text="Escolha os professores que estarão disponíveis nesta fase"
+                   styleClass="subtitulo"/>
+        </VBox>
+    </top>
+
+    <center>
+        <GridPane fx:id="gradeProfessores"
+                  alignment="CENTER"
+                  hgap="14" vgap="14"
+                  styleClass="grade-professores">
+            <padding>
+                <Insets top="12" right="20" bottom="20" left="20"/>
+            </padding>
+        </GridPane>
+    </center>
+
+    <right>
+        <VBox fx:id="painelEquipe" spacing="14" prefWidth="250" minWidth="175" styleClass="painel-equipe">
+            <padding>
+                <Insets top="26" right="20" bottom="24" left="20"/>
+            </padding>
+            <Label text="EQUIPE DA FASE" styleClass="titulo-painel"/>
+            <Label fx:id="contadorSelecionados" text="0 selecionados"
+                   styleClass="contador"/>
+            <ScrollPane fx:id="scrollSelecionados"
+                        fitToWidth="true"
+                        fitToHeight="false"
+                        pannable="true"
+                        hbarPolicy="NEVER"
+                        vbarPolicy="AS_NEEDED"
+                        minHeight="80"
+                        styleClass="lista-selecionados-scroll"
+                        VBox.vgrow="ALWAYS">
+                <content>
+                    <VBox fx:id="listaSelecionados" spacing="8"
+                          fillWidth="true"
+                          styleClass="lista-selecionados"/>
+                </content>
+            </ScrollPane>
+            <Button text="JOGAR" onAction="#confirmarSelecao"
+                    maxWidth="Infinity" styleClass="botao-jogar"/>
+            <Button text="VOLTAR" onAction="#voltar"
+                    maxWidth="Infinity" styleClass="botao-voltar"/>
+        </VBox>
+    </right>
+</BorderPane>

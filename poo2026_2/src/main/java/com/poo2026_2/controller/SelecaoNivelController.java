@@ -95,7 +95,7 @@ public class SelecaoNivelController implements ControladorTela {
     private void iniciarFase(int numero) {
 
         faseSelecionada = numero;
-        gerenciadorDeTelas.mudarTela("Jogo.fxml");
+        gerenciadorDeTelas.mudarTela("SelecaoProfessor.fxml");
     }
 
     // Voltar para o menu principal.

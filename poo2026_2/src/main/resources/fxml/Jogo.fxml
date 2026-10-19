@@ -70,39 +70,39 @@
                 -fx-background-radius: 10;"/>
 
         <!-- Seleção dos personagens -->
-        <VBox 
-            layoutX="20" 
-            layoutY="180" 
+        <VBox
+            layoutX="20"
+            layoutY="180"
             spacing="10"
-            prefHeight="400.0" 
+            prefHeight="400.0"
             prefWidth="150.0"
             alignment="CENTER">
 
-            <Button prefWidth="300" text="Cafeteira"
+            <Button fx:id="btnCafeteira" prefWidth="300" text="Cafeteira"
                     onAction="#selecionarCafeteira"/>
 
-            <Button prefWidth="300" text="Daniel"
+            <Button fx:id="btnDaniel" prefWidth="300" text="Daniel"
                     onAction="#selecionarDaniel"/>
 
-            <Button prefWidth="300" text="Fabrício"
+            <Button fx:id="btnFabricio" prefWidth="300" text="Fabrício"
                     onAction="#selecionarFabricio"/>
 
-            <Button prefWidth="300" text="Gláucia"
+            <Button fx:id="btnGlaucia" prefWidth="300" text="Gláucia"
                     onAction="#selecionarGlaucia"/>
 
-            <Button prefWidth="300" text="Lucas"
+            <Button fx:id="btnLucas" prefWidth="300" text="Lucas"
                     onAction="#selecionarLucas"/>
 
-            <Button prefWidth="300" text="Marcus"
+            <Button fx:id="btnMarcus" prefWidth="300" text="Marcus"
                     onAction="#selecionarMarcus"/>
 
-            <Button prefWidth="300" text="Nacif"
+            <Button fx:id="btnNacif" prefWidth="300" text="Nacif"
                     onAction="#selecionarNacif"/>
 
-            <Button prefWidth="300" text="Philipe"
+            <Button fx:id="btnPhilipe" prefWidth="300" text="Philipe"
                     onAction="#selecionarPhilipe"/>
 
-            <Button prefWidth="300" text="Thaís"
+            <Button fx:id="btnThais" prefWidth="300" text="Thaís"
                     onAction="#selecionarThais"/>
 
         </VBox>

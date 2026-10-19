@@ -4,8 +4,10 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-
 import java.io.IOException;
+
+import com.poo2026_2.model.Fase;
+import com.poo2026_2.controller.SelecaoProfessorController;
 
 public class GerenciadorDeTelas {
 
@@ -44,6 +46,15 @@ public class GerenciadorDeTelas {
             if (controller instanceof ControladorTela) {
                 ControladorTela tela = (ControladorTela) controller;
                 tela.setGerenciadorDeTelas(this);
+            }
+
+            // Configura a seleção de professores antes de mostrar a tela.
+            if (controller instanceof SelecaoProfessorController) {
+
+                SelecaoProfessorController selecao = (SelecaoProfessorController) controller;
+
+                Fase fase = Fase.criarFaseSelecionada();
+                selecao.configurarFase(fase);
             }
 
             if (scene == null) {

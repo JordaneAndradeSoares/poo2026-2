@@ -57,22 +57,50 @@ public class JogoController implements ControladorTela, Initializable {
     private static final double CEL_ALT = 130;
 
     private String personagemSelecionado = ""; // nome do personagem atual
+    private static List<String> professoresSelecionados = new ArrayList<>(); // lista dos professores selecionados
 
     private GerenciadorDeTelas gerenciadorDeTelas;
     
     // =================================================================
+    
+    @FXML
+    private Pane palco;
+    
+    @FXML
+    private GridPane grade;
+    
+    @FXML
+    private Pane camadaJogo;
+
+    @FXML
+    private Button btnCafeteira;
+
+    @FXML
+    private Button btnDaniel;
+
+    @FXML
+    private Button btnFabricio;
+
+    @FXML
+    private Button btnGlaucia;
+
+    @FXML
+    private Button btnLucas;
+
+    @FXML
+    private Button btnMarcus;
+
+    @FXML
+    private Button btnNacif;
+
+    @FXML
+    private Button btnPhilipe;
+
+    @FXML
+    private Button btnThais;
 
     @FXML
     private StackPane raiz;
-
-    @FXML
-    private Pane palco;
-
-    @FXML
-    private GridPane grade;
-
-    @FXML
-    private Pane camadaJogo;
 
     @FXML
     private Button btnVoltar;
@@ -96,6 +124,42 @@ public class JogoController implements ControladorTela, Initializable {
     private final Map<Zumbi, ImageView> zumbisVisuais = new HashMap<>();
     private final Map<Zumbi, Timeline> animacoesCaminhada = new HashMap<>();
     private final Map<Zumbi, Timeline> animacoesAtaque = new HashMap<>();
+
+    public static void setProfessoresSelecionados(java.util.Set<String> selecionados) {
+        professoresSelecionados = new ArrayList<>(selecionados);
+    }
+
+    // =================================================================
+
+    private void atualizarBotoesProfessores() {
+
+        btnCafeteira.setVisible(professoresSelecionados.contains("CAFETEIRA"));
+        btnCafeteira.setManaged(btnCafeteira.isVisible());
+
+        btnDaniel.setVisible(professoresSelecionados.contains("DANIEL"));
+        btnDaniel.setManaged(btnDaniel.isVisible());
+
+        btnFabricio.setVisible(professoresSelecionados.contains("FABRICIO"));
+        btnFabricio.setManaged(btnFabricio.isVisible());
+
+        btnGlaucia.setVisible(professoresSelecionados.contains("GLAUCIA"));
+        btnGlaucia.setManaged(btnGlaucia.isVisible());
+
+        btnLucas.setVisible(professoresSelecionados.contains("LUCAS"));
+        btnLucas.setManaged(btnLucas.isVisible());
+
+        btnMarcus.setVisible(professoresSelecionados.contains("MARCUS"));
+        btnMarcus.setManaged(btnMarcus.isVisible());
+
+        btnNacif.setVisible(professoresSelecionados.contains("NACIF"));
+        btnNacif.setManaged(btnNacif.isVisible());
+
+        btnPhilipe.setVisible(professoresSelecionados.contains("PHILIPE"));
+        btnPhilipe.setManaged(btnPhilipe.isVisible());
+
+        btnThais.setVisible(professoresSelecionados.contains("THAIS"));
+        btnThais.setManaged(btnThais.isVisible());
+    }
 
     // =================================================================
 
@@ -657,6 +721,7 @@ public class JogoController implements ControladorTela, Initializable {
 
     public void initialize(URL url, ResourceBundle rb) {
 
+        atualizarBotoesProfessores();
         montarGrade();
         ajustarEscala();
         configurarSomDeHover(btnVoltar);
@@ -696,6 +761,12 @@ public class JogoController implements ControladorTela, Initializable {
 
         if (personagemSelecionado.isEmpty()) {
             System.out.println("Selecione um personagem primeiro.");
+            return;
+        }
+
+        if (!professoresSelecionados.contains(personagemSelecionado)) {
+            System.out.println("Esse personagem não foi selecionado para a partida.");
+            personagemSelecionado = "";
             return;
         }
 
