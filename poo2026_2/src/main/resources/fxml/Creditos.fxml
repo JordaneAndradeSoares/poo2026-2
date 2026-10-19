@@ -42,8 +42,7 @@
         <Button fx:id="btnVoltar"
                 onAction="#voltar"
                 styleClass="botao-voltar"
-                StackPane.alignment="BOTTOM_CENTER"
-                translateY="-20.0" />
+                StackPane.alignment="BOTTOM_CENTER"/>
 
     </StackPane>
 

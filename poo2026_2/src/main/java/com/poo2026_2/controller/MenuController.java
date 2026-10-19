@@ -83,8 +83,8 @@ public class MenuController implements ControladorTela {
     private Button btnSair;
     
     //remover esse
-    @FXML
-    private Button btnJogo;
+    //@FXML
+    //private Button btnJogo;
 
     private GerenciadorDeTelas gerenciadorDeTelas;
 
@@ -108,8 +108,8 @@ public class MenuController implements ControladorTela {
         configurarCicloDeTrovoes();
 
         AudioManager.tocarMusicaMenu();
-        configurarSomDeHover(btnJogar, btnConfiguracoes, btnCreditos, btnSair, btnJogo);
-        configurarClick(btnJogar, btnConfiguracoes, btnCreditos, btnSair, btnJogo);
+        configurarSomDeHover(btnJogar, btnConfiguracoes, btnCreditos, btnSair); //, btnJogo);
+        configurarClick(btnJogar, btnConfiguracoes, btnCreditos, btnSair); //, btnJogo);
     }
 
     /** Toca um som quando o mouse entra em cada um dos botoes passados. */
@@ -288,12 +288,14 @@ public class MenuController implements ControladorTela {
         );
     }
     
+    /* 
     @FXML
     private void irJogo(ActionEvent event) {
         gerenciadorDeTelas.mudarTela(
                 "Jogo.fxml"
         );
     }
+    */
 
     @FXML
     private void sair(ActionEvent event) {
