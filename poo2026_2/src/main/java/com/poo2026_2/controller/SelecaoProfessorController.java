@@ -18,6 +18,8 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
+import javafx.scene.image.ImageView;
+
 public class SelecaoProfessorController implements ControladorTela {
 
     @FXML private BorderPane raiz;

@@ -10,15 +10,30 @@ import com.poo2026_2.model.Tiro;
  */
 public class Philipe extends Professor {
 
+    private static final int CUSTO_CAFE = 100;
+
     public Philipe(int linha, int coluna) {
-        super(100, linha, coluna, 100, 1.5);
+        super(
+            100, 
+            linha, 
+            coluna, 
+            CUSTO_CAFE, 
+            1.5
+        );
     }
 
     @Override
     public Tiro criarTiro() {
-        return novoTiro(5.0, 20,
-                "/images/tiros/python.png",
-                "nenhum",
-                "/audio/tiros/python.mp3");
+        return novoTiro(
+            5.0,
+            20,
+            "/images/tiros/python.png",
+            "nenhum",
+            "/audio/tiros/python.mp3"
+        );
+    }
+
+    public int getCustoCafe() {
+        return CUSTO_CAFE;
     }
 }

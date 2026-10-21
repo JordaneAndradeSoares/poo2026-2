@@ -34,6 +34,9 @@ import com.poo2026_2.model.Tiro;
 import com.poo2026_2.model.zumbis.*;
 import com.poo2026_2.model.utilizaveis.*;
 
+import javafx.scene.layout.VBox;
+import javafx.geometry.Pos;
+
 /**
  * FXML Controller class
  *
@@ -221,6 +224,44 @@ public class JogoController implements ControladorTela, Initializable {
             default:
                 return "/images/zumbis/ataque/calouroAtaque.png";
         }
+    }
+
+    // =================================================================
+
+    private void configurarBotaoPersonagem(Button botao, String nome, String caminhoImagem, int custoCafe) {
+
+        URL recurso = getClass().getResource(caminhoImagem);
+
+        if (recurso == null) {
+            System.err.println("Imagem não encontrada: " + caminhoImagem);
+            return;
+        }
+
+        ImageView imagem = new ImageView(new Image(recurso.toExternalForm()));
+
+        imagem.setFitWidth(80);
+        imagem.setFitHeight(80);
+        imagem.setPreserveRatio(true);
+        imagem.setSmooth(true);
+
+        Label lblNome = new Label(nome);
+        lblNome.getStyleClass().add("nome-personagem");
+
+        Label lblCusto = new Label("Custo: " + custoCafe + " cafés");
+        lblCusto.getStyleClass().add("custo-personagem");
+
+        VBox conteudo = new VBox(3, imagem, lblNome, lblCusto);
+        conteudo.setAlignment(Pos.CENTER);
+        conteudo.setMouseTransparent(true);
+
+        botao.setText("");
+        botao.setGraphic(conteudo);
+        botao.setContentDisplay(javafx.scene.control.ContentDisplay.GRAPHIC_ONLY);
+        botao.getStyleClass().add("botao-personagem");
+        botao.setPrefWidth(150);
+        botao.setPrefHeight(150);
+        botao.setMinWidth(150);
+        botao.setMinHeight(150);
     }
 
     // =================================================================
@@ -720,6 +761,67 @@ public class JogoController implements ControladorTela, Initializable {
     }
 
     public void initialize(URL url, ResourceBundle rb) {
+
+        configurarBotaoPersonagem(
+            btnCafeteira,
+            "Cafeteira",
+            "/images/interface/cafeteira.png",
+            new Cafeteira(
+                100,
+                0, 
+                0, 
+                60, 
+                5.0, 
+                1.0).getCustoCafe()
+        );
+
+        configurarBotaoPersonagem(
+            btnDaniel, "Daniel",
+            "/images/interface/daniel.png",
+            new Daniel(0, 0).getCustoCafe()
+        );
+
+        configurarBotaoPersonagem(
+            btnFabricio, "Fabrício",
+            "/images/interface/fabricio.png",
+            new Fabricio(0, 0).getCustoCafe()
+        );
+
+        configurarBotaoPersonagem(
+            btnGlaucia, "Gláucia",
+            "/images/interface/glaucia.png",
+            new Glaucia(0, 0).getCustoCafe()
+        );
+
+        configurarBotaoPersonagem(
+            btnLucas, "Lucas",
+            "/images/interface/lucas.png",
+            new Lucas(0, 0).getCustoCafe()
+        );
+
+        configurarBotaoPersonagem(
+            btnMarcus, "Marcus",
+            "/images/interface/marcus.png",
+            new Marcus(0, 0).getCustoCafe()
+        );
+
+        configurarBotaoPersonagem(
+            btnNacif, "Nacif",
+            "/images/interface/nacif.png",
+            new Nacif(0, 0).getCustoCafe()
+        );
+
+        configurarBotaoPersonagem(
+            btnPhilipe, "Philipe",
+            "/images/interface/philipe.png",
+            new Philipe(0, 0).getCustoCafe()
+        );
+
+        configurarBotaoPersonagem(
+            btnThais, "Thaís",
+            "/images/interface/thais.png",
+            new Thais(0, 0).getCustoCafe()
+        );
 
         atualizarBotoesProfessores();
         montarGrade();

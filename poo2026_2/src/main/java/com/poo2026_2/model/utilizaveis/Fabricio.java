@@ -10,8 +10,10 @@ import com.poo2026_2.model.Tiro;
  */
 public class Fabricio extends Professor {
 
+    private static final int CUSTO_CAFE = 100;
+
     public Fabricio(int linha, int coluna) {
-        super(100, linha, coluna, 100, 1.5);
+        super(100, linha, coluna, CUSTO_CAFE, 1.5);
     }
 
     @Override
@@ -20,5 +22,9 @@ public class Fabricio extends Professor {
                 "/images/tiros/scala.png",
                 "nenhum",
                 "/audio/tiros/scala.mp3");
+    }
+
+    public int getCustoCafe() {
+        return CUSTO_CAFE;
     }
 }

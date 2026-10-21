@@ -10,8 +10,10 @@ import com.poo2026_2.model.Tiro;
  */
 public class Marcus extends Professor {
 
+    private static final int CUSTO_CAFE = 100;
+
     public Marcus(int linha, int coluna) {
-        super(100, linha, coluna, 100, 1.5);
+        super(100, linha, coluna, CUSTO_CAFE, 1.5);
     }
 
     @Override
@@ -20,5 +22,9 @@ public class Marcus extends Professor {
                 "/images/tiros/matlab.png",
                 "nenhum",
                 "/audio/tiros/matlab.mp3");
+    }
+
+    public int getCustoCafe() {
+        return CUSTO_CAFE;
     }
 }

@@ -9,6 +9,7 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.control.Label?>
 
 <!--
@@ -54,69 +55,85 @@
             mouseTransparent="true"
         />
 
-        <!-- Indicador de café disponível -->
-        <Label 
-            fx:id="lblCafe"
-            layoutX="20"
-            layoutY="30"
-            text="Café: 150"
-            
-            style = 
-                "-fx-background-color: yellow;
-                -fx-text-fill: black;
-                -fx-font-size: 24px;
-                -fx-font-weight: bold;
-                -fx-padding: 10 18 10 18;
-                -fx-background-radius: 10;"/>
-
-        <!-- Seleção dos personagens -->
         <VBox
-            layoutX="20"
-            layoutY="180"
             spacing="10"
-            prefHeight="400.0"
-            prefWidth="150.0"
-            alignment="CENTER">
+            layoutX="10"
+            layoutY="10"
+            pickOnBounds="false">
 
-            <Button fx:id="btnCafeteira" prefWidth="300" text="Cafeteira"
-                    onAction="#selecionarCafeteira"/>
+            <HBox
+                spacing="10"
+                alignment="TOP_LEFT"
+                pickOnBounds="false">
 
-            <Button fx:id="btnDaniel" prefWidth="300" text="Daniel"
-                    onAction="#selecionarDaniel"/>
+                <!-- Botões de seleção dos personagens -->
+                <Button fx:id="btnCafeteira" text="Cafeteira"
+                        onAction="#selecionarCafeteira"/>
 
-            <Button fx:id="btnFabricio" prefWidth="300" text="Fabrício"
-                    onAction="#selecionarFabricio"/>
+                <Button fx:id="btnDaniel" text="Daniel"
+                        onAction="#selecionarDaniel"/>
 
-            <Button fx:id="btnGlaucia" prefWidth="300" text="Gláucia"
-                    onAction="#selecionarGlaucia"/>
+                <Button fx:id="btnFabricio" text="Fabrício"
+                        onAction="#selecionarFabricio"/>
 
-            <Button fx:id="btnLucas" prefWidth="300" text="Lucas"
-                    onAction="#selecionarLucas"/>
+                <Button fx:id="btnGlaucia" text="Gláucia"
+                        onAction="#selecionarGlaucia"/>
 
-            <Button fx:id="btnMarcus" prefWidth="300" text="Marcus"
-                    onAction="#selecionarMarcus"/>
+                <Button fx:id="btnLucas" text="Lucas"
+                        onAction="#selecionarLucas"/>
 
-            <Button fx:id="btnNacif" prefWidth="300" text="Nacif"
-                    onAction="#selecionarNacif"/>
+                <Button fx:id="btnMarcus" text="Marcus"
+                        onAction="#selecionarMarcus"/>
 
-            <Button fx:id="btnPhilipe" prefWidth="300" text="Philipe"
-                    onAction="#selecionarPhilipe"/>
+                <Button fx:id="btnNacif" text="Nacif"
+                        onAction="#selecionarNacif"/>
 
-            <Button fx:id="btnThais" prefWidth="300" text="Thaís"
-                    onAction="#selecionarThais"/>
+                <Button fx:id="btnPhilipe" text="Philipe"
+                        onAction="#selecionarPhilipe"/>
+
+                <Button fx:id="btnThais" text="Thaís"
+                        onAction="#selecionarThais"/>
+
+            </HBox>
+
+            <!-- Indicador da quantidade de café disponível -->
+            <HBox 
+                prefWidth="300"
+                prefHeight="60"
+                
+                maxWidth="300"
+                maxHeight="60"
+
+                alignment="CENTER_LEFT"
+                mouseTransparent="true"
+                styleClass="painel-cafe">
+
+                <ImageView 
+                    fitWidth="100"
+                    fitHeight="100"
+                    preserveRatio="true">
+
+                    <image>
+                        <Image url="@/images/interface/xicara.png"/>
+                    </image>
+                </ImageView>
+
+                <Label 
+                    fx:id="lblCafe"
+                    styleClass="texto-cafe"/>
+            </HBox>
+
+            <!-- Botão Voltar -->
+            <Button fx:id="btnVoltar"
+                    prefHeight="62" 
+                    prefWidth="200"
+                    mnemonicParsing="false"
+                    onAction="#voltar"
+                    styleClass="botao-voltar"
+                    stylesheets="@../styles/jogo.css"
+                    text="voltar"/>
 
         </VBox>
-
-        <!-- Botão Voltar -->
-        <Button fx:id="btnVoltar"
-                layoutX="1132" layoutY="90"
-                prefHeight="62" prefWidth="200"
-                mnemonicParsing="false"
-                onAction="#voltar"
-                styleClass="botao-voltar"
-                stylesheets="@../styles/jogo.css"
-                text="voltar"/>
-
     </Pane>
 
     <!-- Tela de resultado do jogo (vitoria ou derrota) -->

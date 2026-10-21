@@ -30,7 +30,7 @@ public abstract class Professor extends Entidade {
     }
 
     public int getCustoCafe() {
-        return custoCafe;
+        return this.custoCafe;
     }
 
     public double getCadenciaTiro() {
