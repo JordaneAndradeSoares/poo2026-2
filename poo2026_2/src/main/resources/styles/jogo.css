@@ -27,6 +27,28 @@
     -fx-background-radius: 45;
 }
 
+/* BOTÃO JOGAR NOVAMENTE */
+.jogar-novamente {
+    -fx-background-color: transparent;
+    -fx-background-insets: 0;
+    -fx-background-radius: 0;
+    -fx-border-width: 0;
+    -fx-padding: 0;
+    -fx-text-fill: transparent;
+    -fx-content-display: graphic-only;
+    -fx-cursor: hand;
+    -fx-background-image: url("../images/menu/buttons/jogar_novamente_normal.png");
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center;
+    -fx-background-size: 100% 100%;
+}
+
+.jogar-novamente:hover {
+    -fx-background-image: url("../images/menu/buttons/jogar_novamente_hover.png");
+    -fx-scale-x: 1.08;
+    -fx-scale-y: 1.08;
+}
+
 /* BOTÃO VOLTAR */
 .botao-voltar {
     -fx-background-color: transparent;

@@ -139,46 +139,71 @@
     <!-- Tela de resultado do jogo (vitoria ou derrota) -->
     <StackPane
         fx:id="camadaResultado"
+        visible="false"
         prefWidth="1672"
         prefHeight="941"
-        visible="false"
+        minWidth="0"
+        minHeight="0"
         maxWidth="Infinity"
         maxHeight="Infinity"
         alignment="CENTER"
-        style="-fx-background-color: rgba(0, 0, 0, 0.55);">
+        style="-fx-background-color: rgba(0, 0, 0, 0.65);">
 
-        <!-- Imagem da vitória -->
-        <ImageView
-            fx:id="imagemVitoria"
-            fitWidth="700"
-            fitHeight="600"
-            preserveRatio="true"
-            visible="false"
-            mouseTransparent="true">
+        <VBox
+            alignment="CENTER"
+            spacing="15.0"
+            fillWidth="false">
+            
+            <!-- Imagem da vitória -->
+            <ImageView
+                fx:id="imagemVitoria"
+                fitWidth="700"
+                fitHeight="600"
+                preserveRatio="true"
+                visible="false"
+                managed="false"
+                mouseTransparent="true">
 
-            <image>
-                <Image url="@../images/telas/vitoria.png"/>
-            </image>
-        </ImageView>
+                <image>
+                    <Image url="@../images/telas/vitoria.png"/>
+                </image>
+            </ImageView>
 
-        <!-- Imagem da derrota -->
-        <ImageView 
-            fx:id="imagemDerrota"
-            fitWidth="700"
-            fitHeight="600"
-            preserveRatio="true"
-            visible="false"
-            mouseTransparent="true">
+            <!-- Imagem da derrota -->
+            <ImageView 
+                fx:id="imagemDerrota"
+                fitWidth="700"
+                fitHeight="600"
+                preserveRatio="true"
+                visible="false"
+                managed="false"
+                mouseTransparent="true">
 
-            <image>
-                <Image url="@../images/telas/derrota.png"/>
-            </image>
-        </ImageView>
+                <image>
+                    <Image url="@../images/telas/derrota.png"/>
+                </image>
+            </ImageView>
 
-        <!-- Botões da tela final -->
-        <VBox alignment="CENTER" spacing="15" translateY="200">
-            <Button text="Jogar novamente" onAction="#jogarNovamente"/>
-            <Button text="Voltar ao menu" onAction="#voltar"/>
+            <!-- Botão jogar novamente -->
+            <Button fx:id="btnJogarNovamente"
+                    prefHeight="60" 
+                    prefWidth="200"
+                    mnemonicParsing="false"
+                    onAction="#jogarNovamente"
+                    styleClass="jogar-novamente"
+                    stylesheets="@../styles/jogo.css"
+                    text="Jogar novamente"/>
+
+            <!-- Botão Voltar -->
+            <Button fx:id="btnVoltar"
+                    prefHeight="40" 
+                    prefWidth="110"
+                    mnemonicParsing="false"
+                    onAction="#voltar"
+                    styleClass="botao-voltar"
+                    stylesheets="@../styles/jogo.css"
+                    text="Voltar"/>
+
         </VBox>
 
     </StackPane>

@@ -128,6 +128,9 @@ public class JogoController implements ControladorTela, Initializable {
     private final Map<Zumbi, Timeline> animacoesCaminhada = new HashMap<>();
     private final Map<Zumbi, Timeline> animacoesAtaque = new HashMap<>();
 
+    private final Map<String, Timeline> recargas = new HashMap<>();
+    private final Map<String, Button> botoesPersonagens = new HashMap<>();
+
     public static void setProfessoresSelecionados(java.util.Set<String> selecionados) {
         professoresSelecionados = new ArrayList<>(selecionados);
     }
@@ -338,6 +341,10 @@ public class JogoController implements ControladorTela, Initializable {
 
                 tirosVisuais.put(tiro, imagem);
                 camadaJogo.getChildren().add(imagem);
+
+                if (tiro.getSom() != null && !tiro.getSom().isBlank()) {
+                    AudioManager.tocarEfeito(tiro.getSom());
+                }
             }
 
             imagem.setLayoutX(GRADE_X + tiro.getX() * CEL_LARG);
@@ -759,20 +766,17 @@ public class JogoController implements ControladorTela, Initializable {
             botao.setOnMousePressed(event -> AudioManager.tocarSomBotao());
         }
     }
+    
+    // INICIALIZAR
+    // =================================================================
 
     public void initialize(URL url, ResourceBundle rb) {
-
+        
         configurarBotaoPersonagem(
             btnCafeteira,
             "Cafeteira",
             "/images/interface/cafeteira.png",
-            new Cafeteira(
-                100,
-                0, 
-                0, 
-                60, 
-                5.0, 
-                1.0).getCustoCafe()
+            new Cafeteira(100, 0, 0, 50, 5.0).getCustoCafe()
         );
 
         configurarBotaoPersonagem(
@@ -780,7 +784,7 @@ public class JogoController implements ControladorTela, Initializable {
             "/images/interface/daniel.png",
             new Daniel(0, 0).getCustoCafe()
         );
-
+        
         configurarBotaoPersonagem(
             btnFabricio, "Fabrício",
             "/images/interface/fabricio.png",
@@ -816,12 +820,22 @@ public class JogoController implements ControladorTela, Initializable {
             "/images/interface/philipe.png",
             new Philipe(0, 0).getCustoCafe()
         );
-
+        
         configurarBotaoPersonagem(
             btnThais, "Thaís",
             "/images/interface/thais.png",
             new Thais(0, 0).getCustoCafe()
         );
+        
+        botoesPersonagens.put("CAFETEIRA", btnCafeteira);
+        botoesPersonagens.put("DANIEL", btnDaniel);
+        botoesPersonagens.put("FABRICIO", btnFabricio);
+        botoesPersonagens.put("GLAUCIA", btnGlaucia);
+        botoesPersonagens.put("LUCAS", btnLucas);
+        botoesPersonagens.put("MARCUS", btnMarcus);
+        botoesPersonagens.put("NACIF", btnNacif);
+        botoesPersonagens.put("PHILIPE", btnPhilipe);
+        botoesPersonagens.put("THAIS", btnThais);
 
         atualizarBotoesProfessores();
         montarGrade();
@@ -831,6 +845,8 @@ public class JogoController implements ControladorTela, Initializable {
         iniciarPartida(); 
     }
 
+    // =================================================================
+
     private void montarGrade() {
 
         grade.setLayoutX(GRADE_X);
@@ -838,14 +854,14 @@ public class JogoController implements ControladorTela, Initializable {
 
         for (int l = 0; l < LINHAS; l++) {
             for (int c = 0; c < COLUNAS; c++) {
-
+                
                 StackPane celula = new StackPane();
 
                 celula.setPrefSize(CEL_LARG, CEL_ALT);
                 celula.setMinSize(CEL_LARG, CEL_ALT);
                 celula.setMaxSize(CEL_LARG, CEL_ALT);
                 celula.getStyleClass().add("celula");
-
+                
                 final int linha = l, coluna = c;
                 celula.setOnMouseClicked(e -> aoClicarNaCelula(linha, coluna));
 
@@ -855,8 +871,37 @@ public class JogoController implements ControladorTela, Initializable {
         }
     }
 
-    private void aoClicarNaCelula(int linha, int coluna) {
+    // tempo de recarga dos botões dos professores e da cafeteira dentro da fase
+    private void iniciarTempoDeRecarga(String nome, double segundos) {
 
+        Button botao = botoesPersonagens.get(nome);
+
+        if (botao == null) {
+            return;
+        }
+
+        // Interrompe uma recarga anterior desse botão, se existir.
+        Timeline recargaAnterior = recargas.get(nome);
+
+        if (recargaAnterior != null) {
+            recargaAnterior.stop();
+        }
+
+        botao.setDisable(true);
+
+        Timeline recarga = new Timeline(
+            new KeyFrame(
+                Duration.seconds(segundos),
+                evento -> botao.setDisable(false)
+            )
+        );
+
+        recargas.put(nome, recarga);
+        recarga.play();
+    }
+
+    private void aoClicarNaCelula(int linha, int coluna) {
+        
         if (gerenciadorDeJogo.terminou()) {
             return;
         }
@@ -882,63 +927,82 @@ public class JogoController implements ControladorTela, Initializable {
         boolean instalou = false;
         String nome = personagemSelecionado;
 
+        double segundos = 0;
+
         switch (personagemSelecionado) {
-            case "DANIEL":
-                instalou = gerenciadorDeJogo.adicionarProfessor(new Daniel(linha, coluna), linha, coluna);
+            case "DANIEL": {
+                Daniel daniel = new Daniel(linha, coluna);
+                segundos = daniel.getTempoDeRecarga();
+                instalou = gerenciadorDeJogo.adicionarProfessor(daniel, linha, coluna);
                 break;
+            }
 
-            case "FABRICIO":
-                instalou = gerenciadorDeJogo.adicionarProfessor(new Fabricio(linha, coluna), linha, coluna);
+            case "FABRICIO": {
+                Fabricio fabricio = new Fabricio(linha, coluna);
+                segundos = fabricio.getTempoDeRecarga();
+                instalou = gerenciadorDeJogo.adicionarProfessor(fabricio, linha, coluna);
                 break;
+            }
 
-            case "GLAUCIA":
-                instalou = gerenciadorDeJogo.adicionarProfessor(new Glaucia(linha, coluna), linha, coluna);
+            case "GLAUCIA": {
+                Glaucia glaucia = new Glaucia(linha, coluna);
+                segundos = glaucia.getTempoDeRecarga();
+                instalou = gerenciadorDeJogo.adicionarProfessor(glaucia, linha, coluna);
                 break;
+            }
 
-            case "LUCAS":
-                instalou = gerenciadorDeJogo.adicionarProfessor(new Lucas(linha, coluna), linha, coluna);
+            case "LUCAS": {
+                Lucas lucas = new Lucas(linha, coluna);
+                segundos = lucas.getTempoDeRecarga();
+                instalou = gerenciadorDeJogo.adicionarProfessor(lucas, linha, coluna);
                 break;
+            }
 
-            case "MARCUS":
-                instalou = gerenciadorDeJogo.adicionarProfessor(new Marcus(linha, coluna), linha, coluna);
+            case "MARCUS": {
+                Marcus marcus = new Marcus(linha, coluna);
+                segundos = marcus.getTempoDeRecarga();
+                instalou = gerenciadorDeJogo.adicionarProfessor(marcus, linha, coluna);
                 break;
+            }
 
-            case "NACIF":
-                instalou = gerenciadorDeJogo.adicionarProfessor(new Nacif(linha, coluna), linha, coluna);
+            case "NACIF": {
+                Nacif nacif = new Nacif(linha, coluna);
+                segundos = nacif.getTempoDeRecarga();
+                instalou = gerenciadorDeJogo.adicionarProfessor(nacif, linha, coluna);
                 break;
+            }
 
-            case "PHILIPE":
-                instalou = gerenciadorDeJogo.adicionarProfessor(new Philipe(linha, coluna), linha, coluna);
+            case "PHILIPE": {
+                Philipe philipe = new Philipe(linha, coluna);
+                segundos = philipe.getTempoDeRecarga();
+                instalou = gerenciadorDeJogo.adicionarProfessor(philipe, linha, coluna);
                 break;
+            }
 
-            case "THAIS":
-                instalou = gerenciadorDeJogo.adicionarProfessor(new Thais(linha, coluna), linha, coluna);
+            case "THAIS": {
+                Thais thais = new Thais(linha, coluna);
+                segundos = thais.getTempoDeRecarga();
+                instalou = gerenciadorDeJogo.adicionarProfessor(thais, linha, coluna);
                 break;
+            }
 
-            case "CAFETEIRA":
-                instalou = gerenciadorDeJogo.adicionarCafeteira(
-                    new Cafeteira(100, 
-                        linha, 
-                        coluna, 
-                        60, 
-                        5.0, 
-                        1.0
-                    ),
-
-                    linha, coluna
-                );
-
+            case "CAFETEIRA": {
+                Cafeteira cafeteira = new Cafeteira(100, linha, coluna, 60, 5.0);
+                segundos = cafeteira.getTempoDeRecarga();
+                instalou = gerenciadorDeJogo.adicionarCafeteira(cafeteira, linha, coluna);
                 break;
+            }
 
             default:
-                System.out.println("Desconhecido.");
+                System.out.println("Personagem desconhecido.");
                 return;
         }
 
         if (!instalou) {
-
             System.out.println("Não foi possível instalar. Verifique o café disponível.");
             return;
+        } else {
+            iniciarTempoDeRecarga(personagemSelecionado, segundos);
         }
 
         if (nome.equals("CAFETEIRA")) {
@@ -1017,7 +1081,7 @@ public class JogoController implements ControladorTela, Initializable {
         gerenciadorDeJogo.encerrar();
         gerenciadorDeTelas.voltarMenu();
     }
-
+    
     private void mostrarResultado() {
 
         if (!gerenciadorDeJogo.terminou()) {
@@ -1026,8 +1090,13 @@ public class JogoController implements ControladorTela, Initializable {
 
         boolean venceu = gerenciadorDeJogo.isVitoria();
 
+        imagemVitoria.setManaged(venceu);
         imagemVitoria.setVisible(venceu);
+
+        imagemDerrota.setManaged(!venceu);
         imagemDerrota.setVisible(!venceu);
+
+        camadaResultado.setManaged(true);
         camadaResultado.setVisible(true);
     }
 

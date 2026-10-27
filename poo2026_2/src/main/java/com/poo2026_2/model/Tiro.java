@@ -4,6 +4,8 @@
  */
 package com.poo2026_2.model;
 
+import com.poo2026_2.audio.AudioManager;
+
 /**
  *
  * @author thoma
@@ -102,6 +104,7 @@ public class Tiro {
     /** Causa dano no alvo e some. */
     public void atingir(Entidade alvo) {
         alvo.receberDano(dano);
+        AudioManager.tocarEfeito("/audio/impacto.mp3"); // fonte (acesso em 22/10/2026): https://www.myinstants.com/pt/instant/dramatic-boomer-29428/
         desativar();
     }
 
