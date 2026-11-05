@@ -144,9 +144,7 @@
 }
 
 .cartao-professor {
-    -fx-background-color: linear-gradient(
-        to bottom, #30463c, #172b24
-    );
+    -fx-background-color: linear-gradient(to bottom, #30463c, #172b24);
     -fx-border-color: #82704b;
     -fx-border-width: 2;
     -fx-border-radius: 10;
