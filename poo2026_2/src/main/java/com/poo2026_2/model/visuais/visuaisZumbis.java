@@ -180,7 +180,7 @@ public class visuaisZumbis {
                         System.err.println("Spritesheet de ataque não encontrado: " + caminhoAtaque);
                     } else {
                         Image spritesheetAtaque = new Image(recursoAtaque.toExternalForm());
-                        Image[] quadrosAtaque = visualGeral.recortarSprites(spritesheetAtaque, 80, 80, 4);
+                        Image[] quadrosAtaque = visualGeral.recortarSprites(spritesheetAtaque, 3, 3, 8);
 
                         if (quadrosAtaque.length > 0) {
                             if (animacao != null) {

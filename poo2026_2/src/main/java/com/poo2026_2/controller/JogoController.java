@@ -40,6 +40,7 @@ import com.poo2026_2.model.visuais.visuaisZumbis;
 import com.poo2026_2.model.visuais.visuaisBotoes;
 import com.poo2026_2.model.visuais.visuaisGeral;
 import com.poo2026_2.model.visuais.visuaisGrades;
+import com.poo2026_2.model.visuais.visuaisProva;
 
 import javafx.scene.layout.VBox;
 import javafx.geometry.Pos;
@@ -130,6 +131,7 @@ public class JogoController implements ControladorTela, Initializable {
     private final visuaisBotoes visualBotoes = new visuaisBotoes();
     private final visuaisGeral visualGeral = new visuaisGeral();
     private final visuaisGrades visualGrades = new visuaisGrades(LINHAS, COLUNAS, CEL_LARG, CEL_ALT, GRADE_X, GRADE_Y);
+    private final visuaisProva visualProva = new visuaisProva();
 
     // =================================================================
 
@@ -338,6 +340,17 @@ public class JogoController implements ControladorTela, Initializable {
         gerenciadorDeJogo.iniciarJogo();
         atualizarQuantidadeDeCafe();
 
+        // Criando uma prova para cada linha
+        visualProva.armarProva(
+            camadaJogo,
+            LINHAS,
+            COLUNAS,
+            GRADE_X,
+            GRADE_Y,
+            CEL_LARG,
+            CEL_ALT
+        );
+
         timer = new AnimationTimer() {
             private long ultimo = 0;
 
@@ -353,6 +366,7 @@ public class JogoController implements ControladorTela, Initializable {
                 ultimo = agora;
                 delta = Math.min(delta, 0.1);
 
+                visualProva.moveProva(delta, gerenciadorDeJogo);
                 gerenciadorDeJogo.atualizar(delta);
                 atualizarQuantidadeDeCafe();
                 visualProfessores.removerProfessoresOuCafeteirasMortas(COLUNAS, LINHAS, celulas, gerenciadorDeJogo, animacoes);
@@ -510,6 +524,17 @@ public class JogoController implements ControladorTela, Initializable {
 
         gerenciadorDeJogo.reiniciarJogo();
         personagemSelecionado = "";
+
+        // Reposiciona e rearma todas as provas
+        visualProva.armarProva(
+            camadaJogo,
+            LINHAS,
+            COLUNAS,
+            GRADE_X,
+            GRADE_Y,
+            CEL_LARG,
+            CEL_ALT
+        );
 
         // Limpa as células
         for (StackPane[] linha : celulas) {
