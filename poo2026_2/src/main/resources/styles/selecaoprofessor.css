@@ -1,135 +1,141 @@
-.selecao-root {
-    -fx-background-color: linear-gradient(to bottom right, #101d1d, #243b35, #142322);
-    -fx-font-family: "Georgia";
+/* =====================================================================
+ * Tela de selecao de professores - estilo Windows 95
+ *
+ * Paleta: cinza #c0c0c0 (face), azul-marinho #000080 (titulo/selecao),
+ * branco/cinza para os chanfros 3D.
+ *
+ * Os chanfros sao feitos com camadas de -fx-background-color deslocadas por
+ * -fx-background-insets (as listas tem que ter o mesmo numero de itens):
+ *   "elevado"  = borda externa clara em cima/esquerda, escura embaixo/direita
+ *   "afundado" = o contrario
+ * ===================================================================== */
+
+/* ---------- Janela ---------- */
+.win95-janela {
+    -fx-font-family: "Arial";
+    -fx-font-size: 14px;
+    -fx-focus-color: transparent;
+    -fx-faint-focus-color: transparent;
+    -fx-background-color: #0a0a0a, #ffffff, #808080, #dfdfdf, #c0c0c0;
+    -fx-background-insets: 0, 0 1 1 0, 1 1 1 1, 1 2 2 1, 2 2 2 2;
+    -fx-background-radius: 0;
+    -fx-padding: 3;
 }
 
-.cabecalho {
-    -fx-background-color: rgba(5, 12, 12, 0.88);
-    -fx-border-color: transparent transparent #b9a36c transparent;
-    -fx-border-width: 0 0 2 0;
+/* ---------- Barra de titulo ---------- */
+.barra-titulo {
+    -fx-background-color: #000080;
+    -fx-padding: 2 2 2 3;
+    -fx-min-height: 24;
+    -fx-pref-height: 24;
 }
 
-.titulo {
-    -fx-text-fill: #f2ead7;
-    -fx-font-size: 27px;
+.titulo-janela {
+    -fx-text-fill: #ffffff;
+    -fx-font-size: 16px;
     -fx-font-weight: bold;
 }
 
-.subtitulo {
-    -fx-text-fill: #c2c9bb;
-    -fx-font-size: 13px;
+.botao-janela {
+    -fx-background-color: #0a0a0a, #ffffff, #808080, #dfdfdf, #c0c0c0;
+    -fx-background-insets: 0, 0 1 1 0, 1 1 1 1, 1 2 2 1, 2 2 2 2;
+    -fx-background-radius: 0;
+    -fx-padding: 0;
+    -fx-min-width: 20;
+    -fx-pref-width: 20;
+    -fx-max-width: 20;
+    -fx-min-height: 18;
+    -fx-pref-height: 18;
+    -fx-max-height: 18;
+    -fx-cursor: default;
+}
+
+.botao-janela:pressed {
+    -fx-background-color: #ffffff, #0a0a0a, #dfdfdf, #808080, #c0c0c0;
+    -fx-padding: 1 0 0 1;
+}
+
+/* ---------- Barra de menu ---------- */
+.barra-menu {
+    -fx-padding: 3 6 3 6;
+}
+
+.item-menu .text {
+    -fx-font-family: "Arial";
+    -fx-font-size: 15px;
+    -fx-fill: #000000;
+}
+
+/* ---------- Area dos icones (branca, afundada) ---------- */
+.area-hundida {
+    -fx-background-color: #ffffff, #808080, #dfdfdf, #0a0a0a, #ffffff;
+    -fx-background-insets: 0, 0 1 1 0, 1 1 1 1, 1 2 2 1, 2 2 2 2;
+    -fx-background-radius: 0;
+    -fx-padding: 3;
 }
 
 .grade-professores {
     -fx-background-color: transparent;
-    -fx-alignment: center;
 }
 
+/* Cada professor e um "arquivo": icone em cima, nome embaixo. */
 .cartao-professor {
-    -fx-background-color: linear-gradient(to bottom, #293b37, #172522);
-    -fx-background-radius: 5;
-    -fx-border-color: #796d4c;
-    -fx-border-width: 2;
-    -fx-border-radius: 5;
-    -fx-text-fill: #f3e9d1;
-    -fx-font-size: 16px;
-    -fx-font-weight: bold;
-    -fx-alignment: bottom-center;
-    -fx-padding: 10;
-    -fx-cursor: hand;
-}
-
-.cartao-professor:hover {
-    -fx-border-color: #c7b77e;
-    -fx-background-color: #354b43;
-}
-
-.cartao-professor.bloqueado {
-    -fx-background-color: linear-gradient(to bottom, #292d2c, #171a19);
-    -fx-border-color: #555b58;
-    -fx-text-fill: #929995;
-    -fx-opacity: 0.78;
+    -fx-background-color: transparent;
+    -fx-background-insets: 0;
+    -fx-background-radius: 0;
+    -fx-border-width: 0;
+    -fx-text-fill: #000000;
+    -fx-font-size: 18px;
+    -fx-font-weight: normal;
+    -fx-content-display: top;
+    -fx-graphic-text-gap: 6;
+    -fx-alignment: top-center;
+    -fx-padding: 6 10 6 10;
     -fx-cursor: default;
 }
 
-.cartao-professor.bloqueado:hover {
-    -fx-background-color: linear-gradient(to bottom, #292d2c, #171a19);
-    -fx-border-color: #555b58;
-}
-
 .cartao-professor.selecionado {
-    -fx-border-color: #38f36a;
-    -fx-border-width: 3;
-    -fx-effect: dropshadow(gaussian, rgba(45, 255, 91, 0.55), 12, 0.25, 0, 0);
+    -fx-background-color: #000080;
+    -fx-text-fill: #ffffff;
 }
 
-.nome-professor {
-    -fx-text-fill: #fff0cf;
-    -fx-font-size: 15px;
-    -fx-font-weight: bold;
+.cartao-professor.bloqueado {
+    -fx-text-fill: #808080;
+    -fx-opacity: 0.7;
 }
 
-.custo-professor {
-    -fx-text-fill: #ffe58a;
-    -fx-font-size: 13px;
-    -fx-font-weight: bold;
-}
-
+/* ---------- Painel "Equipe da fase" ---------- */
 .painel-equipe {
-    -fx-background-color: rgba(7, 17, 17, 0.88);
-    -fx-border-color: #796d4c;
-    -fx-border-width: 0 0 0 2;
+    -fx-background-color: transparent;
 }
 
 .titulo-painel {
-    -fx-text-fill: #f2ead7;
-    -fx-font-size: 19px;
+    -fx-background-color: #0a0a0a, #ffffff, #808080, #dfdfdf, #c0c0c0;
+    -fx-background-insets: 0, 0 1 1 0, 1 1 1 1, 1 2 2 1, 2 2 2 2;
+    -fx-background-radius: 0;
+    -fx-text-fill: #000000;
+    -fx-font-size: 17px;
     -fx-font-weight: bold;
+    -fx-padding: 6 8 6 8;
 }
 
 .contador {
-    -fx-text-fill: #d5c79d;
-    -fx-font-size: 14px;
+    -fx-text-fill: #000000;
+    -fx-font-size: 16px;
+    -fx-padding: 2 0 0 2;
 }
 
 .item-selecionado {
-    -fx-text-fill: #d9f3d7;
-    -fx-background-color: #263d32;
-    -fx-background-radius: 4;
-    -fx-padding: 8;
+    -fx-text-fill: #000000;
+    -fx-font-size: 17px;
+    -fx-padding: 1 0 1 2;
     -fx-max-width: Infinity;
-}
-
-.botao-jogar {
-    -fx-background-color: #13b83f;
-    -fx-text-fill: white;
-    -fx-font-size: 23px;
-    -fx-font-weight: bold;
-    -fx-background-radius: 6;
-    -fx-padding: 14 12;
-    -fx-cursor: hand;
-}
-
-.botao-jogar:hover {
-    -fx-background-color: #2ee85b;
-}
-
-.botao-voltar {
-    -fx-background-color: #304247;
-    -fx-text-fill: #f2ead7;
-    -fx-font-size: 14px;
-    -fx-background-radius: 5;
-    -fx-padding: 10 12;
-    -fx-cursor: hand;
-}
-
-.botao-voltar:hover {
-    -fx-background-color: #435b60;
 }
 
 .lista-selecionados-scroll {
     -fx-background-color: transparent;
     -fx-background: transparent;
+    -fx-background-insets: 0;
     -fx-border-color: transparent;
     -fx-padding: 0;
 }
@@ -143,12 +149,41 @@
     -fx-padding: 2 4 2 0;
 }
 
-.cartao-professor {
-    -fx-background-color: linear-gradient(to bottom, #30463c, #172b24);
-    -fx-border-color: #82704b;
-    -fx-border-width: 2;
-    -fx-border-radius: 10;
-    -fx-background-radius: 10;
-    -fx-cursor: hand;
-    -fx-padding: 8;
+/* ---------- Botoes JOGAR / VOLTAR ---------- */
+.botao-jogar,
+.botao-voltar {
+    -fx-background-color: #0a0a0a, #ffffff, #808080, #dfdfdf, #c0c0c0;
+    -fx-background-insets: 0, 0 1 1 0, 1 1 1 1, 1 2 2 1, 2 2 2 2;
+    -fx-background-radius: 0;
+    -fx-text-fill: #000000;
+    -fx-font-size: 17px;
+    -fx-font-weight: bold;
+    -fx-padding: 6 12 6 12;
+    -fx-cursor: default;
+}
+
+.botao-jogar:pressed,
+.botao-voltar:pressed {
+    -fx-background-color: #ffffff, #0a0a0a, #dfdfdf, #808080, #c0c0c0;
+    -fx-padding: 7 12 5 13;
+}
+
+/* JOGAR e o botao padrao: contorno preto extra, como no Windows 95. */
+.botao-jogar {
+    -fx-background-color: #000000, #ffffff, #808080, #dfdfdf, #c0c0c0;
+    -fx-background-insets: 0, 1 2 2 1, 2 2 2 2, 2 3 3 2, 3 3 3 3;
+    -fx-padding: 7 13 7 13;
+}
+
+.botao-jogar:pressed {
+    -fx-background-color: #000000, #808080, #c0c0c0;
+    -fx-background-insets: 0, 1, 2;
+    -fx-padding: 8 13 6 14;
+}
+
+/* ---------- Barra de status ---------- */
+.barra-status {
+    -fx-background-color: #ffffff, #808080, #c0c0c0;
+    -fx-background-insets: 0, 0 1 1 0, 1 1 1 1;
+    -fx-background-radius: 0;
 }

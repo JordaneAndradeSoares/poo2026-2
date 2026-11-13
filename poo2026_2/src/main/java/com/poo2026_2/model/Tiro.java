@@ -4,7 +4,10 @@
  */
 package com.poo2026_2.model;
 
+import java.util.function.Consumer;
+
 import com.poo2026_2.audio.AudioManager;
+import com.poo2026_2.model.zumbis.Zumbi;
 
 /**
  *
@@ -22,8 +25,14 @@ public class Tiro {
     private String sprite;
     private String efeitoVisual;
     private String som;
+    private Consumer<Zumbi> efeito; // aplicado ao zumbi atingido (pode ser null)
 
     public Tiro(double x, double y, double velocidade, int dano, String sprite, String efeitoVisual, String som) {
+        this(x, y, velocidade, dano, sprite, efeitoVisual, som, null);
+    }
+
+    /** Tiro com efeito: depois do dano, o efeito e aplicado ao zumbi atingido. */
+    public Tiro(double x, double y, double velocidade, int dano, String sprite, String efeitoVisual, String som, Consumer<Zumbi> efeito) {
 
         if (dano <= 0) {
             throw new IllegalArgumentException("O dano tem que ser maior que zero.");
@@ -39,6 +48,7 @@ public class Tiro {
         this.sprite = sprite;
         this.efeitoVisual = efeitoVisual;
         this.som = som;
+        this.efeito = efeito;
         this.ativo = true;
     }
 
@@ -101,9 +111,12 @@ public class Tiro {
         }
     }
     
-    /** Causa dano no alvo e some. */
+    /** Causa dano no alvo, aplica o efeito (se houver) e some. */
     public void atingir(Entidade alvo) {
         alvo.receberDano(dano);
+        if (efeito != null && alvo instanceof Zumbi && alvo.estaVivo()) {
+            efeito.accept((Zumbi) alvo);
+        }
         AudioManager.tocarEfeito("/audio/impacto.mp3"); // fonte (acesso em 22/10/2026): https://www.myinstants.com/pt/instant/dramatic-boomer-29428/
         desativar();
     }

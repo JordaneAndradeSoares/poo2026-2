@@ -57,7 +57,7 @@ Entidade (abstrata)
  │     ├── ProfessorLucas         → melee Skate - custo 150 cafe
                                     dano: hitkill
                                     cadência: 17s
-                                    efeito: da uma skatedada no zumbi e depois fica carregando
+                                    efeito: da uma skatada no zumbi e depois fica carregando
  │     ├── ...                    → (até 8 professores)
  │     └── Cafeteira              → produz café periodicamente (não atira) - custo 50 cafe
                                     efeito: cospe um simbolo de café

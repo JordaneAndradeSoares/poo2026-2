@@ -1,34 +1,19 @@
 package com.poo2026_2.model.utilizaveis;
 
 import com.poo2026_2.model.Professor;
-import com.poo2026_2.model.Tiro;
 
 /**
- * Atira Matlab. (valores provisorios: ajustar no balanceamento)
- *
+ * Tanque (Matlab): nao atira, so segura os zumbis com muita vida.
  * @author thoma
  */
 public class Marcus extends Professor {
 
-    private static final int CUSTO_CAFE = 100;
-    private static final double TEMPO_DE_RECARGA = 8;
+    private static final int CUSTO_CAFE = 150;
+    private static final double TEMPO_DE_RECARGA = 8;  
+    private static final int VIDA = 4000;
 
     public Marcus(int linha, int coluna) {
-        super(100, linha, coluna, CUSTO_CAFE, 1.5);
-    }
-
-    @Override
-    public Tiro criarTiro() {
-        return novoTiro(
-            5.0, 
-            20,
-            "/images/tiros/matlab.png",
-            "nenhum",
-            "/audio/tiros/matlab.mp3");
-    }
-
-    public int getCustoCafe() {
-        return this.CUSTO_CAFE;    
+        super(VIDA, linha, coluna, CUSTO_CAFE, 0);
     }
 
     public double getTempoDeRecarga() {
