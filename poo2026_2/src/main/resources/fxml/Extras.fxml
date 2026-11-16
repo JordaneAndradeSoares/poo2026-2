@@ -8,44 +8,185 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
 
-<!-- removido: prefHeight="720.0" prefWidth="1280.0" -->
 <AnchorPane xmlns="http://javafx.com/javafx/26"
             xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="com.poo2026_2.controller.ExtrasController"
-            styleClass="settings-root">
+            style="-fx-background-color: #A9A9A9;">
 
-    <StackPane  AnchorPane.topAnchor="0.0"
-                AnchorPane.bottomAnchor="0.0"
-                AnchorPane.leftAnchor="0.0"
-                AnchorPane.rightAnchor="0.0">
+    <StackPane AnchorPane.topAnchor="0.0"
+               AnchorPane.bottomAnchor="0.0"
+               AnchorPane.leftAnchor="0.0"
+               AnchorPane.rightAnchor="0.0">
 
+        <VBox spacing="0"
+              style="-fx-background-color: #B8B8B8;
+                     -fx-border-color: #222222;
+                     -fx-border-width: 3;"
+              maxWidth="1050"
+              maxHeight="650">
 
-        <VBox   alignment="CENTER"
-                spacing="20.0"
-                prefWidth="460.0"
-                maxWidth="460.0"
-                styleClass="settings-panel">
-        
-            <Label text="CONFIGURAÇÕES" styleClass="settings-title" />
-            <Label text="Resolução" styleClass="settings-label" />
+            <!-- CABEÇALHO -->
+            <HBox alignment="CENTER"
+                  prefHeight="75"
+                  style="-fx-background-color: #000080;
+                         -fx-padding: 10 20 10 20;">
 
-            <ComboBox fx:id="comboResolucao" prefWidth="460.0" styleClass="settings-control" />
+                <Region HBox.hgrow="ALWAYS"/>
 
-            <Label text="Volume da música" styleClass="settings-label" />
-            <Slider fx:id="sliderMusica" min="0" max="100" showTickLabels="true" />
+                <Label text="BIOS Setup Utility"
+                       style="-fx-font-family: 'Monospaced';
+                              -fx-font-size: 27px;
+                              -fx-font-weight: bold;
+                              -fx-text-fill: white;"/>
 
-            <Label text="Volume dos efeitos" styleClass="settings-label" />
-            <Slider fx:id="sliderEfeitos" min="0" max="100" showTickLabels="true" />
+                <Region HBox.hgrow="ALWAYS"/>
 
-            <CheckBox fx:id="checkMudo" text="Silenciar sons" styleClass="settings-check" />
+                <Button text="Exit"
+                        onAction="#voltar"
+                        prefWidth="100"
+                        style="-fx-background-color: #0000AA;
+                               -fx-border-color: white;
+                               -fx-text-fill: white;
+                               -fx-font-family: 'Monospaced';
+                               -fx-font-size: 16px;"/>
+            </HBox>
 
-            <!-- removido: tela cheia virou uma opção dentro da resolução -->
-            <!-- <CheckBox fx:id="checkTelaCheia" text="Tela cheia" styleClass="settings-check" /> -->
+            <!-- CONTEÚDO -->
+            <HBox spacing="0" VBox.vgrow="ALWAYS">
 
-            <Button text="APLICAR" onAction="#aplicar" styleClass="settings-button" />
-            <Button text="VOLTAR" onAction="#voltar" styleClass="settings-button" />
+                <!-- CONFIGURAÇÕES -->
+                <VBox spacing="18"
+                      HBox.hgrow="ALWAYS"
+                      style="-fx-padding: 30;">
+
+                    <Label text="System Configuration"
+                           style="-fx-font-family: 'Monospaced';
+                                  -fx-font-size: 21px;
+                                  -fx-font-weight: bold;
+                                  -fx-text-fill: #000080;"/>
+
+                    <Label text="Resolution:"
+                           style="-fx-font-family: 'Monospaced';
+                                  -fx-font-size: 17px;
+                                  -fx-text-fill: #000080;"/>
+
+                    <ComboBox fx:id="comboResolucao"
+                              maxWidth="Infinity"
+                              prefHeight="40"
+                              styleClass="settings-control"/>
+
+                    <Label text="Music Volume:"
+                           style="-fx-font-family: 'Monospaced';
+                                  -fx-font-size: 17px;
+                                  -fx-text-fill: #000080;"/>
+
+                    <Slider fx:id="sliderMusica"
+                            min="0" max="100"
+                            showTickLabels="true"
+                            showTickMarks="true"
+                            majorTickUnit="25"/>
+
+                    <Label text="Sound Effects Volume:"
+                           style="-fx-font-family: 'Monospaced';
+                                  -fx-font-size: 17px;
+                                  -fx-text-fill: #000080;"/>
+
+                    <Slider fx:id="sliderEfeitos"
+                            min="0" max="100"
+                            showTickLabels="true"
+                            showTickMarks="true"
+                            majorTickUnit="25"/>
+
+                    <CheckBox fx:id="checkMudo"
+                              text="Mute All Sounds"
+                              style="-fx-font-family: 'Monospaced';
+                                     -fx-font-size: 17px;
+                                     -fx-text-fill: #000080;"/>
+
+                    <Region VBox.vgrow="ALWAYS"/>
+
+                    <HBox spacing="20" alignment="CENTER">
+
+                        <Button text="Apply"
+                                onAction="#aplicar"
+                                prefWidth="140"
+                                prefHeight="42"
+                                style="-fx-background-color: #000080;
+                                       -fx-text-fill: white;
+                                       -fx-font-family: 'Monospaced';
+                                       -fx-font-size: 17px;"/>
+
+                        <Button text="Back"
+                                onAction="#voltar"
+                                prefWidth="140"
+                                prefHeight="42"
+                                style="-fx-background-color: #666666;
+                                       -fx-text-fill: white;
+                                       -fx-font-family: 'Monospaced';
+                                       -fx-font-size: 17px;"/>
+
+                    </HBox>
+
+                </VBox>
+
+                <!-- PAINEL DE AJUDA -->
+                <VBox spacing="20"
+                      prefWidth="260"
+                      minWidth="220"
+                      style="-fx-background-color: #A0A0A0;
+                             -fx-border-color: #555555;
+                             -fx-border-width: 0 0 0 2;
+                             -fx-padding: 25;">
+
+                    <Label text="Item Specific Help"
+                           style="-fx-font-family: 'Monospaced';
+                                  -fx-font-size: 18px;
+                                  -fx-font-weight: bold;
+                                  -fx-text-fill: #222222;"/>
+
+                    <Label text="Configure your game settings.
+
+Select your desired resolution.
+
+Adjust music and sound effects volume.
+
+Enable mute to silence all sounds.
+
+Press Apply to save."
+                           wrapText="true"
+                           style="-fx-font-family: 'Monospaced';
+                                  -fx-font-size: 14px;
+                                  -fx-text-fill: #000080;"/>
+
+                </VBox>
+
+            </HBox>
+
+            <!-- RODAPÉ -->
+            <HBox alignment="CENTER_LEFT"
+                  spacing="30"
+                  prefHeight="35"
+                  style="-fx-background-color: #000080;
+                         -fx-padding: 5 15;">
+
+                <Label text="ENTER: Select"
+                       style="-fx-text-fill: white;
+                              -fx-font-family: 'Monospaced';"/>
+
+                <Label text="ESC: Back"
+                       style="-fx-text-fill: white;
+                              -fx-font-family: 'Monospaced';"/>
+
+                <Label text="Apply: Save"
+                       style="-fx-text-fill: white;
+                              -fx-font-family: 'Monospaced';"/>
+
+            </HBox>
 
         </VBox>
+
     </StackPane>
 </AnchorPane>
