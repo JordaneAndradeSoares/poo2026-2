@@ -117,15 +117,11 @@ public final class AudioManager {
         }
 
         try {
-            Media media = cacheMedia.computeIfAbsent(caminhoRecurso, caminho
-                    -> new Media(AudioManager.class.getResource(caminho).toExternalForm())
-            );
+            Media media = cacheMedia.computeIfAbsent(caminhoRecurso, caminho -> new Media(AudioManager.class.getResource(caminho).toExternalForm()));
             tocarEfeitoDescartavel(media, caminhoRecurso);
 
         } catch (Exception e) {
-            System.err.println(
-                    "Nao foi possivel tocar o efeito '" + caminhoRecurso + "': " + e.getMessage()
-            );
+            System.err.println("Nao foi possivel tocar o efeito '" + caminhoRecurso + "': " + e.getMessage());
         }
     }
     

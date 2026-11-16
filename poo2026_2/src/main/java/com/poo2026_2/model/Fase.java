@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.poo2026_2.controller.SelecaoNivelController;
+import com.poo2026_2.model.utilizaveis.*;
 import com.poo2026_2.model.zumbis.Calouro;
 import com.poo2026_2.model.zumbis.CalouroBlindado;
 import com.poo2026_2.model.zumbis.CalouroProtegido;
@@ -31,6 +32,18 @@ public class Fase {
 
         Fase fase = new Fase(1, "Início do semestre", 150);
 
+        fase.adicionarProfessorDisponivel(Daniel.class);
+        fase.adicionarProfessorDisponivel(Fabricio.class);
+        fase.adicionarProfessorDisponivel(Glaucia.class);
+        fase.adicionarProfessorDisponivel(Lucas.class);
+        fase.adicionarProfessorDisponivel(Marcus.class);
+        fase.adicionarProfessorDisponivel(Nacif.class);
+        fase.adicionarProfessorDisponivel(Philipe.class);
+        fase.adicionarProfessorDisponivel(Thais.class);
+
+        // fase.adicionarProfessorDisponivel(Daniel.class);
+        // fase.adicionarProfessorDisponivel(Fabricio.class);
+
         fase.adicionarOnda(new Onda(1, 4, 6.0, Calouro::new));
         fase.adicionarOnda(new Onda(2, 5, 6.0, Calouro::new));
         fase.adicionarOnda(new Onda(3, 3, 7.0, CalouroBlindado::new));
@@ -42,6 +55,12 @@ public class Fase {
     private static Fase criarFase2() {
 
         Fase fase = new Fase(2, "Semana de provas", 200);
+
+        fase.adicionarProfessorDisponivel(Daniel.class);
+        fase.adicionarProfessorDisponivel(Fabricio.class);
+        fase.adicionarProfessorDisponivel(Glaucia.class);
+        fase.adicionarProfessorDisponivel(Lucas.class);
+        fase.adicionarProfessorDisponivel(Marcus.class);
 
         fase.adicionarOnda(new Onda(1, 5, 5.0, CalouroBlindado::new));
         fase.adicionarOnda(new Onda(2, 4, 5.0, Trote::new));
@@ -56,6 +75,15 @@ public class Fase {
     private static Fase criarFase3() {
 
         Fase fase = new Fase(3, "Fim do semestre", 250);
+
+        fase.adicionarProfessorDisponivel(Daniel.class);
+        fase.adicionarProfessorDisponivel(Fabricio.class);
+        fase.adicionarProfessorDisponivel(Glaucia.class);
+        fase.adicionarProfessorDisponivel(Lucas.class);
+        fase.adicionarProfessorDisponivel(Marcus.class);
+        fase.adicionarProfessorDisponivel(Nacif.class);
+        fase.adicionarProfessorDisponivel(Philipe.class);
+        fase.adicionarProfessorDisponivel(Thais.class);
 
         fase.adicionarOnda(new Onda(1, 5, 4.0, Calouro::new));
         fase.adicionarOnda(new Onda(2, 4, 4.0, CalouroBlindado::new));

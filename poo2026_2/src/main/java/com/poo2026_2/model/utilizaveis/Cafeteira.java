@@ -13,18 +13,20 @@ import com.poo2026_2.model.Entidade;
 public class Cafeteira extends Entidade {
 
     private static final int CUSTO_CAFE_PADRAO = 50;
+    private static final double TEMPO_DE_RECARGA = 8;
+
     private int custoCafe;
     private int cafePorCiclo;
+
     private double intervaloProducao;
     private double tempoUltimaProducao;
-    private double raioProducao;
 
-    public Cafeteira(int vida, int linha, int coluna, int cafePorCiclo, double intervaloProducao, double raioProducao) {
+    public Cafeteira(int vida, int linha, int coluna, int cafePorCiclo, double intervaloProducao) {
         
-        this(vida, linha, coluna, cafePorCiclo, intervaloProducao, raioProducao, CUSTO_CAFE_PADRAO);
+        this(vida, linha, coluna, cafePorCiclo, intervaloProducao, TEMPO_DE_RECARGA, CUSTO_CAFE_PADRAO);
     }
 
-    public Cafeteira(int vida, int linha, int coluna, int cafePorCiclo, double intervaloProducao, double raioProducao, int custoCafe) {
+    public Cafeteira(int vida, int linha, int coluna, int cafePorCiclo, double intervaloProducao, double tempoDeRecarga, int custoCafe) {
 
         super(vida, linha, coluna);
 
@@ -36,8 +38,8 @@ public class Cafeteira extends Entidade {
             throw new IllegalArgumentException("O intervalo de producao tem que ser positivo e finito.");
         }
 
-        if (raioProducao <= 0 || !Double.isFinite(raioProducao)) {
-            throw new IllegalArgumentException("O raio de producao tem que ser positivo e finito.");
+        if (intervaloProducao <= 0 || !Double.isFinite(tempoDeRecarga)) {
+            throw new IllegalArgumentException("O tempo de recarga tem que ser positivo e finito.");
         }
 
         if (custoCafe < 0) {
@@ -46,33 +48,28 @@ public class Cafeteira extends Entidade {
 
         this.cafePorCiclo = cafePorCiclo;
         this.intervaloProducao = intervaloProducao;
-        this.raioProducao = raioProducao;
         this.tempoUltimaProducao = 0.0;
         this.custoCafe = custoCafe;
     }
 
     public int getCustoCafe() {
-        return custoCafe;
+        return this.custoCafe;
     }
 
     public int getCafePorCiclo() {
-        return cafePorCiclo;
+        return this.cafePorCiclo;
+    }
+
+    public double getTempoDeRecarga() {
+        return this.TEMPO_DE_RECARGA;
     }
 
     public double getIntervaloProducao() {
-        return intervaloProducao;
+        return this.intervaloProducao;
     }
 
     public double getTempoUltimaProducao() {
-        return tempoUltimaProducao;
-    }
-
-    public double getRaioProducao() {
-        return raioProducao;
-    }
-
-    public void setRaioProducao(double raioProducao) {
-        this.raioProducao = raioProducao;
+        return this.tempoUltimaProducao;
     }
 
     /**

@@ -268,13 +268,21 @@ public class GerenciadorDeJogo {
      * na sua linha, a frente dele (a direita).
      */
     private void professoresAtacam(double deltaTime) {
+        List<Zumbi> zumbisSoLeitura = Collections.unmodifiableList(zumbis);
+
         for (Professor professor : listarProfessores()) {
-            // podeAtacar(deltaTime) mexe no relogio do professor
-            if (haZumbiNaFrente(professor) && professor.podeAtacar(deltaTime)) {
-                Tiro tiro = professor.atacar();
-                tiro.setX(professor.getColuna() + 0.5);   // sai do centro da casa
-                tiro.setY(professor.getLinha());
-                adicionarTiro(tiro);
+            professor.atualizarTempo(deltaTime);
+            professor.agir(zumbisSoLeitura);
+
+            if (professor.atira() && haZumbiNaFrente(professor) && professor.podeAtacar()) {
+                for (Tiro tiro : professor.atacar()) {
+                    int linhaDoTiro = (int) tiro.getY();
+                    if (linhaDoTiro < 0 || linhaDoTiro >= tabuleiro.getLinhas()) {
+                        continue;  
+                    }
+                    tiro.setX(professor.getColuna() + 0.5);   // sai do centro da casa
+                    adicionarTiro(tiro);
+                }
             }
         }
     }
@@ -282,7 +290,8 @@ public class GerenciadorDeJogo {
     private boolean haZumbiNaFrente(Professor professor) {
         double xProfessor = professor.getColuna() + 0.5;
         for (Zumbi z : zumbis) {
-            if (z.estaVivo() && z.getLinha() == professor.getLinha()
+            if (z.estaVivo()
+                    && Math.abs(z.getLinha() - professor.getLinha()) <= professor.getAlcanceEmLinhas()
                     && z.getPosicaoX() >= xProfessor) {
                 return true;
             }

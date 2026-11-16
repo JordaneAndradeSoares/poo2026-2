@@ -4,47 +4,111 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.shape.Rectangle?>
+<?import javafx.scene.shape.SVGPath?>
+<?import javafx.scene.text.Text?>
+<?import javafx.scene.text.TextFlow?>
 
+<!-- Tela de selecao no estilo de uma janela do Windows 95 (explorador de arquivos). -->
 <BorderPane xmlns="http://javafx.com/javafx/21"
             xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="com.poo2026_2.controller.SelecaoProfessorController"
             fx:id="raiz"
-            styleClass="selecao-root"
+            styleClass="win95-janela"
             stylesheets="@../styles/selecaoprofessor.css">
 
     <top>
-        <VBox spacing="6" styleClass="cabecalho">
-            <padding>
-                <Insets top="22" right="28" bottom="18" left="28"/>
-            </padding>
-            <Label fx:id="tituloFase" text="SELEÇÃO DE PROFESSORES"
-                   styleClass="titulo"/>
-            <Label text="Escolha os professores que estarão disponíveis nesta fase"
-                   styleClass="subtitulo"/>
+        <VBox>
+            <!-- Barra de titulo -->
+            <HBox styleClass="barra-titulo" alignment="CENTER_LEFT" spacing="6">
+                <ImageView fitWidth="16" fitHeight="20" preserveRatio="true" smooth="false">
+                    <image>
+                        <Image url="@../images/interface/documento95.png"/>
+                    </image>
+                </ImageView>
+                <Label fx:id="tituloFase" text="Professores vs Zumbiversitários"
+                       styleClass="titulo-janela" maxWidth="Infinity" HBox.hgrow="ALWAYS"/>
+                <Button styleClass="botao-janela" focusTraversable="false" mnemonicParsing="false">
+                    <graphic>
+                        <Rectangle width="8" height="2" fill="BLACK"/>
+                    </graphic>
+                </Button>
+                <Button styleClass="botao-janela" focusTraversable="false" mnemonicParsing="false">
+                    <graphic>
+                        <Rectangle width="9" height="8" fill="TRANSPARENT" stroke="BLACK" strokeWidth="1.5"/>
+                    </graphic>
+                </Button>
+                <Button styleClass="botao-janela" focusTraversable="false" mnemonicParsing="false"
+                        onAction="#voltar">
+                    <HBox.margin>
+                        <Insets left="2"/>
+                    </HBox.margin>
+                    <graphic>
+                        <SVGPath content="M0,0 L8,8 M8,0 L0,8" fill="TRANSPARENT" stroke="BLACK" strokeWidth="1.8"/>
+                    </graphic>
+                </Button>
+            </HBox>
+
+            <!-- Barra de menu (decorativa) -->
+            <HBox styleClass="barra-menu" alignment="CENTER_LEFT" spacing="16">
+                <TextFlow styleClass="item-menu">
+                    <Text text="F" underline="true"/><Text text="ile"/>
+                </TextFlow>
+                <TextFlow styleClass="item-menu">
+                    <Text text="E" underline="true"/><Text text="dit"/>
+                </TextFlow>
+                <TextFlow styleClass="item-menu">
+                    <Text text="V" underline="true"/><Text text="iew"/>
+                </TextFlow>
+                <TextFlow styleClass="item-menu">
+                    <Text text="H" underline="true"/><Text text="elp"/>
+                </TextFlow>
+            </HBox>
         </VBox>
     </top>
 
     <center>
-        <GridPane fx:id="gradeProfessores"
-                  alignment="CENTER"
-                  hgap="14" vgap="14"
-                  styleClass="grade-professores">
-            <padding>
-                <Insets top="12" right="20" bottom="20" left="20"/>
-            </padding>
-        </GridPane>
+        <!-- Painel branco "afundado" com os icones -->
+        <StackPane styleClass="area-hundida">
+            <BorderPane.margin>
+                <Insets top="2" right="3" bottom="3" left="2"/>
+            </BorderPane.margin>
+            <GridPane fx:id="gradeProfessores"
+                      styleClass="grade-professores"
+                      maxWidth="Infinity" maxHeight="Infinity">
+                <columnConstraints>
+                    <ColumnConstraints percentWidth="33.33" halignment="CENTER"/>
+                    <ColumnConstraints percentWidth="33.33" halignment="CENTER"/>
+                    <ColumnConstraints percentWidth="33.33" halignment="CENTER"/>
+                </columnConstraints>
+                <rowConstraints>
+                    <RowConstraints percentHeight="33.33" valignment="CENTER"/>
+                    <RowConstraints percentHeight="33.33" valignment="CENTER"/>
+                    <RowConstraints percentHeight="33.33" valignment="CENTER"/>
+                </rowConstraints>
+            </GridPane>
+        </StackPane>
     </center>
 
     <right>
-        <VBox fx:id="painelEquipe" spacing="14" prefWidth="250" minWidth="175" styleClass="painel-equipe">
+        <VBox fx:id="painelEquipe" spacing="8" prefWidth="250" minWidth="175" styleClass="painel-equipe">
+            <BorderPane.margin>
+                <Insets top="2" right="2" bottom="3" left="3"/>
+            </BorderPane.margin>
             <padding>
-                <Insets top="26" right="20" bottom="24" left="20"/>
+                <Insets top="2" right="2" bottom="4" left="2"/>
             </padding>
-            <Label text="EQUIPE DA FASE" styleClass="titulo-painel"/>
+            <Label text="EQUIPE DA FASE" styleClass="titulo-painel"
+                   maxWidth="Infinity" alignment="CENTER"/>
             <Label fx:id="contadorSelecionados" text="0 selecionados"
                    styleClass="contador"/>
             <ScrollPane fx:id="scrollSelecionados"
@@ -57,7 +121,7 @@
                         styleClass="lista-selecionados-scroll"
                         VBox.vgrow="ALWAYS">
                 <content>
-                    <VBox fx:id="listaSelecionados" spacing="8"
+                    <VBox fx:id="listaSelecionados" spacing="4"
                           fillWidth="true"
                           styleClass="lista-selecionados"/>
                 </content>
@@ -68,4 +132,13 @@
                     maxWidth="Infinity" styleClass="botao-voltar"/>
         </VBox>
     </right>
+
+    <bottom>
+        <!-- Barra de status (vazia, como no mockup) -->
+        <HBox styleClass="barra-status" minHeight="22" prefHeight="22">
+            <BorderPane.margin>
+                <Insets top="0" right="2" bottom="1" left="2"/>
+            </BorderPane.margin>
+        </HBox>
+    </bottom>
 </BorderPane>

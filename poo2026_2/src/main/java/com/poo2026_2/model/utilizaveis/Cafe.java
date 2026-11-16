@@ -13,7 +13,7 @@ public class Cafe {
     private int quantidade;
     private double posicaoX;
     private double posicaoY;
-    private double tempoDeVida; //old temperatura
+    private double tempoDeVida; //antigo temperatura
 
     public Cafe(int quantidade, double posicaoX, double posicaoY, double tempoDeVida) {
         this.quantidade = quantidade;
