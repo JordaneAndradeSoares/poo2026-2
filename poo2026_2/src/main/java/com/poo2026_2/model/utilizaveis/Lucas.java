@@ -7,23 +7,21 @@ import com.poo2026_2.model.Professor;
 import com.poo2026_2.model.zumbis.Zumbi;
 
 /**
- * Skate: corpo a corpo. Quando um zumbi chega ao alcance, da um golpe que
- * mata na hora (hitkill) e depois fica 17 segundos carregando. Ja entra em
- * campo carregado.
- *
+ * Skate: corpo a corpo e habilidade especial de hitkill a distância.
  * @author thoma
  */
 public class Lucas extends Professor {
 
     private static final int CUSTO_CAFE = 150;
-    private static final double TEMPO_DE_RECARGA = 8; 
-    private static final double RECARGA_DO_GOLPE = 17; 
-
+    private static final double TEMPO_DE_RECARGA = 8;
+    private static final double RECARGA_DO_GOLPE = 17;
     private static final double ALCANCE_EXTRA_EM_CASAS = 1.0;
+
+    private double tempoDesdeUltimaHabilidade = TEMPO_DE_RECARGA;
 
     public Lucas(int linha, int coluna) {
         super(linha, coluna, CUSTO_CAFE, RECARGA_DO_GOLPE);
-        carregarTotalmente();   // o primeiro golpe nao precisa esperar
+        carregarTotalmente();
     }
 
     @Override
@@ -69,5 +67,43 @@ public class Lucas extends Professor {
 
     public double getTempoDeRecarga() {
         return this.TEMPO_DE_RECARGA;
+    }
+
+    public static int getCustoCafeLucas() {
+        return CUSTO_CAFE;
+    }
+
+    // ================================================================================
+    // A habilidade especial do Lucas causa morte instantânea do zumbi atingido e depois ele entra em tempo de recarga
+
+    public void habilidadeEspecial(Zumbi zumbiAlvo) {
+
+        if (!habilidadePronta()) {
+            return;
+        }
+
+        if (zumbiAlvo == null || !zumbiAlvo.estaVivo()) {
+            return;
+        }
+
+        zumbiAlvo.receberDano(zumbiAlvo.getVida());
+        this.tempoDesdeUltimaHabilidade = 0;
+    }
+
+    // ================================================================================
+    // Métodos para gerenciar o tempo de recarga da habilidade especial
+
+    public void atualizarRecarga(double deltaTime) {
+        if (tempoDesdeUltimaHabilidade < TEMPO_DE_RECARGA) {
+            tempoDesdeUltimaHabilidade += deltaTime;
+
+            if (tempoDesdeUltimaHabilidade > TEMPO_DE_RECARGA) {
+                tempoDesdeUltimaHabilidade = TEMPO_DE_RECARGA;
+            }
+        }
+    }
+
+    public boolean habilidadePronta() {
+        return tempoDesdeUltimaHabilidade >= TEMPO_DE_RECARGA;
     }
 }

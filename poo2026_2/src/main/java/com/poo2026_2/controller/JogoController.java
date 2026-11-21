@@ -22,6 +22,8 @@ import javafx.scene.image.WritableImage;
 import javafx.util.Duration;
 import java.util.ArrayList;
 import java.util.List;
+import javafx.scene.layout.HBox;
+import javafx.scene.control.Separator;
 
 import com.poo2026_2.audio.AudioManager;
 import com.poo2026_2.model.Entidade;
@@ -30,10 +32,10 @@ import com.poo2026_2.model.GerenciadorDeJogo;
 import com.poo2026_2.model.Tabuleiro;
 import com.poo2026_2.model.Onda;
 import com.poo2026_2.model.Tiro;
-
-import com.poo2026_2.model.zumbis.*;
+import com.poo2026_2.model.EventoExplosao;
+import com.poo2026_2.model.visuais.visuaisExplosao;
 import com.poo2026_2.model.utilizaveis.*;
-
+import com.poo2026_2.model.DescricaoProfessores;
 import com.poo2026_2.model.visuais.visuaisTiros;
 import com.poo2026_2.model.visuais.visuaisProfessores;
 import com.poo2026_2.model.visuais.visuaisZumbis;
@@ -43,6 +45,7 @@ import com.poo2026_2.model.visuais.visuaisGrades;
 import com.poo2026_2.model.visuais.visuaisProva;
 
 import javafx.scene.layout.VBox;
+import javafx.scene.control.Tooltip;
 import javafx.geometry.Pos;
 
 /**
@@ -132,6 +135,7 @@ public class JogoController implements ControladorTela, Initializable {
     private final visuaisGeral visualGeral = new visuaisGeral();
     private final visuaisGrades visualGrades = new visuaisGrades(LINHAS, COLUNAS, CEL_LARG, CEL_ALT, GRADE_X, GRADE_Y);
     private final visuaisProva visualProva = new visuaisProva();
+    private final visuaisExplosao visualExplosao = new visuaisExplosao();
 
     // =================================================================
 
@@ -152,10 +156,6 @@ public class JogoController implements ControladorTela, Initializable {
     // listas dos visuais
     private final Map<ImageView, Timeline> animacoes = new HashMap<>();
     private final Map<Tiro, ImageView> tirosVisuais = new HashMap<>();
-
-    private final Map<Zumbi, ImageView> zumbisVisuais = new HashMap<>();
-    private final Map<Zumbi, Timeline> animacoesCaminhada = new HashMap<>();
-    private final Map<Zumbi, Timeline> animacoesAtaque = new HashMap<>();
 
     private final Map<String, Timeline> recargas = new HashMap<>();
     private final Map<String, Button> botoesPersonagens = new HashMap<>();
@@ -352,26 +352,71 @@ public class JogoController implements ControladorTela, Initializable {
         );
 
         timer = new AnimationTimer() {
-            private long ultimo = 0;
+            private long ultimoTempo = 0;
 
             @Override
             public void handle(long agora) {
 
-                if (ultimo == 0) {
-                    ultimo = agora;
+                if (ultimoTempo == 0) {
+                    ultimoTempo = agora;
                     return;
                 }
 
-                double delta = (agora - ultimo) / 1_000_000_000.0;
-                ultimo = agora;
-                delta = Math.min(delta, 0.1);
+                double delta = (agora - ultimoTempo) / 1_000_000_000.0;
+                ultimoTempo = agora;
 
-                visualProva.moveProva(delta, gerenciadorDeJogo);
                 gerenciadorDeJogo.atualizar(delta);
+
+                // ATUALIZAR AS PROVAS (CORTADORES DE GRAMA)
+                visualProva.moveProva(delta, gerenciadorDeJogo);
+
+                // VERIFICAR DERROTA DEPOIS DA ATUALIZAÇÃO DAS PROVAS
+                gerenciadorDeJogo.verificarDerrota();
+
+                // REMOVER PROFESSORES E CAFETEIRAS QUE MORRERAM
+                visualProfessores.removerProfessoresOuCafeteirasMortas(
+                    COLUNAS,
+                    LINHAS,
+                    celulas,
+                    gerenciadorDeJogo,
+                    animacoes
+                );
+
+                // EXIBIR EXPLOSÕES PENDENTES
+                for (EventoExplosao evento : gerenciadorDeJogo.consumirExplosoesPendentes()) {
+
+                    visualExplosao.mostrar(
+                        camadaJogo,
+                        evento.getLinha(),
+                        evento.getColuna(),
+                        GRADE_X,
+                        GRADE_Y,
+                        CEL_LARG,
+                        CEL_ALT
+                    );
+                }
+
                 atualizarQuantidadeDeCafe();
-                visualProfessores.removerProfessoresOuCafeteirasMortas(COLUNAS, LINHAS, celulas, gerenciadorDeJogo, animacoes);
-                visualTiros.atualizarVisuaisDosTiros(CEL_LARG, CEL_ALT, GRADE_X, GRADE_Y, camadaJogo, gerenciadorDeJogo, tirosVisuais);
-                visualZumbis.atualizarVisuaisDosZumbis(camadaJogo, gerenciadorDeJogo, zumbisVisuais, animacoesCaminhada, animacoesAtaque, GRADE_X, GRADE_Y, CEL_LARG, CEL_ALT);
+
+                visualTiros.atualizarVisuaisDosTiros(
+                    CEL_LARG,
+                    CEL_ALT,
+                    GRADE_X,
+                    GRADE_Y,
+                    camadaJogo,
+                    gerenciadorDeJogo,
+                    tirosVisuais
+                );
+
+                visualZumbis.atualizarVisuaisDosZumbis(
+                    camadaJogo,
+                    gerenciadorDeJogo,
+                    GRADE_X,
+                    GRADE_Y,
+                    CEL_LARG,
+                    CEL_ALT
+                );
+
                 mostrarResultado();
             }
         };
@@ -438,6 +483,17 @@ public class JogoController implements ControladorTela, Initializable {
             "/images/interface/thais.png",
             new Thais(0, 0).getCustoCafe()
         );
+
+        // Descrições dos personagens durante a partida
+        configurarDescricao(btnCafeteira, "CAFETEIRA");
+        configurarDescricao(btnDaniel, "DANIEL");
+        configurarDescricao(btnFabricio, "FABRICIO");
+        configurarDescricao(btnGlaucia, "GLAUCIA");
+        configurarDescricao(btnLucas, "LUCAS");
+        configurarDescricao(btnMarcus, "MARCUS");
+        configurarDescricao(btnNacif, "NACIF");
+        configurarDescricao(btnPhilipe, "PHILIPE");
+        configurarDescricao(btnThais, "THAIS");
         
         botoesPersonagens.put("CAFETEIRA", btnCafeteira);
         botoesPersonagens.put("DANIEL", btnDaniel);
@@ -502,17 +558,8 @@ public class JogoController implements ControladorTela, Initializable {
         tirosVisuais.values().forEach(imagem -> camadaJogo.getChildren().remove(imagem));
         tirosVisuais.clear();
 
-        // Interrompe as animações de caminhada
-        animacoesCaminhada.values().forEach(Timeline::stop);
-        animacoesCaminhada.clear();
-
-        // Interrompe as animações de ataque
-        animacoesAtaque.values().forEach(Timeline::stop);
-        animacoesAtaque.clear();
-
-        // Remove os visuais antigos dos zumbis
-        zumbisVisuais.values().forEach(imagem -> camadaJogo.getChildren().remove(imagem));
-        zumbisVisuais.clear();
+        // Limpa todos os visuais dos zumbis
+        visualZumbis.limparVisuaisDosZumbis(camadaJogo);
 
         // Interrompe as recargas dos botões
         recargas.values().forEach(Timeline::stop);
@@ -538,12 +585,125 @@ public class JogoController implements ControladorTela, Initializable {
 
         // Limpa as células
         for (StackPane[] linha : celulas) {
+            
             for (StackPane celula : linha) {
                 celula.getChildren().clear();
             }
         }
 
         atualizarQuantidadeDeCafe();
+    }
+
+    // =================================================================
+
+    public static void configurarDescricao(Button botao, String nome){
+
+        // Obtém a descrição atual do professor
+        String descricaoCompleta = DescricaoProfessores.obter(nome);
+
+        // Separa a descrição do custo de café
+        String marcadorCusto = "Custo de café: ";
+        int posicaoCusto = descricaoCompleta.lastIndexOf(marcadorCusto);
+
+        String descricao;
+        String custo;
+
+        if (posicaoCusto != -1) {
+            descricao = descricaoCompleta.substring(0, posicaoCusto).trim();
+            custo = descricaoCompleta.substring(posicaoCusto + marcadorCusto.length()).trim();
+        } else {
+            descricao = descricaoCompleta;
+            custo = "—";
+        }
+
+        // Identifica a linguagem de cada professor
+        Map<String, String> linguagens = Map.of(
+            "CAFETEIRA", "GERADOR DE CAFÉ",
+            "DANIEL", "C",
+            "FABRICIO", "SCALA",
+            "GLAUCIA", "JAVASCRIPT",
+            "LUCAS", "COMBATE CORPO A CORPO",
+            "MARCUS", "MATLAB",
+            "NACIF", "VERILOG",
+            "PHILIPE", "PYTHON",
+            "THAIS", "GO"
+        );
+
+        String linguagem = linguagens.getOrDefault(
+            nome.toUpperCase(),
+            "PROFESSOR"
+        );
+
+        // Cria o painel principal
+        VBox painel = new VBox(10);
+
+        painel.setMinSize(300, 300);
+        painel.setPrefSize(300, 300);
+        painel.setMaxSize(300, 300);
+
+        painel.getStyleClass().add("dica-painel");
+
+        // Nome do professor
+        Label titulo = new Label(nome.toUpperCase());
+        titulo.getStyleClass().add("dica-titulo");
+
+        // Linguagem ou identificação
+        Label lblLinguagem = new Label(linguagem);
+        lblLinguagem.getStyleClass().add("dica-linguagem");
+
+        // Título da habilidade
+        Label subtitulo = new Label("HABILIDADE");
+        subtitulo.getStyleClass().add("dica-subtitulo");
+
+        // Descrição da habilidade
+        Label lblDescricao = new Label(descricao);
+        lblDescricao.getStyleClass().add("dica-descricao");
+        lblDescricao.setWrapText(true);
+        lblDescricao.setMaxWidth(250);
+
+        // Informações do custo
+        Label lblCusto = new Label("CUSTO EM CAFÉ");
+        lblCusto.getStyleClass().add("dica-custo");
+
+        Label lblValor = new Label(custo);
+        lblValor.getStyleClass().add("dica-valor");
+
+        HBox linhaCusto = new HBox(10, lblCusto, lblValor);
+        linhaCusto.setAlignment(Pos.CENTER_LEFT);
+
+        // Monta o painel
+        painel.getChildren().addAll(
+            titulo,
+            lblLinguagem,
+            new Separator(),
+            subtitulo,
+            lblDescricao,
+            new Separator(),
+            linhaCusto
+        );
+
+        // Cria o Tooltip personalizado
+        Tooltip dica = new Tooltip();
+        dica.setGraphic(painel);
+
+        dica.setOnShown(evento -> {
+
+            var cenaDica = dica.getScene();
+            var arquivoCss = JogoController.class.getResource("/styles/jogo.css");
+
+            if (cenaDica != null && arquivoCss != null) {
+                String caminhoCss = arquivoCss.toExternalForm();
+
+                if (!cenaDica.getStylesheets().contains(caminhoCss)) {
+                    cenaDica.getStylesheets().add(caminhoCss);
+                }
+            }
+        });
+
+        dica.setShowDelay(Duration.millis(350));
+        dica.setShowDuration(Duration.seconds(15));
+
+        botao.setTooltip(dica);
     }
 
     // =================================================================

@@ -52,8 +52,8 @@ public class Cafeteira extends Entidade {
         this.custoCafe = custoCafe;
     }
 
-    public int getCustoCafe() {
-        return this.custoCafe;
+    public static int getCustoCafe() {
+        return CUSTO_CAFE_PADRAO;
     }
 
     public int getCafePorCiclo() {

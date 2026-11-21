@@ -18,13 +18,10 @@ import com.poo2026_2.model.zumbis.Zumbi;
 public class Nacif extends Professor {
 
     private static final int CUSTO_CAFE = 50;
-    private static final double TEMPO_DE_RECARGA = 8;   
-    private static final double TEMPO_PARA_ARMAR = 15;  
-
-    private static final int DANO_EXPLOSAO = 1800;
+    private static final double TEMPO_DE_RECARGA = 1.2;
 
     public Nacif(int linha, int coluna) {
-        super(linha, coluna, CUSTO_CAFE, TEMPO_PARA_ARMAR);
+        super(100, linha, coluna, CUSTO_CAFE, TEMPO_DE_RECARGA);
     }
 
     @Override
@@ -32,34 +29,51 @@ public class Nacif extends Professor {
         return false;
     }
 
-    public boolean estaArmada() {
-        return estaCarregado();
+    public double getTempoDeRecarga() {
+        return this.TEMPO_DE_RECARGA;
     }
 
-    @Override
-    public void agir(List<Zumbi> zumbis) {
-        if (!estaArmada()) {
-            return;
-        }
+    public static int getCustoCafeNacif() {
+        return CUSTO_CAFE;
+    }
 
-        boolean explodiu = false;
+    // ================================================================================
+    // A habilidade especial do Nacif elimina todos os zumbis na área 3x3 ao redor dele e depois ele se sacrifica, recebendo dano igual à sua vida
 
+    // Elimina todos os zumbis na área e o próprio Nacif.
+    public void explodir(List<Zumbi> zumbis) {
+
+        // explodindo os zumbis na área 3x3
         for (Zumbi zumbi : zumbis) {
-            if (zumbi.estaVivo() && zumbi.getLinha() == getLinha()
-                    && (int) Math.floor(zumbi.getPosicaoX()) == getColuna()) {
-                zumbi.receberDano(DANO_EXPLOSAO);
-                explodiu = true;
+
+            if (zumbi.estaVivo() && estaNaArea(zumbi)) {
+                zumbi.receberDano(zumbi.getVida());
             }
         }
 
-        if (explodiu) {
-            AudioManager.tocarEfeito("/audio/impacto.mp3");
-            // a bomba se gasta; o jogo tira professores mortos do piso
-            setVida(0);
-        }
+        // tocando som da explosão
+        AudioManager.tocarEfeito("/audio/explosao.mp3"); // fonte (acesso em 10/11/2026): https://pixabay.com/pt/sound-effects/epic-cinematic-explosion-454857/
+
+        // sacrificando o Nacif
+        receberDano(getVida());
     }
 
-    public double getTempoDeRecarga() {
-        return this.TEMPO_DE_RECARGA;
+    // Verifica se existe algum zumbi na área 3x3
+    public boolean existeZumbiNaArea(List<Zumbi> zumbis) {
+
+        for (Zumbi zumbi : zumbis) {
+            if (zumbi.estaVivo() && estaNaArea(zumbi)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    // verifica se o zumbi está na área 3x3 ao redor do Nacif
+    private boolean estaNaArea(Zumbi zumbi) {
+
+        int colunaZumbi = (int) Math.floor(zumbi.getPosicaoX());
+        return Math.abs(zumbi.getLinha() - getLinha()) <= 1 && Math.abs(colunaZumbi - getColuna()) <= 1;
     }
 }

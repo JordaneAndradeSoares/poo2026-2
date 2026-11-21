@@ -36,6 +36,10 @@ public class Glaucia extends Professor {
         );
     }
 
+    public static int getCustoCafeGlaucia() {
+        return CUSTO_CAFE;
+    }
+
     public double getTempoDeRecarga() {
         return this.TEMPO_DE_RECARGA;
     }

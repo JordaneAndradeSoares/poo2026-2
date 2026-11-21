@@ -31,6 +31,10 @@ public class Daniel extends Professor {
             "/audio/tiros/c.mp3"); // fonte (acesso em 22/10/2026): https://www.myinstants.com/pt/instant/shot-gun-32807/
     }
 
+    public static int getCustoCafeDaniel() {
+        return CUSTO_CAFE;
+    }
+
     public double getTempoDeRecarga() {
         return this.TEMPO_DE_RECARGA;
     }

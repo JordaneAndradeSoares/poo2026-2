@@ -20,6 +20,11 @@ public class visuaisZumbis {
 
     private final visuaisGeral visualGeral = new visuaisGeral();
 
+    // Mapas para armazenar os visuais e animações dos zumbis
+    private final Map<Zumbi, ImageView> zumbisVisuais = new java.util.HashMap<>();
+    private final Map<Zumbi, Timeline> animacoesCaminhada = new java.util.HashMap<>();
+    private final Map<Zumbi, Timeline> animacoesAtaque = new java.util.HashMap<>();
+
     public String obterCaminhoCaminhada(Zumbi zumbi) {
         String tipo = zumbi.getClass().getSimpleName();
 
@@ -82,32 +87,21 @@ public class visuaisZumbis {
 
     // =================================================================
 
-    public void atualizarVisuaisDosZumbis(Pane camadaJogo, GerenciadorDeJogo gerenciadorDeJogo, Map<Zumbi, ImageView> zumbisVisuais, Map<Zumbi, Timeline> animacoesCaminhada, Map<Zumbi, Timeline> animacoesAtaque, double gradeX, double gradeY, double celLarg, double celAlt) {
-
+    public void atualizarVisuaisDosZumbis(Pane camadaJogo, GerenciadorDeJogo gerenciadorDeJogo, double gradeX, double gradeY, double celLarg, double celAlt) {
         List<Zumbi> zumbisAtivos = gerenciadorDeJogo.getZumbis();
 
-        // Remove zumbis que saíram do jogo e interrompe as duas animações.
-        zumbisVisuais.entrySet().removeIf(entrada -> {
-            Zumbi zumbi = entrada.getKey();
+        // Remove zumbis que saíram do jogo e interrompe as duas animações
+        List<Zumbi> zumbisParaRemover = new ArrayList<>();
 
+        for (Zumbi zumbi : zumbisVisuais.keySet()) {
             if (!zumbisAtivos.contains(zumbi)) {
-                camadaJogo.getChildren().remove(entrada.getValue());
-
-                Timeline caminhada = animacoesCaminhada.remove(zumbi);
-                if (caminhada != null) {
-                    caminhada.stop();
-                }
-
-                Timeline ataque = animacoesAtaque.remove(zumbi);
-                if (ataque != null) {
-                    ataque.stop();
-                }
-
-                return true;
+                zumbisParaRemover.add(zumbi);
             }
+        }
 
-            return false;
-        });
+        for (Zumbi zumbi : zumbisParaRemover) {
+            removerZumbiVisual(zumbi, camadaJogo);
+        }
 
         for (Zumbi zumbi : zumbisAtivos) {
             ImageView imagem = zumbisVisuais.get(zumbi);
@@ -250,5 +244,44 @@ public class visuaisZumbis {
             imagem.setLayoutX(gradeX + zumbi.getPosicaoX() * celLarg - 40);
             imagem.setLayoutY(gradeY + zumbi.getLinha() * celAlt + 15);
         }
+    }
+
+    // =================================================================
+
+    private void removerZumbiVisual(Zumbi zumbi, Pane camadaJogo) {
+
+        ImageView imagem = zumbisVisuais.remove(zumbi);
+
+        if (imagem != null) {
+            camadaJogo.getChildren().remove(imagem);
+        }
+
+        Timeline caminhada = animacoesCaminhada.remove(zumbi);
+
+        if (caminhada != null) {
+            caminhada.stop();
+        }
+
+        Timeline ataque = animacoesAtaque.remove(zumbi);
+
+        if (ataque != null) {
+            ataque.stop();
+        }
+    }
+
+    // limpa ataque e caminhada dos zumbis
+    public void limparVisuaisDosZumbis(Pane camadaJogo) {
+
+        animacoesCaminhada.values().forEach(Timeline::stop);
+        animacoesAtaque.values().forEach(Timeline::stop);
+
+        animacoesCaminhada.clear();
+        animacoesAtaque.clear();
+
+        for (ImageView imagem : zumbisVisuais.values()) {
+            camadaJogo.getChildren().remove(imagem);
+        }
+
+        zumbisVisuais.clear();
     }
 }

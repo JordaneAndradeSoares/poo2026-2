@@ -1,7 +1,10 @@
 package com.poo2026_2.model;
 
 import com.poo2026_2.model.utilizaveis.Cafeteira;
+import com.poo2026_2.model.utilizaveis.Lucas;
 import com.poo2026_2.model.utilizaveis.Cafe;
+import com.poo2026_2.model.utilizaveis.Nacif;
+import com.poo2026_2.model.utilizaveis.Thais;
 import com.poo2026_2.model.zumbis.Zumbi;
 
 import java.util.ArrayList;
@@ -23,6 +26,9 @@ public class GerenciadorDeJogo {
  
     /** Tolerancia (em casas) para o tiro acertar o zumbi. */
     private static final double RAIO_ACERTO = 0.4;
+
+    /** Alcance do ataque corpo a corpo do Lucas, em casas. */
+    private static final double ALCANCE_LUCAS = 1.0;
  
     /**
      * true: o cafe produzido ja entra direto no saldo do jogador.
@@ -41,8 +47,10 @@ public class GerenciadorDeJogo {
     private boolean vitoria;
     private boolean terminou;
     private final Random random = new Random();
+    private final List<EventoExplosao> explosoesPendentes = new ArrayList<>();
  
     // ===================== CONSTRUTOR =====================
+
     public GerenciadorDeJogo(Fase faseAtual, Tabuleiro tabuleiro) {
         if (faseAtual == null) {
             throw new IllegalArgumentException("A fase atual nao pode ser nula.");
@@ -75,15 +83,23 @@ public class GerenciadorDeJogo {
         if (!jogoAtivo || terminou || deltaTime <= 0 || !Double.isFinite(deltaTime)) {
             return;
         }
+
         gerarZumbisDaOnda(deltaTime);
         atualizarZumbis(deltaTime);
+
+        // Atualiza a recarga individual de cada um dos Lucas
+        for (Professor professor : listarProfessores()) {
+            if (professor instanceof Lucas lucas) {
+                lucas.atualizarRecarga(deltaTime);
+            }
+        }
+
         professoresAtacam(deltaTime);
         atualizarTiros(deltaTime);
         verificarColisoes(deltaTime);
         gerarCafe(deltaTime);
         atualizarCafesNoChao(deltaTime);
         verificarVitoria();
-        verificarDerrota();
     }
  
     public void pausar() {
@@ -261,34 +277,113 @@ public class GerenciadorDeJogo {
         }
     }
  
-    // ===================== PROFESSORES ATIRAM =====================
+    // ===================== PROFESSORES ATIRAM OU USAM HABILIDADES =====================
  
     /**
      * Cada professor dispara quando a cadencia permite E ha algum zumbi vivo
      * na sua linha, a frente dele (a direita).
      */
+
     private void professoresAtacam(double deltaTime) {
         List<Zumbi> zumbisSoLeitura = Collections.unmodifiableList(zumbis);
 
         for (Professor professor : listarProfessores()) {
-            professor.atualizarTempo(deltaTime);
-            professor.agir(zumbisSoLeitura);
+            if (!professor.estaVivo()) {
+                continue;
+            }
 
-            if (professor.atira() && haZumbiNaFrente(professor) && professor.podeAtacar()) {
-                for (Tiro tiro : professor.atacar()) {
-                    int linhaDoTiro = (int) tiro.getY();
-                    if (linhaDoTiro < 0 || linhaDoTiro >= tabuleiro.getLinhas()) {
-                        continue;  
+            // Lucas possui uma recarga própria para sua habilidade de hitkill.
+            if (professor instanceof Lucas lucas) {
+                lucas.atualizarRecarga(deltaTime);
+                if (lucas.habilidadePronta()) {
+                    Zumbi alvo = encontrarZumbiParaLucas(lucas);
+                    if (alvo != null) {
+                        lucas.habilidadeEspecial(alvo);
                     }
-                    tiro.setX(professor.getColuna() + 0.5);   // sai do centro da casa
-                    adicionarTiro(tiro);
                 }
+                continue;
+            }
+
+            // Nacif explode quando sua recarga termina e se sacrifica.
+            if (professor instanceof Nacif nacif) {
+                if (nacif.podeAtacar(deltaTime)) {
+                    explosoesPendentes.add(new EventoExplosao(nacif.getLinha(), nacif.getColuna()));
+                    nacif.explodir(zumbis);
+                }
+                continue;
+            }
+
+            // Thais dispara simultaneamente nas três linhas próximas.
+            if (professor instanceof Thais thais) {
+                if (thais.podeAtacar(deltaTime)
+                        && thais.haZumbiNasTresLinhas(thais, zumbis)) {
+                    int primeiraLinha = Math.max(0, thais.getLinha() - 1);
+                    int ultimaLinha = Math.min(tabuleiro.getLinhas() - 1, thais.getLinha() + 1);
+                    for (Tiro tiro : thais.atacarTresLinhas(primeiraLinha, ultimaLinha)) {
+                        adicionarTiro(tiro);
+                    }
+                    thais.reiniciarCadencia();
+                }
+                continue;
+            }
+
+            professor.agir(zumbisSoLeitura);
+            if (!professor.atira() || !professor.podeAtacar(deltaTime)
+                    || !haZumbiNaFrente(professor)) {
+                continue;
+            }
+
+            for (Tiro tiro : professor.atacar()) {
+                int linhaDoTiro = (int) tiro.getY();
+                if (linhaDoTiro < 0 || linhaDoTiro >= tabuleiro.getLinhas()) {
+                    continue;
+                }
+                tiro.setX(professor.getColuna() + 0.5);
+                adicionarTiro(tiro);
             }
         }
     }
- 
+
+    // Explosoes visuais do Nacif: a view consome a lista de explosoes pendentes e a limpa.
+    public List<EventoExplosao> consumirExplosoesPendentes() {
+
+        List<EventoExplosao> eventos = new ArrayList<>(explosoesPendentes);
+        explosoesPendentes.clear();
+        return eventos;
+    }
+
+    // Busca os zumbis para o Lucas eliminar
+    private Zumbi encontrarZumbiParaLucas(Lucas lucas) {
+
+        double xProfessor = lucas.getColuna() + 0.5;
+
+        Zumbi alvo = null;
+
+        for (Zumbi zumbi : zumbis) {
+
+            if (!zumbi.estaVivo() || zumbi.getLinha() != lucas.getLinha()) {
+                continue;
+            }
+
+            double distancia = zumbi.getPosicaoX() - xProfessor;
+
+            if (distancia >= 0 && distancia <= ALCANCE_LUCAS) {
+
+                // Escolhe o zumbi mais próximo.
+                if (alvo == null ||
+                    zumbi.getPosicaoX() < alvo.getPosicaoX()) {
+
+                    alvo = zumbi;
+                }
+            }
+        }
+
+        return alvo;
+    }
+
     private boolean haZumbiNaFrente(Professor professor) {
         double xProfessor = professor.getColuna() + 0.5;
+
         for (Zumbi z : zumbis) {
             if (z.estaVivo()
                     && Math.abs(z.getLinha() - professor.getLinha()) <= professor.getAlcanceEmLinhas()
@@ -296,6 +391,7 @@ public class GerenciadorDeJogo {
                 return true;
             }
         }
+
         return false;
     }
  
@@ -365,16 +461,18 @@ public class GerenciadorDeJogo {
             if (!z.estaVivo()) {
                 continue;
             }
+
             int coluna = (int) Math.floor(z.getPosicaoX());
-            Entidade ocupante = (coluna >= 0 && coluna < getColunas())
-                    ? ocupanteDoPiso(z.getLinha(), coluna) : null;
+            Entidade ocupante = (coluna >= 0 && coluna < getColunas()) ? ocupanteDoPiso(z.getLinha(), coluna) : null;
  
             if (ocupante == null || !ocupante.estaVivo()) {
                 z.pararAtaque();
                 continue;
             }
+
             z.iniciarAtaque();
             z.atacar(ocupante, deltaTime);
+
             if (!ocupante.estaVivo()) {
                 removerDoPiso(z.getLinha(), coluna);
                 z.pararAtaque();

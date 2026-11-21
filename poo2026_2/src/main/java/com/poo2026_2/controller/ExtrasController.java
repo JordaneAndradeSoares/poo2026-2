@@ -9,9 +9,14 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.Slider;
 import javafx.stage.Stage;
 import javafx.stage.Screen;
+import javafx.application.Platform;
+import javafx.scene.input.KeyEvent;
+import javafx.scene.layout.AnchorPane;
 
 public class ExtrasController implements ControladorTela {
 
+    @FXML
+    private AnchorPane raiz;
     @FXML
     private ComboBox<String> comboResolucao;
     @FXML
@@ -44,6 +49,29 @@ public class ExtrasController implements ControladorTela {
         checkMudo.setSelected(
                 ConfiguracoesJogo.isMudo()
         );
+
+        // Atalhos do teclado
+        Platform.runLater(() -> {
+            raiz.setFocusTraversable(true);
+            raiz.requestFocus();
+        });
+
+        raiz.addEventFilter(KeyEvent.KEY_PRESSED, event -> {
+            switch (event.getCode()) {
+                case ENTER:
+                    aplicar(null);
+                    event.consume();
+                    break;
+
+                case ESCAPE:
+                    voltar(null);
+                    event.consume();
+                    break;
+
+                default:
+                    break;
+            }
+        });
     }
 
     private void carregarResolucionesDisponiveis() {

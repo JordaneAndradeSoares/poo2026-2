@@ -51,15 +51,29 @@ public abstract class Professor extends Entidade {
         return cadenciaTiro;
     }
 
-    /** true se o professor dispara. */
+    /** Indica se este professor utiliza disparos convencionais. */
     public boolean atira() {
         return cadenciaTiro > 0;
     }
 
-    /** Cada professor que atira diz qual tiro dispara. */
+    /** Cada professor que atira define o seu próprio projétil. */
     public Tiro criarTiro() {
         throw new UnsupportedOperationException(getClass().getSimpleName() + " nao dispara tiros.");
     }
+
+    /** Atualiza a recarga e informa se o professor já pode atacar. */
+    public boolean podeAtacar(double deltaTime) {
+        if (deltaTime > 0 && Double.isFinite(deltaTime)) {
+            tempoDesdeUltimoTiro += deltaTime;
+        }
+        return estaCarregado();
+    }
+
+    /** Reinicia a recarga após uma habilidade ou disparo. */
+    public void reiniciarCadencia() {
+        reiniciarCarga();
+    }
+
 
     /** Todos os tiros de um disparo. */
     public List<Tiro> criarTiros() {

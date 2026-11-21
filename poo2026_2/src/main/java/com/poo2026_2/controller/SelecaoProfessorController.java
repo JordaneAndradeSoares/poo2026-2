@@ -1,10 +1,12 @@
 package com.poo2026_2.controller;
 
+import com.poo2026_2.model.DescricaoProfessores;
 import com.poo2026_2.model.Fase;
 import com.poo2026_2.model.Professor;
 import com.poo2026_2.model.utilizaveis.*;
 
 import javafx.fxml.FXML;
+import javafx.scene.control.Tooltip;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ContentDisplay;
@@ -33,15 +35,15 @@ public class SelecaoProfessorController implements ControladorTela {
     private Fase fase;
 
     private static final List<OpcaoProfessor> CATALOGO = List.of(
-        new OpcaoProfessor("Cafeteira", Cafeteira.class, true),
-        new OpcaoProfessor("Daniel", Daniel.class, false),
-        new OpcaoProfessor("Fabricio", Fabricio.class, false),
-        new OpcaoProfessor("Glaucia", Glaucia.class, false),
-        new OpcaoProfessor("Lucas", Lucas.class, false),
-        new OpcaoProfessor("Marcus", Marcus.class, false),
-        new OpcaoProfessor("Nacif", Nacif.class, false),
-        new OpcaoProfessor("Philipe", Philipe.class, false),
-        new OpcaoProfessor("Thais", Thais.class, false)
+        new OpcaoProfessor("Cafeteira", Cafeteira.class, true, "/images/interface/cafeteira.png"),
+        new OpcaoProfessor("Daniel", Daniel.class, false, "/images/interface/daniel.png"),
+        new OpcaoProfessor("Fabricio", Fabricio.class, false, "/images/interface/fabricio.png"),
+        new OpcaoProfessor("Glaucia", Glaucia.class, false, "/images/interface/glaucia.png"),
+        new OpcaoProfessor("Lucas", Lucas.class, false, "/images/interface/lucas.png"),
+        new OpcaoProfessor("Marcus", Marcus.class, false, "/images/interface/marcus.png"),
+        new OpcaoProfessor("Nacif", Nacif.class, false, "/images/interface/nacif.png"),
+        new OpcaoProfessor("Philipe", Philipe.class, false, "/images/interface/philipe.png"),
+        new OpcaoProfessor("Thais", Thais.class, false, "/images/interface/thais.png")
     );
 
     private final Set<OpcaoProfessor> selecionados = new LinkedHashSet<>();
@@ -106,20 +108,34 @@ public class SelecaoProfessorController implements ControladorTela {
         Set<Class<? extends Professor>> liberados = new LinkedHashSet<>(fase.getProfessorDisponiveis());
 
         for (int indice = 0; indice < CATALOGO.size(); indice++) {
+
             OpcaoProfessor opcao = CATALOGO.get(indice);
-
             boolean estaLiberado = opcao.cafeteira || liberados.contains(opcao.classe.asSubclass(Professor.class));
-
             Button cartao = new Button(estaLiberado ? opcao.nome : opcao.nome + "\n(bloqueado)");
-            if (iconeDocumento != null) {
-                ImageView icone = new ImageView(iconeDocumento);
+            var streamImagem = getClass().getResourceAsStream(opcao.caminhoImagem);
+
+            if (streamImagem != null) {
+                Image imagem = new Image(streamImagem);
+
+                ImageView icone = new ImageView(imagem);
+                icone.setFitWidth(90);
+                icone.setFitHeight(100);
+                icone.setPreserveRatio(true);
                 icone.setSmooth(false);
+
                 cartao.setGraphic(icone);
+            } else {
+                System.err.println("Imagem não encontrada: " + opcao.caminhoImagem);
             }
+
             cartao.setContentDisplay(ContentDisplay.TOP);
             cartao.getStyleClass().add("cartao-professor");
             cartao.setMnemonicParsing(false);
             cartao.setMinWidth(110);
+
+            // Descrição exibida ao passar o mouse sobre o cartão.
+            String nomeProfessor = opcao.cafeteira ? "CAFETEIRA" : opcao.classe.getSimpleName().toUpperCase();
+            JogoController.configurarDescricao(cartao, nomeProfessor);
 
             if (estaLiberado) {
                 cartao.setOnAction(evento -> alternarSelecao(opcao, cartao));
@@ -131,6 +147,7 @@ public class SelecaoProfessorController implements ControladorTela {
             // Sempre adiciona os nove cartões, mantendo a grade fixa 3x3.
             int coluna = indice % 3;
             int linha = indice / 3;
+
             gradeProfessores.add(cartao, coluna, linha);
         }
 
@@ -146,6 +163,7 @@ public class SelecaoProfessorController implements ControladorTela {
                 cartao.getStyleClass().add("selecionado");
             }
         }
+
         atualizarResumo();
     }
 
@@ -166,6 +184,7 @@ public class SelecaoProfessorController implements ControladorTela {
             mostrarAviso("Nenhuma fase foi configurada para esta tela.");
             return;
         }
+
         if (selecionados.isEmpty()) {
             mostrarAviso("Selecione pelo menos um personagem.");
             return;
@@ -199,11 +218,14 @@ public class SelecaoProfessorController implements ControladorTela {
         private final String nome;
         private final Class<?> classe;
         private final boolean cafeteira;
+        private final String caminhoImagem;
 
-        private OpcaoProfessor(String nome, Class<?> classe, boolean cafeteira) {
+        private OpcaoProfessor(String nome, Class<?> classe, boolean cafeteira, String caminhoImagem) {
+
             this.nome = nome;
             this.classe = classe;
             this.cafeteira = cafeteira;
+            this.caminhoImagem = caminhoImagem;
         }
     }
 }

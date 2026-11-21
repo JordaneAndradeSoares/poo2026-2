@@ -36,7 +36,7 @@ public abstract class Zumbi extends Entidade {
         this.dano = dano;
         this.posicaoX = 0;
         this.atacando = false;
-        this.tempoDesdeMordida = INTERVALO_ATAQUE;   // a primeira mordida é imediata
+        this.tempoDesdeMordida = INTERVALO_ATAQUE; // a primeira mordida é imediata
     }
 
     public double getVelocidade() {
@@ -138,12 +138,14 @@ public abstract class Zumbi extends Entidade {
     }
 
     public boolean atacar(Entidade alvo, double deltaTime) {
-    tempoDesdeMordida += deltaTime;
-    if (tempoDesdeMordida >= INTERVALO_ATAQUE) {
-        tempoDesdeMordida = 0;
-        alvo.receberDano(dano);
-        return true;
+        tempoDesdeMordida += deltaTime;
+
+        if (tempoDesdeMordida >= INTERVALO_ATAQUE) {
+            tempoDesdeMordida = 0;
+            alvo.receberDano(dano);
+            return true;
+        }
+
+        return false;
     }
-    return false;
-}
 }

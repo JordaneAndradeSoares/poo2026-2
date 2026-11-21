@@ -15,13 +15,11 @@ import com.poo2026_2.model.Tiro;
 public class Fabricio extends Professor {
 
     private static final int CUSTO_CAFE = 300;
-    private static final double TEMPO_DE_RECARGA = 8;  
-    private static final double CADENCIA = 1.5;     
-
+    private static final double TEMPO_DE_RECARGA = 8;
+    private static final double CADENCIA = 1.5;
     private static final int DANO = 100;
     private static final double VELOCIDADE_TIRO = 5.0;
-
-    private static final int ALCANCE_EM_LINHAS = 1;  
+    private static final int ALCANCE_EM_LINHAS = 1;
 
     public Fabricio(int linha, int coluna) {
         super(linha, coluna, CUSTO_CAFE, CADENCIA);
@@ -49,6 +47,10 @@ public class Fabricio extends Professor {
         }
 
         return tiros;
+    }
+
+    public static int getCustoCafeFabricio() {
+        return CUSTO_CAFE;
     }
 
     @Override
