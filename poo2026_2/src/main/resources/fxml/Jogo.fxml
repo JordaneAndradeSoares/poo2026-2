@@ -194,6 +194,18 @@
                     stylesheets="@../styles/jogo.css"
                     text="Jogar novamente"/>
 
+            <!-- Botão proxima fase -->
+            <Button fx:id="btnProximaFase"
+                    prefHeight="60" 
+                    prefWidth="200"
+                    mnemonicParsing="false"
+                    onAction="#proximaFase"
+                    styleClass="proxima-fase"
+                    stylesheets="@../styles/jogo.css"
+                    text="Proxima fase"
+                    visible="false"
+                    managed="false"/>
+                    
             <!-- Botão Voltar -->
             <Button fx:id="btnVoltar"
                     prefHeight="40" 

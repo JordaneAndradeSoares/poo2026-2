@@ -25,6 +25,7 @@ import java.util.List;
 import javafx.scene.layout.HBox;
 import javafx.scene.control.Separator;
 
+import com.poo2026_2.controller.SelecaoNivelController;
 import com.poo2026_2.audio.AudioManager;
 import com.poo2026_2.model.Entidade;
 import com.poo2026_2.model.Fase;
@@ -125,6 +126,9 @@ public class JogoController implements ControladorTela, Initializable {
 
     @FXML
     private Label lblCafe;
+
+    @FXML
+    private Button btnProximaFase;
 
     // =================================================================
 
@@ -533,11 +537,24 @@ public class JogoController implements ControladorTela, Initializable {
 
         boolean venceu = gerenciadorDeJogo.isVitoria();
 
+        // Desbloqueia a próxima fase quando vencer
+        if (venceu) {
+            SelecaoNivelController.desbloquearProximaFase(SelecaoNivelController.faseSelecionada);
+        }
+
         imagemVitoria.setManaged(venceu);
         imagemVitoria.setVisible(venceu);
 
         imagemDerrota.setManaged(!venceu);
         imagemDerrota.setVisible(!venceu);
+
+        // Só mostra o botão se vencer e ainda existir uma próxima fase
+        boolean existeProximaFase = SelecaoNivelController.faseSelecionada < 3;
+
+        boolean mostrarBotaoProximaFase = venceu && existeProximaFase;
+
+        btnProximaFase.setVisible(mostrarBotaoProximaFase);
+        btnProximaFase.setManaged(mostrarBotaoProximaFase);
 
         camadaResultado.setManaged(true);
         camadaResultado.setVisible(true);
@@ -564,6 +581,10 @@ public class JogoController implements ControladorTela, Initializable {
         // Interrompe as recargas dos botões
         recargas.values().forEach(Timeline::stop);
         recargas.clear();
+
+        // Botão proxima fase invisivel
+        btnProximaFase.setVisible(false);
+        btnProximaFase.setManaged(false);
 
         for (Button botao : botoesPersonagens.values()) {
             botao.setDisable(false);
@@ -592,6 +613,32 @@ public class JogoController implements ControladorTela, Initializable {
         }
 
         atualizarQuantidadeDeCafe();
+    }
+
+    @FXML
+    private void proximaFase() {
+        
+        System.out.println("Proxima fase");
+
+        // Só permite avançar se o jogador venceu
+        if (!gerenciadorDeJogo.isVitoria()) {
+            return;
+        }
+
+        // Verifica se existe uma próxima fase
+        if (SelecaoNivelController.faseSelecionada >= 3) {
+            return;
+        }
+
+        // Para o jogo atual
+        timer.stop();
+        gerenciadorDeJogo.encerrar();
+
+        // Avança para a próxima fase
+        SelecaoNivelController.faseSelecionada++;
+
+        // Abre a seleção de professores da próxima fase
+        gerenciadorDeTelas.mudarTela("SelecaoProfessor.fxml");
     }
 
     // =================================================================

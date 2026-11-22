@@ -23,19 +23,15 @@ public class CreditosController implements ControladorTela {
 
     @FXML
     private void initialize() {
+
         configurarSomDeHover(btnVoltar);
 
         btnVoltar.sceneProperty().addListener((obs, cenaAntiga, cenaNova) -> {
 
             if (cenaNova != null) {
 
-                cenaNova.widthProperty().addListener(
-                        (obs2, valorAntigo, valorNovo) -> ajustarBotao()
-                );
-
-                cenaNova.heightProperty().addListener(
-                        (obs2, valorAntigo, valorNovo) -> ajustarBotao()
-                );
+                cenaNova.widthProperty().addListener((obs2, valorAntigo, valorNovo) -> ajustarBotao());
+                cenaNova.heightProperty().addListener((obs2, valorAntigo, valorNovo) -> ajustarBotao());
 
                 ajustarBotao();
             }

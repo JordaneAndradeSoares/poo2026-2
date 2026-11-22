@@ -5,6 +5,7 @@
 package com.poo2026_2.controller;
 
 import com.poo2026_2.audio.AudioManager;
+
 import javafx.scene.control.Button;
 import javafx.fxml.FXML;
 
@@ -30,8 +31,36 @@ public class SelecaoNivelController implements ControladorTela {
 
     private GerenciadorDeTelas gerenciadorDeTelas;
 
-    // Guarda a fase escolhida antes de abrir o jogo.
+    //////////////////////////////////////////////////////////////////
+
+    // Guarda a fase escolhida antes de abrir o jogo
     public static int faseSelecionada = 1;
+
+    // Guarda o progresso apenas enquanto o jogo estiver aberto
+    private static int faseMaximaDesbloqueada = 1;
+
+    public static int getFaseMaximaDesbloqueada() {
+        return faseMaximaDesbloqueada;
+    }
+
+    public static void desbloquearProximaFase(int faseAtual) {
+
+        int proximaFase = faseAtual + 1;
+
+        if (proximaFase > faseMaximaDesbloqueada && proximaFase <= 3) {
+            faseMaximaDesbloqueada = proximaFase;
+        }
+    }
+
+    private void atualizarBotoesFases() {
+        int faseDesbloqueada = getFaseMaximaDesbloqueada();
+
+        btnNivel1.setDisable(false);
+        btnNivel2.setDisable(faseDesbloqueada < 2);
+        btnNivel3.setDisable(faseDesbloqueada < 3);
+    }
+
+    //////////////////////////////////////////////////////////////////
 
     @Override
     public void setGerenciadorDeTelas(GerenciadorDeTelas gerenciadorDeTelas) {
@@ -41,6 +70,8 @@ public class SelecaoNivelController implements ControladorTela {
 
     @FXML
     private void initialize() {
+
+        atualizarBotoesFases();
 
         configurarSomDeHover(
             btnVoltar,
@@ -93,6 +124,11 @@ public class SelecaoNivelController implements ControladorTela {
     }
 
     private void iniciarFase(int numero) {
+
+        // Impede iniciar fases bloqueadas
+        if (numero > getFaseMaximaDesbloqueada()) {
+            return;
+        }
 
         faseSelecionada = numero;
         gerenciadorDeTelas.mudarTela("SelecaoProfessor.fxml");
