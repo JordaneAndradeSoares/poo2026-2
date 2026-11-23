@@ -19,7 +19,11 @@
   Assim a grade sempre fica alinhada com a imagem.
 -->
 
-<StackPane fx:id="raiz" style="-fx-background-color: black;" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.poo2026_2.controller.JogoController">
+<StackPane  fx:id="raiz" 
+            style="-fx-background-color: black;" 
+            xmlns="http://javafx.com/javafx/26" 
+            xmlns:fx="http://javafx.com/fxml/1" 
+            fx:controller="com.poo2026_2.controller.JogoController">
 
     <stylesheets>
         <URL value="@../styles/jogo.css" />
@@ -125,18 +129,21 @@
 
             <!-- Botão Voltar -->
             <Button fx:id="btnVoltar"
-                    prefHeight="62" 
-                    prefWidth="200"
-                    mnemonicParsing="false"
-                    onAction="#voltar"
-                    styleClass="botao-voltar"
-                    stylesheets="@../styles/jogo.css"
-                    text="voltar"/>
+                prefHeight="50"
+                prefWidth="160"
+                minHeight="50"
+                minWidth="160"
+                maxHeight="50"
+                maxWidth="160"
+                mnemonicParsing="false"
+                onAction="#voltar"
+                styleClass="botao-voltar"/>
 
         </VBox>
     </Pane>
 
     <!-- Tela de resultado do jogo (vitoria ou derrota) -->
+
     <StackPane
         fx:id="camadaResultado"
         visible="false"
@@ -147,74 +154,66 @@
         maxWidth="Infinity"
         maxHeight="Infinity"
         alignment="CENTER"
-        style="-fx-background-color: rgba(0, 0, 0, 0.65);">
+        styleClass="camada-resultado">
 
-        <VBox
-            alignment="CENTER"
-            spacing="15.0"
-            fillWidth="false">
+        
+        <VBox   alignment="CENTER_LEFT"
+                spacing="20"
+                maxWidth="900"
+                styleClass="painel-resultado">
+
+            <Label  fx:id="lblRostoResultado"
+                    styleClass="rosto-resultado"
+                    maxWidth="Infinity"/>
+
+            <Label  fx:id="lblTituloResultado"
+                    styleClass="titulo-resultado"
+                    maxWidth="Infinity"/>
+
+            <Label  fx:id="lblMensagemResultado"
+                    styleClass="recompensa-resultado"
+                    maxWidth="Infinity"/>
+
+            <!-- Coluna com botões e o QR Code -->
+
+            <HBox spacing="30">
+
+                <!-- QR Code (imagem PNG)-->
+
+                <ImageView  fx:id="QRCode"
+                            fitWidth="150"
+                            fitHeight="150"
+                            preserveRatio="true"
+                            pickOnBounds="true">
+
+                    <image>
+                        <Image url="@../images/QRCode.png" />
+                    </image>
+
+                </ImageView>
+
+                <!-- Botões (jogar novamente, proxima fase e voltar) -->
+
+                <VBox spacing="30">
+
+                    <Button fx:id="btnJogarNovamente"
+                            text="Jogar novamente"
+                            onAction="#jogarNovamente"
+                            styleClass="jogar-novamente"/>
+
+                    <Button fx:id="btnProximaFase"
+                            text="Próxima fase"
+                            onAction="#proximaFase"
+                            styleClass="proxima-fase"/>
+
+                    <Button fx:id="btnVoltarResultado"
+                            text="Voltar"
+                            onAction="#voltar"
+                            styleClass="voltar-resultado"/>
+
+                </VBox>
             
-            <!-- Imagem da vitória -->
-            <ImageView
-                fx:id="imagemVitoria"
-                fitWidth="700"
-                fitHeight="600"
-                preserveRatio="true"
-                visible="false"
-                managed="false"
-                mouseTransparent="true">
-
-                <image>
-                    <Image url="@../images/telas/vitoria.png"/>
-                </image>
-            </ImageView>
-
-            <!-- Imagem da derrota -->
-            <ImageView 
-                fx:id="imagemDerrota"
-                fitWidth="700"
-                fitHeight="600"
-                preserveRatio="true"
-                visible="false"
-                managed="false"
-                mouseTransparent="true">
-
-                <image>
-                    <Image url="@../images/telas/derrota.png"/>
-                </image>
-            </ImageView>
-
-            <!-- Botão jogar novamente -->
-            <Button fx:id="btnJogarNovamente"
-                    prefHeight="60" 
-                    prefWidth="200"
-                    mnemonicParsing="false"
-                    onAction="#jogarNovamente"
-                    styleClass="jogar-novamente"
-                    stylesheets="@../styles/jogo.css"
-                    text="Jogar novamente"/>
-
-            <!-- Botão proxima fase -->
-            <Button fx:id="btnProximaFase"
-                    prefHeight="60" 
-                    prefWidth="200"
-                    mnemonicParsing="false"
-                    onAction="#proximaFase"
-                    styleClass="proxima-fase"
-                    stylesheets="@../styles/jogo.css"
-                    text="Proxima fase"
-                    visible="false"
-                    managed="false"/>
-                    
-            <!-- Botão Voltar -->
-            <Button fx:id="btnVoltar"
-                    prefHeight="40" 
-                    prefWidth="110"
-                    mnemonicParsing="false"
-                    onAction="#voltar"
-                    styleClass="botao-voltar"
-                    stylesheets="@../styles/jogo.css"
-                    text="Voltar"/>
+            </HBox>
 
         </VBox>
 

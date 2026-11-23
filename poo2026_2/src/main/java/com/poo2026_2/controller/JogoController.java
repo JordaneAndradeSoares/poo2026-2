@@ -14,6 +14,8 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.image.ImageView;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
+
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.scene.image.Image;
@@ -71,6 +73,8 @@ public class JogoController implements ControladorTela, Initializable {
     private static final double CEL_LARG = 110; // tamanho de cada casa
     private static final double CEL_ALT = 130;
 
+    private boolean RESULTADO_EXIBIDO = false; // vitoria ou derrota
+
     // =================================================================
     
     @FXML
@@ -119,16 +123,25 @@ public class JogoController implements ControladorTela, Initializable {
     private StackPane camadaResultado;
 
     @FXML
-    private ImageView imagemVitoria;
-    
-    @FXML
-    private ImageView imagemDerrota;
-
-    @FXML
     private Label lblCafe;
 
     @FXML
     private Button btnProximaFase;
+
+    @FXML 
+    private Label lblRostoResultado;
+
+    @FXML 
+    private Label lblTituloResultado;
+
+    @FXML 
+    private Label lblMensagemResultado;
+
+    @FXML 
+    private Button btnJogarNovamente;
+
+    @FXML
+    private ImageView QRCode;
 
     // =================================================================
 
@@ -314,8 +327,7 @@ public class JogoController implements ControladorTela, Initializable {
                 3,
                 3,
                 8,
-                animacoes
-            );
+                animacoes);
         }
 
         System.out.println("Casa clicada: linha " + linha + ", coluna " + coluna);
@@ -376,6 +388,7 @@ public class JogoController implements ControladorTela, Initializable {
 
                 // VERIFICAR DERROTA DEPOIS DA ATUALIZAÇÃO DAS PROVAS
                 gerenciadorDeJogo.verificarDerrota();
+                gerenciadorDeJogo.verificarVitoria();
 
                 // REMOVER PROFESSORES E CAFETEIRAS QUE MORRERAM
                 visualProfessores.removerProfessoresOuCafeteirasMortas(
@@ -521,6 +534,36 @@ public class JogoController implements ControladorTela, Initializable {
 
     // =================================================================
 
+    private void mostrarVitoria() {
+
+        lblRostoResultado.setText(":)");
+        lblTituloResultado.setText("VITÓRIA!");
+        lblMensagemResultado.setText("PARABÉNS! VOCÊ PODE CONTINUAR OU JOGAR NOVAMENTE.");
+
+        btnJogarNovamente.setVisible(true);
+        btnProximaFase.setVisible(true);
+        btnProximaFase.setManaged(true);
+    }
+
+    private void mostrarDerrota() {
+
+        lblRostoResultado.setText(":(");
+        lblTituloResultado.setText("DERROTA!");
+        lblMensagemResultado.setText("MAS VOCÊ AINDA PODE TENTAR NOVAMENTE!");
+
+        btnJogarNovamente.setVisible(true);
+        btnProximaFase.setVisible(false);
+        btnProximaFase.setManaged(false);
+    }
+
+    // =================================================================
+
+    public void trocarImagem(String caminhoRecurso) {
+
+        String url = Objects.requireNonNull(getClass().getResource(caminhoRecurso),"Imagem não encontrada: " + caminhoRecurso).toExternalForm();
+        QRCode.setImage(new Image(url));
+    }
+
     @FXML
     private void voltar(ActionEvent event) {
 
@@ -531,31 +574,33 @@ public class JogoController implements ControladorTela, Initializable {
     
     private void mostrarResultado() {
 
-        if (!gerenciadorDeJogo.terminou()) {
+        if (!gerenciadorDeJogo.terminou() || RESULTADO_EXIBIDO) {
             return;
         }
 
+        RESULTADO_EXIBIDO = true;
+
         boolean venceu = gerenciadorDeJogo.isVitoria();
 
-        // Desbloqueia a próxima fase quando vencer
         if (venceu) {
+
+            // Desbloqueia a próxima fase
             SelecaoNivelController.desbloquearProximaFase(SelecaoNivelController.faseSelecionada);
+
+            mostrarVitoria();
+
+            // Verifica se existe uma próxima fase
+            boolean existeProximaFase = SelecaoNivelController.faseSelecionada < 3;
+
+            btnProximaFase.setVisible(existeProximaFase);
+            btnProximaFase.setManaged(existeProximaFase);
+
+        } else {
+
+            mostrarDerrota();
         }
 
-        imagemVitoria.setManaged(venceu);
-        imagemVitoria.setVisible(venceu);
-
-        imagemDerrota.setManaged(!venceu);
-        imagemDerrota.setVisible(!venceu);
-
-        // Só mostra o botão se vencer e ainda existir uma próxima fase
-        boolean existeProximaFase = SelecaoNivelController.faseSelecionada < 3;
-
-        boolean mostrarBotaoProximaFase = venceu && existeProximaFase;
-
-        btnProximaFase.setVisible(mostrarBotaoProximaFase);
-        btnProximaFase.setManaged(mostrarBotaoProximaFase);
-
+        // Exibe a tela final
         camadaResultado.setManaged(true);
         camadaResultado.setVisible(true);
     }
@@ -568,8 +613,7 @@ public class JogoController implements ControladorTela, Initializable {
         animacoes.clear();
 
         camadaResultado.setVisible(false);
-        imagemVitoria.setVisible(false);
-        imagemDerrota.setVisible(false);
+        RESULTADO_EXIBIDO = false;
 
         // Remove os tiros antigos
         tirosVisuais.values().forEach(imagem -> camadaJogo.getChildren().remove(imagem));
