@@ -1,7 +1,11 @@
 package com.poo2026_2.controller;
 
+import java.io.FileInputStream;
+import java.io.File;
 import java.net.URL;
 import java.util.ResourceBundle;
+import java.util.concurrent.atomic.AtomicInteger;
+
 import javafx.animation.AnimationTimer;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -50,6 +54,7 @@ import com.poo2026_2.model.visuais.visuaisProva;
 import javafx.scene.layout.VBox;
 import javafx.scene.control.Tooltip;
 import javafx.geometry.Pos;
+import java.util.Scanner;
 
 /**
  * FXML Controller class
@@ -74,6 +79,8 @@ public class JogoController implements ControladorTela, Initializable {
     private static final double CEL_ALT = 130;
 
     private boolean RESULTADO_EXIBIDO = false; // vitoria ou derrota
+
+    private Timeline digitacao;
 
     // =================================================================
     
@@ -141,7 +148,13 @@ public class JogoController implements ControladorTela, Initializable {
     private Button btnJogarNovamente;
 
     @FXML
+    private Button btnVoltarResultado;
+
+    @FXML
     private ImageView QRCode;
+
+    @FXML
+    private Label mensagemLabel;
 
     // =================================================================
 
@@ -536,22 +549,119 @@ public class JogoController implements ControladorTela, Initializable {
 
     private void mostrarVitoria() {
 
-        lblRostoResultado.setText(":)");
-        lblTituloResultado.setText("VITÓRIA!");
-        lblMensagemResultado.setText("PARABÉNS! VOCÊ PODE CONTINUAR OU JOGAR NOVAMENTE.");
+        // Cor da tela de vitória
+        camadaResultado.getStyleClass().add("vitoria");
 
-        btnJogarNovamente.setVisible(true);
-        btnProximaFase.setVisible(true);
-        btnProximaFase.setManaged(true);
+        // Esconde e limpa os textos de derrota
+        for (Label lbl : List.of(lblRostoResultado, lblTituloResultado, lblMensagemResultado)) {
+            if (lbl != null) {
+                lbl.setText("");
+                lbl.setVisible(false);
+                lbl.setManaged(false);
+            }
+        }
+
+        // Esconde todos os botões enquanto a mensagem está sendo digitada
+        if (btnVoltarResultado != null) {
+            btnVoltarResultado.setVisible(false);
+            btnVoltarResultado.setManaged(false);
+        }
+
+        if (btnJogarNovamente != null) {
+            btnJogarNovamente.setVisible(false);
+            btnJogarNovamente.setManaged(false);
+        }
+
+        if (btnProximaFase != null) {
+            btnProximaFase.setVisible(false);
+            btnProximaFase.setManaged(false);
+        }
+
+        // Exibe o QRCode apenas na vitória
+        if (QRCode != null) {
+            QRCode.setVisible(false);
+            QRCode.setManaged(false);
+        }
+
+        String mensagem = "Inicializando próxima fase...\nCarregando personagens...\nVerificando habilidades...\nPreparando tabuleiro...\n\nTodas as verificações concluídas!\nTudo pronto para continuar.\n\nBUILD SUCCESS :)";
+        Duration intervalo = Duration.millis(10);
+
+        if (digitacao != null) {
+            digitacao.stop();
+        }
+
+        if (mensagemLabel != null) {
+            mensagemLabel.setText("");
+            mensagemLabel.setVisible(true);
+            mensagemLabel.setManaged(true);
+        }
+
+        AtomicInteger indice = new AtomicInteger(0);
+
+        digitacao = new Timeline(
+            new KeyFrame(intervalo, event -> {
+                int atual = indice.incrementAndGet();
+                if (mensagemLabel != null) {
+                    mensagemLabel.setText(mensagem.substring(0, atual));
+                }
+            })
+        );
+
+        digitacao.setCycleCount(mensagem.length());
+
+        // Só exibe os botões após a última letra aparecer
+        digitacao.setOnFinished(event -> {
+            boolean existeProximaFase = SelecaoNivelController.faseSelecionada < 3;
+
+            if (btnJogarNovamente != null) {
+                btnJogarNovamente.setVisible(true);
+                btnJogarNovamente.setManaged(true);
+            }
+
+            if (btnProximaFase != null) {
+                btnProximaFase.setVisible(existeProximaFase);
+                btnProximaFase.setManaged(existeProximaFase);
+            }
+
+            if (btnVoltarResultado != null) {
+                btnVoltarResultado.setVisible(true);
+                btnVoltarResultado.setManaged(true);
+            }
+        });
+
+        digitacao.play();
     }
 
     private void mostrarDerrota() {
+
+        // Som da tela de derrota. Fonte acesso em 23/11/2026: https://www.myinstants.com/pt/instant/blue-screen/
+        AudioManager.tocarMusica("/audio/derrota.mp3");
+
+        // Cor da tela de derrota
+        camadaResultado.getStyleClass().remove("vitoria");
+
+        if (digitacao != null) {
+            digitacao.stop();
+        }
 
         lblRostoResultado.setText(":(");
         lblTituloResultado.setText("DERROTA!");
         lblMensagemResultado.setText("MAS VOCÊ AINDA PODE TENTAR NOVAMENTE!");
 
+        if (mensagemLabel != null) {
+            mensagemLabel.setText("");
+            mensagemLabel.setVisible(false);
+            mensagemLabel.setManaged(false);
+        }
+
+        if (QRCode != null) {
+            QRCode.setVisible(true);
+            QRCode.setManaged(true);
+        }
+
         btnJogarNovamente.setVisible(true);
+        btnJogarNovamente.setManaged(true);
+
         btnProximaFase.setVisible(false);
         btnProximaFase.setManaged(false);
     }
@@ -589,12 +699,6 @@ public class JogoController implements ControladorTela, Initializable {
 
             mostrarVitoria();
 
-            // Verifica se existe uma próxima fase
-            boolean existeProximaFase = SelecaoNivelController.faseSelecionada < 3;
-
-            btnProximaFase.setVisible(existeProximaFase);
-            btnProximaFase.setManaged(existeProximaFase);
-
         } else {
 
             mostrarDerrota();
@@ -608,11 +712,23 @@ public class JogoController implements ControladorTela, Initializable {
     @FXML
     private void jogarNovamente() {
 
+        // Limpa as palavras na tela
+        
+        if (digitacao != null) {
+            digitacao.stop();
+        }
+
+        if (mensagemLabel != null) {
+            mensagemLabel.setText("");
+        }
+
         // Interrompe as animações dos professores e cafeteiras
         animacoes.values().forEach(Timeline::stop);
         animacoes.clear();
 
         camadaResultado.setVisible(false);
+        camadaResultado.setManaged(false);
+
         RESULTADO_EXIBIDO = false;
 
         // Remove os tiros antigos

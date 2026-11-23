@@ -188,7 +188,7 @@
     -fx-font-weight: bold;
 }
 
-/* TELA DE RESULTADO (PARECIDA COM UMA TELA AZUL DA MORTE) */
+/* TELA DE RESULTADO */
 .camada-resultado {
     -fx-background-color: BLUE;
 }
@@ -227,6 +227,16 @@
     -fx-text-fill: WHITE;
 }
 
+.mensagem-dialogo {
+    -fx-font-family: "Consolas", "Monospace", sans-serif;
+    -fx-font-size: 32px;
+    -fx-font-weight: bold;
+    -fx-text-fill: WHITE;
+    -fx-min-width: 180px;
+    -fx-alignment: center;
+}
+
+/* BOTÕES DA TELA DE RESULTADO */
 .jogar-novamente,
 .proxima-fase,
 .voltar-resultado {
@@ -242,17 +252,32 @@
     -fx-cursor: hand;
 }
 
-.jogar-novamente:hover,
-.proxima-fase:hover,
-.voltar-resultado:hover {
+/* EFEITO DE HOVER DERROTA */
+.camada-resultado .jogar-novamente:hover,
+.camada-resultado .proxima-fase:hover,
+.camada-resultado .voltar-resultado:hover {
+    -fx-background-color: DARKBLUE;
     -fx-scale-x: 1.08;
     -fx-scale-y: 1.08;
-    -fx-effect: dropshadow(
-        gaussian,
-        #00dfff,
-        12, 
-        0.6, 
-        0, 
-        0
-    );
+}
+
+/* COR DA VITÓRIA */
+.vitoria {
+    -fx-background-color: GREEN;
+}
+
+.vitoria .jogar-novamente,
+.vitoria .proxima-fase,
+.vitoria .voltar-resultado {
+    -fx-background-color: DARKGREEN;
+    -fx-text-fill: WHITE;
+}
+
+/* EFEITO DE HOVER VITÓRIA */
+.vitoria .jogar-novamente:hover,
+.vitoria .proxima-fase:hover,
+.vitoria .voltar-resultado:hover {
+    -fx-background-color: DARKGREEN;
+    -fx-scale-x: 1.08;
+    -fx-scale-y: 1.08;
 }
