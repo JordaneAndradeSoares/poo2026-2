@@ -229,11 +229,19 @@
 
 .mensagem-dialogo {
     -fx-font-family: "Consolas", "Monospace", sans-serif;
-    -fx-font-size: 32px;
+    -fx-font-size: 14px;
     -fx-font-weight: bold;
     -fx-text-fill: WHITE;
-    -fx-min-width: 180px;
-    -fx-alignment: center;
+
+    -fx-min-width: 800px;
+    -fx-pref-width: 800px;
+    -fx-max-width: 800px;
+
+    -fx-min-height: 180px;
+    -fx-pref-height: 200px;
+
+    -fx-wrap-text: true;
+    -fx-alignment: center-left;
 }
 
 /* BOTÕES DA TELA DE RESULTADO */
@@ -254,30 +262,42 @@
 
 /* EFEITO DE HOVER DERROTA */
 .camada-resultado .jogar-novamente:hover,
-.camada-resultado .proxima-fase:hover,
 .camada-resultado .voltar-resultado:hover {
     -fx-background-color: DARKBLUE;
     -fx-scale-x: 1.08;
     -fx-scale-y: 1.08;
 }
 
-/* COR DA VITÓRIA */
-.vitoria {
-    -fx-background-color: GREEN;
-}
-
-.vitoria .jogar-novamente,
-.vitoria .proxima-fase,
-.vitoria .voltar-resultado {
-    -fx-background-color: DARKGREEN;
-    -fx-text-fill: WHITE;
-}
-
-/* EFEITO DE HOVER VITÓRIA */
+/* EFEITO DE HOVER DOS BOTÕES DA VITÓRIA */
 .vitoria .jogar-novamente:hover,
 .vitoria .proxima-fase:hover,
 .vitoria .voltar-resultado:hover {
-    -fx-background-color: DARKGREEN;
+    -fx-background-color: GREEN;
+    -fx-border-color: LIME;
+    -fx-text-fill: LIME;
     -fx-scale-x: 1.08;
     -fx-scale-y: 1.08;
+}
+
+/* COR DA VITÓRIA */
+.vitoria {
+    -fx-background-color: BLACK;
+}
+
+/* Texto verde na tela de vitória */
+.vitoria .mensagem-dialogo,
+.vitoria .rosto-resultado,
+.vitoria .titulo-resultado,
+.vitoria .mensagem-resultado,
+.vitoria .recompensa-resultado {
+    -fx-text-fill: LIME;
+}
+
+/* Botões da tela de vitória */
+.vitoria .jogar-novamente,
+.vitoria .proxima-fase,
+.vitoria .voltar-resultado {
+    -fx-background-color: BLACK;
+    -fx-border-color: LIME;
+    -fx-text-fill: LIME;
 }

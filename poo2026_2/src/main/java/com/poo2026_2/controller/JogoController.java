@@ -583,7 +583,7 @@ public class JogoController implements ControladorTela, Initializable {
             QRCode.setManaged(false);
         }
 
-        String mensagem = "Inicializando próxima fase...\nCarregando personagens...\nVerificando habilidades...\nPreparando tabuleiro...\n\nTodas as verificações concluídas!\nTudo pronto para continuar.\n\nBUILD SUCCESS :)";
+        String mensagem = "Inicializando próxima fase...\nCarregando personagens...\nVerificando habilidades...\nPreparando tabuleiro...\n\nTodas as verificações concluídas!\nFase seguinte liberada!\n\nBUILD SUCCESS :)";
         Duration intervalo = Duration.millis(10);
 
         if (digitacao != null) {

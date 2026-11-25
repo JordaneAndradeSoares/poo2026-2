@@ -3,147 +3,173 @@
 <?import java.net.URL?>
 <?import java.lang.String?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
-<?import javafx.scene.layout.HBox?>
-<?import javafx.scene.control.Label?>
 
 <!--
-  Raiz: StackPane que ocupa a janela toda.
-  Dentro dela, o "palco" tem tamanho FIXO (1672x941 = tamanho do background.png)
-  e é escalado pelo controller para caber em qualquer resolucao 16:9.
-  Assim a grade sempre fica alinhada com a imagem.
+        Raiz: StackPane que ocupa a janela toda.
+        Dentro dela, o "palco" tem tamanho FIXO (1672x941 = tamanho do background.png)
+        e é escalado pelo controller para caber em qualquer resolucao 16:9.
+        Assim a grade sempre fica alinhada com a imagem.
 -->
 
-<StackPane  fx:id="raiz" 
-            style="-fx-background-color: black;" 
-            xmlns="http://javafx.com/javafx/26" 
-            xmlns:fx="http://javafx.com/fxml/1" 
-            fx:controller="com.poo2026_2.controller.JogoController">
+<StackPane
+        fx:id="raiz"
+        style="-fx-background-color: black;"
+        xmlns="http://javafx.com/javafx/26"
+        xmlns:fx="http://javafx.com/fxml/1"
+        fx:controller="com.poo2026_2.controller.JogoController">
 
-    <stylesheets>
-        <URL value="@../styles/jogo.css" />
-    </stylesheets>
-
-    <Pane
-        fx:id="palco"
-        maxHeight="941" maxWidth="1672"
-        minHeight="941" minWidth="1672"
-        prefHeight="941" prefWidth="1672">
-
-        <!-- Imagem de fundo -->
-        <ImageView fitHeight="941" fitWidth="1672" preserveRatio="false">
-            <image>
-                <Image url="@../images/game/background2.png"/>
-            </image>
-        </ImageView>
-
-        <!-- Grade -->
-        <GridPane fx:id="grade">
-            <styleClass>
-                <String fx:value="grade"/>
-                <String fx:value="pane"/>
-            </styleClass>
-        </GridPane>
+        <stylesheets>
+                <URL value="@../styles/jogo.css"/>
+        </stylesheets>
 
         <Pane
-            fx:id="camadaJogo"
-            layoutX="0"
-            layoutY="0"
-            prefWidth="1672"
-            prefHeight="941"
-            mouseTransparent="true"
-        />
+                fx:id="palco"
+                maxHeight="941"
+                maxWidth="1672"
+                minHeight="941"
+                minWidth="1672"
+                prefHeight="941"
+                prefWidth="1672">
 
-        <VBox
-            spacing="10"
-            layoutX="10"
-            layoutY="10"
-            pickOnBounds="false">
+                <!-- Imagem de fundo -->
+                <ImageView
+                        fitHeight="941"
+                        fitWidth="1672"
+                        preserveRatio="false">
 
-            <HBox
-                spacing="10"
-                alignment="TOP_LEFT"
-                pickOnBounds="false">
-
-                <!-- Botões de seleção dos personagens -->
-                <Button fx:id="btnCafeteira" text="Cafeteira"
-                        onAction="#selecionarCafeteira"/>
-
-                <Button fx:id="btnDaniel" text="Daniel"
-                        onAction="#selecionarDaniel"/>
-
-                <Button fx:id="btnFabricio" text="Fabrício"
-                        onAction="#selecionarFabricio"/>
-
-                <Button fx:id="btnGlaucia" text="Gláucia"
-                        onAction="#selecionarGlaucia"/>
-
-                <Button fx:id="btnLucas" text="Lucas"
-                        onAction="#selecionarLucas"/>
-
-                <Button fx:id="btnMarcus" text="Marcus"
-                        onAction="#selecionarMarcus"/>
-
-                <Button fx:id="btnNacif" text="Nacif"
-                        onAction="#selecionarNacif"/>
-
-                <Button fx:id="btnPhilipe" text="Philipe"
-                        onAction="#selecionarPhilipe"/>
-
-                <Button fx:id="btnThais" text="Thaís"
-                        onAction="#selecionarThais"/>
-
-            </HBox>
-
-            <!-- Indicador da quantidade de café disponível -->
-            <HBox 
-                prefWidth="300"
-                prefHeight="10"
-                
-                maxWidth="300"
-                maxHeight="10"
-
-                alignment="CENTER_LEFT"
-                mouseTransparent="true"
-                styleClass="painel-cafe">
-
-                <ImageView 
-                    fitWidth="100"
-                    fitHeight="100"
-                    preserveRatio="true">
-
-                    <image>
-                        <Image url="@/images/interface/xicara.png"/>
-                    </image>
+                        <image>
+                                <Image url="@../images/game/background2.png"/>
+                        </image>
                 </ImageView>
 
-                <Label 
-                    fx:id="lblCafe"
-                    styleClass="texto-cafe"/>
-            </HBox>
+                <!-- Grade -->
+                <GridPane fx:id="grade">
+                        <styleClass>
+                                <String fx:value="grade"/>
+                                <String fx:value="pane"/>
+                        </styleClass>
+                </GridPane>
 
-            <!-- Botão Voltar -->
-            <Button fx:id="btnVoltar"
-                prefHeight="50"
-                prefWidth="160"
-                minHeight="50"
-                minWidth="160"
-                maxHeight="50"
-                maxWidth="160"
-                mnemonicParsing="false"
-                onAction="#voltar"
-                styleClass="botao-voltar"/>
+        <Pane
+                fx:id="camadaJogo"
+                layoutX="0"
+                layoutY="0"
+                prefWidth="1672"
+                prefHeight="941"
+                mouseTransparent="true"/>
+
+        <VBox
+                spacing="10"
+                layoutX="10"
+                layoutY="10"
+                pickOnBounds="false">
+
+                <HBox
+                        spacing="10"
+                        alignment="TOP_LEFT"
+                        pickOnBounds="false">
+
+                        <!-- Botões de seleção dos personagens -->
+                        <Button
+                        fx:id="btnCafeteira"
+                        text="Cafeteira"
+                        onAction="#selecionarCafeteira"/>
+
+                        <Button
+                        fx:id="btnDaniel"
+                        text="Daniel"
+                        onAction="#selecionarDaniel"/>
+
+                        <Button
+                        fx:id="btnFabricio"
+                        text="Fabrício"
+                        onAction="#selecionarFabricio"/>
+
+                        <Button
+                        fx:id="btnGlaucia"
+                        text="Gláucia"
+                        onAction="#selecionarGlaucia"/>
+
+                        <Button
+                        fx:id="btnLucas"
+                        text="Lucas"
+                        onAction="#selecionarLucas"/>
+
+                        <Button
+                        fx:id="btnMarcus"
+                        text="Marcus"
+                        onAction="#selecionarMarcus"/>
+
+                        <Button
+                        fx:id="btnNacif"
+                        text="Nacif"
+                        onAction="#selecionarNacif"/>
+
+                        <Button
+                        fx:id="btnPhilipe"
+                        text="Philipe"
+                        onAction="#selecionarPhilipe"/>
+
+                        <Button
+                        fx:id="btnThais"
+                        text="Thaís"
+                        onAction="#selecionarThais"/>
+
+                </HBox>
+
+                <!-- Indicador da quantidade de café disponível -->
+                <HBox
+                        prefWidth="300"
+                        prefHeight="10"
+                        maxWidth="300"
+                        maxHeight="10"
+                        alignment="CENTER_LEFT"
+                        mouseTransparent="true"
+                        styleClass="painel-cafe">
+
+                        <ImageView
+                                fitWidth="100"
+                                fitHeight="100"
+                                preserveRatio="true">
+
+                                <image>
+                                        <Image url="@/images/interface/xicara.png"/>
+                                </image>
+
+                        </ImageView>
+
+                        <Label
+                        fx:id="lblCafe"
+                        styleClass="texto-cafe"/>
+
+                </HBox>
+
+                <!-- Botão Voltar -->
+                <Button
+                        fx:id="btnVoltar"
+                        prefHeight="50"
+                        prefWidth="160"
+                        minHeight="50"
+                        minWidth="160"
+                        maxHeight="50"
+                        maxWidth="160"
+                        mnemonicParsing="false"
+                        onAction="#voltar"
+                        styleClass="botao-voltar"/>
 
         </VBox>
+
     </Pane>
 
-    <!-- Tela de resultado do jogo (vitoria ou derrota) -->
-
+    <!-- Tela de resultado do jogo (vitória ou derrota) -->
     <StackPane
         fx:id="camadaResultado"
         visible="false"
@@ -156,69 +182,77 @@
         alignment="CENTER"
         styleClass="camada-resultado">
 
-        
-        <VBox   alignment="CENTER_LEFT"
+        <VBox
+                alignment="CENTER_LEFT"
                 spacing="20"
+                prefWidth="900"
                 maxWidth="900"
                 styleClass="painel-resultado">
 
-            <Label  fx:id="lblRostoResultado"
-                    styleClass="rosto-resultado"
-                    maxWidth="Infinity"/>
+                <Label
+                        fx:id="lblRostoResultado"
+                        styleClass="rosto-resultado"
+                        maxWidth="Infinity"/>
 
-            <Label  fx:id="lblTituloResultado"
-                    styleClass="titulo-resultado"
-                    maxWidth="Infinity"/>
+                <Label
+                        fx:id="lblTituloResultado"
+                        styleClass="titulo-resultado"
+                        maxWidth="Infinity"/>
 
-            <Label  fx:id="lblMensagemResultado"
-                    styleClass="recompensa-resultado"
-                    maxWidth="Infinity"/>
+                <Label
+                        fx:id="lblMensagemResultado"
+                        styleClass="recompensa-resultado"
+                        maxWidth="Infinity"/>
 
-            <!-- Mensagem da tela de vitória -->
+                <!-- Mensagem da tela de vitória -->
+                <Label
+                        fx:id="mensagemLabel"
+                        styleClass="mensagem-dialogo"
+                        maxWidth="900"
+                        wrapText="true"
+                        alignment="CENTER_LEFT"/>
 
-            <Label  fx:id="mensagemLabel" 
-                    styleClass="mensagem-dialogo" />
+                <!-- Coluna com botões e o QR Code -->
+                <HBox spacing="30">
 
-            <!-- Coluna com botões e o QR Code -->
+                        <!-- QR Code (imagem PNG) -->
+                        <ImageView
+                                fx:id="QRCode"
+                                fitWidth="150"
+                                fitHeight="150"
+                                preserveRatio="true"
+                                pickOnBounds="true">
 
-            <HBox spacing="30">
+                                <image>
+                                        <Image url="@../images/QRCode.png"/>
+                                </image>
 
-                <!-- QR Code (imagem PNG)-->
+                        </ImageView>
 
-                <ImageView  fx:id="QRCode"
-                            fitWidth="150"
-                            fitHeight="150"
-                            preserveRatio="true"
-                            pickOnBounds="true">
+                        <!-- Botões (jogar novamente, próxima fase e voltar) -->
+                        <VBox spacing="20">
 
-                    <image>
-                        <Image url="@../images/QRCode.png" />
-                    </image>
+                                <Button
+                                        fx:id="btnJogarNovamente"
+                                        text="Jogar novamente"
+                                        onAction="#jogarNovamente"
+                                        styleClass="jogar-novamente"/>
 
-                </ImageView>
+                                <Button
+                                        fx:id="btnProximaFase"
+                                        text="Próxima fase"
+                                        onAction="#proximaFase"
+                                        styleClass="proxima-fase"/>
 
-                <!-- Botões (jogar novamente, proxima fase e voltar) -->
+                                <Button
+                                        fx:id="btnVoltarResultado"
+                                        text="Voltar"
+                                        onAction="#voltar"
+                                        styleClass="voltar-resultado"/>
 
-                <VBox spacing="30">
+                        </VBox>
 
-                    <Button fx:id="btnJogarNovamente"
-                            text="Jogar novamente"
-                            onAction="#jogarNovamente"
-                            styleClass="jogar-novamente"/>
-
-                    <Button fx:id="btnProximaFase"
-                            text="Próxima fase"
-                            onAction="#proximaFase"
-                            styleClass="proxima-fase"/>
-
-                    <Button fx:id="btnVoltarResultado"
-                            text="Voltar"
-                            onAction="#voltar"
-                            styleClass="voltar-resultado"/>
-
-                </VBox>
-            
-            </HBox>
+                </HBox>
 
         </VBox>
 

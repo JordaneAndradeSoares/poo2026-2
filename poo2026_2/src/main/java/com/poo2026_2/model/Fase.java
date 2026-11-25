@@ -41,17 +41,10 @@ public class Fase {
         fase.adicionarProfessorDisponivel(Philipe.class);
         fase.adicionarProfessorDisponivel(Thais.class);
 
-        // fase.adicionarProfessorDisponivel(Daniel.class);
-        // fase.adicionarProfessorDisponivel(Fabricio.class);
-
-        fase.adicionarOnda(new Onda(1, 1, 1, Calouro::new));
-
-        /*
         fase.adicionarOnda(new Onda(1, 4, 6.0, Calouro::new));
         fase.adicionarOnda(new Onda(2, 5, 6.0, Calouro::new));
         fase.adicionarOnda(new Onda(3, 3, 7.0, CalouroBlindado::new));
         fase.adicionarOnda(new Onda(4, 4, 6.0, CalouroProtegido::new));
-        */
 
         return fase;
     }

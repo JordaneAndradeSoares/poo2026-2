@@ -17,10 +17,10 @@
             style="-fx-background-color: #A9A9A9;"
             fx:id="raiz">
 
-       <StackPane AnchorPane.topAnchor="0.0"
-               AnchorPane.bottomAnchor="0.0"
-               AnchorPane.leftAnchor="0.0"
-               AnchorPane.rightAnchor="0.0">
+       <StackPane    AnchorPane.topAnchor="0.0"
+                     AnchorPane.bottomAnchor="0.0"
+                     AnchorPane.leftAnchor="0.0"
+                     AnchorPane.rightAnchor="0.0">
 
        <VBox spacing="0"
               style="-fx-background-color: #B8B8B8;
