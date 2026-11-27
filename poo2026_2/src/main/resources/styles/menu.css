@@ -1,66 +1,31 @@
+/* ===== Paleta do menu (tirada do mockup) ===== */
 .menu-root {
-    -fx-background-color: #07131b;
+    -fx-background-color: #1c2429;
 }
 
 .menu-btn {
-    -fx-background-color: transparent;
-    -fx-background-insets: 0;
-    -fx-background-radius: 0;
-    -fx-border-width: 0;
-    -fx-padding: 0;
-    -fx-text-fill: transparent;
-    -fx-content-display: graphic-only;
+    -fx-background-color: #f5f5f5;
+    -fx-background-radius: 25;
+    -fx-border-color: #4a2c1a;
+    -fx-border-width: 8;
+    -fx-border-radius: 22;
+    -fx-text-fill: #4a2c1a;
+    -fx-font-size: 40px;
+    -fx-font-weight: bold;
     -fx-cursor: hand;
-
-    -fx-background-repeat: no-repeat;
-    -fx-background-position: center;
-    -fx-background-size: 100% 100%;
+    -fx-padding: 0;
 }
-
-.menu-btn-play {
-    -fx-background-image: url("../images/menu/buttons/jogar_normal.png");
-}
-.menu-btn-play:hover {
-    -fx-background-image: url("../images/menu/buttons/jogar_hover.png");
-}
-
-.menu-btn-config {
-    -fx-background-image: url("../images/menu/buttons/config_normal.png");
-}
-.menu-btn-config:hover {
-    -fx-background-image: url("../images/menu/buttons/config_hover.png");
-}
-
-.menu-btn-creditos {
-    -fx-background-image: url("../images/menu/buttons/creditos_normal.png");
-}
-.menu-btn-creditos:hover {
-    -fx-background-image: url("../images/menu/buttons/creditos_hover.png");
-}
-
-.menu-btn-sair {
-    -fx-background-image: url("../images/menu/buttons/sair_normal.png");
-}
-.menu-btn-sair:hover {
-    -fx-background-image: url("../images/menu/buttons/sair_hover.png");
-}
-
-/*
-.menu-btn-teste {
-    -fx-background-image: url("../images/menu/buttons/teste_normal.png");
-}
-.menu-btn-teste:hover {
-    -fx-background-image: url("../images/menu/buttons/teste_hover.png");
-}
-*/
 
 .menu-btn:hover {
-    -fx-scale-x: 1.035;
-    -fx-scale-y: 1.035;
+    -fx-background-color: #f4a23a;
 }
 
 .menu-btn:pressed {
-    -fx-scale-x: 0.98;
-    -fx-scale-y: 0.98;
-    -fx-translate-y: 2;
+    -fx-background-color: #dd8a22;
+    -fx-translate-y: 3;
+}
+
+.menu-btn:focused {
+    -fx-focus-color: transparent;
+    -fx-faint-focus-color: transparent;
 }

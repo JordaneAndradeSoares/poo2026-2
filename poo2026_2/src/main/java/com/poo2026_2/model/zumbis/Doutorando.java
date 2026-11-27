@@ -8,6 +8,6 @@ package com.poo2026_2.model.zumbis;
 public class Doutorando extends Zumbi {
 
     public Doutorando(int linha) {
-        super(100, linha, 0.6, 10);
+        super(20000, linha, VELOCIDADE_PADRAO, DANO_HITKILL);
     }
 }

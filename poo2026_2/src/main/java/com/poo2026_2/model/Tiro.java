@@ -117,7 +117,6 @@ public class Tiro {
         if (efeito != null && alvo instanceof Zumbi && alvo.estaVivo()) {
             efeito.accept((Zumbi) alvo);
         }
-        AudioManager.tocarEfeito("/audio/impacto.mp3"); // fonte (acesso em 22/10/2026): https://www.myinstants.com/pt/instant/dramatic-boomer-29428/
         desativar();
     }
 

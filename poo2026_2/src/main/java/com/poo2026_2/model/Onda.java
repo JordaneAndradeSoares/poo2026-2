@@ -1,111 +1,95 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package com.poo2026_2.model;
 
-import java.util.function.IntFunction;
-
-import com.poo2026_2.model.zumbis.Zumbi;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.EnumMap;
+import java.util.List;
+import java.util.Map;
 
 /**
+ * Uma onda de zumbis, como configurada no niveis.json: quando comeca, em que
+ * ritmo os zumbis saem e quais zumbis vem nela.
  *
- * @author Mateus
+ * A onda so guarda dados; quem avanca o tempo e solta os zumbis e o Cronograma.
  */
-public class Onda {
+public final class Onda {
 
-    private int numero;
-    private int quantidadeZumbis;
-    private double intervaloSpawn; // segundos entre cada zumbi
-    private double tempoDecorrido; // tempo acumulado desde o último spawn
-    private int zumbisGerados;
-    private boolean concluida;
+    private final String nome;
+    private final double inicio;           // segundos desde o comeco da fase
+    private final double passo;            // segundos entre um zumbi e o seguinte
+    private final boolean grande;          // aparece destacada na linha do tempo
+    private final List<TipoZumbi> sequencia;
 
-    private IntFunction<? extends Zumbi> criadorZumbi;
-
-    public Onda(int numero, int quantidadeZumbis, double intervaloSpawn, IntFunction<? extends Zumbi> criadorZumbi) {
-        
-        if (numero <= 0) {
-            throw new IllegalArgumentException("O numero de ondas tem que ser maior que zero");
+    public Onda(String nome, double inicio, double passo, boolean grande, List<TipoZumbi> sequencia) {
+        if (nome == null || nome.isBlank()) {
+            throw new IllegalArgumentException("A onda precisa de um nome.");
         }
-
-        if (quantidadeZumbis < 0) {
-            throw new IllegalArgumentException("A quantidade de zumbis nao pode ser negativa.");
+        if (inicio < 0 || !Double.isFinite(inicio)) {
+            throw new IllegalArgumentException("O inicio da onda nao pode ser negativo.");
         }
-
-        if (intervaloSpawn <= 0 || !Double.isFinite(intervaloSpawn)) {
-            throw new IllegalArgumentException("O intervalo de spawn tem que ser positivo e finito.");
+        if (passo <= 0 || !Double.isFinite(passo)) {
+            throw new IllegalArgumentException("O intervalo entre zumbis tem que ser positivo.");
         }
-
-        if (criadorZumbi == null) {
-            throw new IllegalArgumentException("O tipo de zumbi deve ser informado.");
+        if (sequencia == null || sequencia.isEmpty()) {
+            throw new IllegalArgumentException("A onda precisa de pelo menos um zumbi.");
         }
-        
-        this.numero = numero;
-        this.quantidadeZumbis = quantidadeZumbis;
-        this.intervaloSpawn = intervaloSpawn;
-        this.criadorZumbi = criadorZumbi;
-        this.tempoDecorrido = 0;
-        this.zumbisGerados = 0;
-        this.concluida = quantidadeZumbis == 0;
+        this.nome = nome;
+        this.inicio = inicio;
+        this.passo = passo;
+        this.grande = grande;
+        this.sequencia = List.copyOf(sequencia);
     }
 
-    public int getNumero() {
-        return numero;
+    public String getNome() {
+        return nome;
+    }
+
+    public double getInicio() {
+        return inicio;
+    }
+
+    public double getPasso() {
+        return passo;
+    }
+
+    public boolean isGrande() {
+        return grande;
     }
 
     public int getQuantidadeZumbis() {
-        return quantidadeZumbis;
+        return sequencia.size();
     }
 
-    public double getIntervaloSpawn() {
-        return intervaloSpawn;
+    /** Os zumbis na ordem em que saem. */
+    public List<TipoZumbi> getSequencia() {
+        return sequencia;
     }
 
-    public int getZumbisGerados(){
-        return zumbisGerados;
+    /** Segundo (desde o comeco da fase) em que sai o zumbi de indice i. */
+    public double getTempoDoZumbi(int i) {
+        return inicio + i * passo;
     }
 
-    /** Avança o relógio da onda em segundos. */
-    public void atualizar(double deltaTime) {
-        if (!concluida && deltaTime > 0) {
-            tempoDecorrido += deltaTime;
+    /** Segundo em que a onda termina; a proxima onda, se nao disser o contrario, comeca aqui. */
+    public double getFim() {
+        return inicio + sequencia.size() * passo;
+    }
+
+    /** Quantos zumbis de cada tipo (para mostrar na linha do tempo). */
+    public Map<TipoZumbi, Integer> getResumo() {
+        Map<TipoZumbi, Integer> resumo = new EnumMap<>(TipoZumbi.class);
+        for (TipoZumbi tipo : sequencia) {
+            resumo.merge(tipo, 1, Integer::sum);
         }
+        return Collections.unmodifiableMap(resumo);
     }
 
-    /**
-     * Registra a geração de um zumbi, reinicia o contador de tempo
-     * e marca a onda como concluída quando todos foram gerados.
-     */
-    public boolean gerarZumbi() {
-        if (!podeGerarZumbi()) {
-            return false;
+    /** Ex.: "5x Calouro, 2x Trote". */
+    public String getResumoEmTexto() {
+        List<String> partes = new ArrayList<>();
+        for (Map.Entry<TipoZumbi, Integer> e : getResumo().entrySet()) {
+            partes.add(e.getValue() + "x " + e.getKey().getNomeExibicao());
         }
-        zumbisGerados++;
-        tempoDecorrido -= intervaloSpawn;
-        if (zumbisGerados >= quantidadeZumbis) {
-            concluida = true;
-        }
-        return true;
-    }
-
-    public boolean podeGerarZumbi() {
-        return !concluida
-                && zumbisGerados < quantidadeZumbis
-                && tempoDecorrido >= intervaloSpawn;
-    }
-
-    public Zumbi criarZumbi(int linha) {
-        return criadorZumbi.apply(linha);
-    }
-
-    public boolean estaConcluida() {
-        return concluida;
-    }
-
-    public void reiniciar() {
-        tempoDecorrido = 0;
-        zumbisGerados = 0;
-        concluida = quantidadeZumbis == 0;
+        return String.join(", ", partes);
     }
 }

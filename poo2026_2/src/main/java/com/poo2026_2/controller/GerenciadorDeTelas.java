@@ -6,10 +6,10 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 import java.io.IOException;
 
-import com.poo2026_2.model.Fase;
-import com.poo2026_2.controller.SelecaoProfessorController;
-
 public class GerenciadorDeTelas {
+
+    private Parent raizSalva; // tela que ficou "por baixo" das configs
+    private Runnable aoFecharConfiguracoes; // o que fazer ao voltar para ela
 
     private final Stage stage;
 
@@ -37,8 +37,7 @@ public class GerenciadorDeTelas {
     public void mudarTela(String arquivoFXML) {
         try {
             FXMLLoader loader = new FXMLLoader(
-                    getClass().getResource("/fxml/" + arquivoFXML)
-            );
+                    getClass().getResource("/fxml/" + arquivoFXML));
 
             Parent root = loader.load();
             Object controller = loader.getController();
@@ -46,15 +45,6 @@ public class GerenciadorDeTelas {
             if (controller instanceof ControladorTela) {
                 ControladorTela tela = (ControladorTela) controller;
                 tela.setGerenciadorDeTelas(this);
-            }
-
-            // Configura a seleção de professores antes de mostrar a tela.
-            if (controller instanceof SelecaoProfessorController) {
-
-                SelecaoProfessorController selecao = (SelecaoProfessorController) controller;
-
-                Fase fase = Fase.criarFaseSelecionada();
-                selecao.configurarFase(fase);
             }
 
             if (scene == null) {
@@ -68,12 +58,35 @@ public class GerenciadorDeTelas {
 
         } catch (IOException | NullPointerException e) {
             throw new RuntimeException(
-                    "Erro ao carregar a tela: " + arquivoFXML, e
-            );
+                    "Erro ao carregar a tela: " + arquivoFXML, e);
+        }
+    }
+
+    /** Abre as configs mantendo a tela atual viva (ex.: a partida pausada). */
+    public void abrirConfiguracoesSobre(Runnable aoVoltar) {
+        raizSalva = scene.getRoot();
+        aoFecharConfiguracoes = aoVoltar;
+        mudarTela("Extras.fxml");
+    }
+
+    /** Volta para a tela guardada; se nao houver, vai para o menu. */
+    public void fecharConfiguracoes() {
+        if (raizSalva == null) {
+            voltarMenu();
+            return;
+        }
+        Parent anterior = raizSalva;
+        Runnable aoVoltar = aoFecharConfiguracoes;
+        raizSalva = null;
+        aoFecharConfiguracoes = null;
+        scene.setRoot(anterior);
+        if (aoVoltar != null) {
+            aoVoltar.run();
         }
     }
 
     public void voltarMenu() {
+        raizSalva = null;
         mudarTela("Menu.fxml");
     }
 }

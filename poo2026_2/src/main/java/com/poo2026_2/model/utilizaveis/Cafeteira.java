@@ -1,6 +1,7 @@
 package com.poo2026_2.model.utilizaveis;
 
 import com.poo2026_2.model.Entidade;
+import com.poo2026_2.model.Instalavel;
 
 /**
  * Representa uma cafeteira responsável por produzir cafés.
@@ -10,10 +11,13 @@ import com.poo2026_2.model.Entidade;
  *
  * @author Rafael
  */
-public class Cafeteira extends Entidade {
+public class Cafeteira extends Entidade implements Instalavel {
 
     private static final int CUSTO_CAFE_PADRAO = 50;
     private static final double TEMPO_DE_RECARGA = 8;
+
+    /** Segundos que a cafeteira leva para chegar ao estagio final (frame 12); a gota sai nesse instante. */
+    public static final double SEGUNDOS_ATE_O_ESTAGIO_FINAL = 24.0;
 
     private int custoCafe;
     private int cafePorCiclo;
@@ -38,7 +42,7 @@ public class Cafeteira extends Entidade {
             throw new IllegalArgumentException("O intervalo de producao tem que ser positivo e finito.");
         }
 
-        if (intervaloProducao <= 0 || !Double.isFinite(tempoDeRecarga)) {
+        if (tempoDeRecarga <= 0 || !Double.isFinite(tempoDeRecarga)) {
             throw new IllegalArgumentException("O tempo de recarga tem que ser positivo e finito.");
         }
 
@@ -52,8 +56,8 @@ public class Cafeteira extends Entidade {
         this.custoCafe = custoCafe;
     }
 
-    public static int getCustoCafe() {
-        return CUSTO_CAFE_PADRAO;
+    public int getCustoCafe() {
+        return this.custoCafe;
     }
 
     public int getCafePorCiclo() {

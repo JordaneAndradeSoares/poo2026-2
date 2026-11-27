@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import java.net.URL?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.scene.image.*?>
+
+<StackPane xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
+           fx:controller="com.poo2026_2.controller.WordAntigoController"
+           fx:id="root" styleClass="word-root">
+    <stylesheets><URL value="@/styles/wordantigo.css"/></stylesheets>
+    <BorderPane maxWidth="1250" maxHeight="950" styleClass="word-window">
+        <top>
+            <VBox>
+                <HBox styleClass="title-bar" alignment="CENTER_LEFT" spacing="7">
+                    <ImageView fitWidth="17" fitHeight="17" preserveRatio="true">
+                        <image><Image url="@../images/word/word_icon.png"/></image>
+                    </ImageView>
+                    <Label text="Documento1 - Microsoft Word" styleClass="window-title" HBox.hgrow="ALWAYS"/>
+                    <Region HBox.hgrow="ALWAYS"/>
+                    <Button text="_" styleClass="window-control" onAction="#minimizar"/>
+                    <Button text="□" styleClass="window-control" onAction="#maximizar"/>
+                    <Button fx:id="btnFechar" text="×" styleClass="window-control-close" onAction="#voltar"/>
+                </HBox>
+                <MenuBar styleClass="classic-menu">
+                    <menus>
+                        <Menu text="Arquivo">
+                            <items>
+                                <MenuItem text="Novo" onAction="#novo"/>
+                                <MenuItem text="Abrir..." onAction="#abrir"/>
+                                <MenuItem text="Salvar" onAction="#salvar"/>
+                                <MenuItem text="Salvar como..." onAction="#salvarComo"/>
+                                <SeparatorMenuItem/>
+                                <MenuItem text="Imprimir..." onAction="#imprimir"/>
+                                <SeparatorMenuItem/>
+                                <MenuItem text="Fechar (ESC)" onAction="#voltar"/>
+                            </items>
+                        </Menu>
+                        <Menu text="Editar">
+                            <items>
+                                <MenuItem text="Desfazer" onAction="#desfazer"/>
+                                <MenuItem text="Refazer" onAction="#refazer"/>
+                                <SeparatorMenuItem/>
+                                <MenuItem text="Recortar" onAction="#recortar"/>
+                                <MenuItem text="Copiar" onAction="#copiar"/>
+                                <MenuItem text="Colar" onAction="#colar"/>
+                                <MenuItem text="Selecionar tudo" onAction="#selecionarTudo"/>
+                            </items>
+                        </Menu>
+                        <Menu text="Exibir"><items><CheckMenuItem text="Régua" selected="true" onAction="#alternarRegua"/></items></Menu>
+                        <Menu text="Inserir"><items><MenuItem text="Data e hora" onAction="#inserirData"/></items></Menu>
+                        <Menu text="Formatar"><items><MenuItem text="Fonte" onAction="#aplicarFonte"/></items></Menu>
+                        <Menu text="Ferramentas"><items><MenuItem text="Contar palavras" onAction="#contarPalavras"/></items></Menu>
+                        <Menu text="Tabela"><items><MenuItem text="Inserir tabela (indisponível)" onAction="#indisponivel"/></items></Menu>
+                        <Menu text="Janela"><items><MenuItem text="WordAntigo"/></items></Menu>
+                        <Menu text="Ajuda"><items><MenuItem text="Sobre" onAction="#ajuda"/></items></Menu>
+                    </menus>
+                </MenuBar>
+                <HBox styleClass="classic-toolbar" alignment="CENTER_LEFT" spacing="3">
+                    <Button styleClass="tool-button" onAction="#novo"><graphic><ImageView fitWidth="17" fitHeight="17"><image><Image url="@../images/word/new.png"/></image></ImageView></graphic></Button>
+                    <Button styleClass="tool-button" onAction="#abrir"><graphic><ImageView fitWidth="17" fitHeight="17"><image><Image url="@../images/word/open.png"/></image></ImageView></graphic></Button>
+                    <Button styleClass="tool-button" onAction="#salvar"><graphic><ImageView fitWidth="17" fitHeight="17"><image><Image url="@../images/word/save.png"/></image></ImageView></graphic></Button>
+                    <Separator orientation="VERTICAL"/>
+                    <Button styleClass="tool-button" onAction="#imprimir"><graphic><ImageView fitWidth="17" fitHeight="17"><image><Image url="@../images/word/print.png"/></image></ImageView></graphic></Button>
+                    <Separator orientation="VERTICAL"/>
+                    <Button styleClass="tool-button" onAction="#recortar"><graphic><ImageView fitWidth="17" fitHeight="17"><image><Image url="@../images/word/cut.png"/></image></ImageView></graphic></Button>
+                    <Button styleClass="tool-button" onAction="#copiar"><graphic><ImageView fitWidth="17" fitHeight="17"><image><Image url="@../images/word/copy.png"/></image></ImageView></graphic></Button>
+                    <Button styleClass="tool-button" onAction="#colar"><graphic><ImageView fitWidth="17" fitHeight="17"><image><Image url="@../images/word/paste.png"/></image></ImageView></graphic></Button>
+                    <Separator orientation="VERTICAL"/>
+                    <Button text="↶" styleClass="tool-button" onAction="#desfazer"/>
+                    <Button text="↷" styleClass="tool-button" onAction="#refazer"/>
+                    <Region HBox.hgrow="ALWAYS"/>
+                    <Label text="100%" styleClass="zoom-label"/>
+                </HBox>
+                <HBox styleClass="classic-toolbar" alignment="CENTER_LEFT" spacing="4">
+                    <ComboBox fx:id="estilo" prefWidth="115" value="Normal" styleClass="classic-combo"/>
+                    <ComboBox fx:id="fonte" prefWidth="170" value="Times New Roman" onAction="#aplicarFonte" styleClass="classic-combo"/>
+                    <ComboBox fx:id="tamanho" prefWidth="66" value="12" onAction="#aplicarFonte" styleClass="classic-combo"/>
+                    <Separator orientation="VERTICAL"/>
+                    <ToggleButton fx:id="btnNegrito" text="N" styleClass="format-button,bold-button" onAction="#aplicarFonte"/>
+                    <ToggleButton fx:id="btnItalico" text="I" styleClass="format-button,italic-button" onAction="#aplicarFonte"/>
+                    <ToggleButton fx:id="btnSublinhado" text="S" styleClass="format-button,underline-button" onAction="#aplicarFonte"/>
+                    <Separator orientation="VERTICAL"/>
+                    <ToggleButton fx:id="alinharEsquerda" text="≡" selected="true" styleClass="format-button" onAction="#alinharEsquerda"/>
+                    <ToggleButton fx:id="alinharCentro" text="☰" styleClass="format-button" onAction="#alinharCentro"/>
+                    <ToggleButton fx:id="alinharDireita" text="≡" styleClass="format-button" onAction="#alinharDireita"/>
+                    <Separator orientation="VERTICAL"/>
+                    <Button text="•" styleClass="tool-button" onAction="#inserirMarcador"/>
+                    <Button text="1." styleClass="tool-button" onAction="#inserirNumeracao"/>
+                </HBox>
+                <HBox styleClass="ruler-row" alignment="CENTER_LEFT">
+                    <Label text="▣" styleClass="ruler-corner"/>
+                    <HBox fx:id="reguaHorizontal" alignment="CENTER_LEFT" styleClass="ruler-horizontal" spacing="0" HBox.hgrow="ALWAYS">
+                        <Label text="    1         2         3         4         5         6         7         8         9        10        11        12        13        14        15        16        17" styleClass="ruler-numbers"/>
+                    </HBox>
+                </HBox>
+            </VBox>
+        </top>
+        <center>
+            <HBox styleClass="work-area">
+                <VBox fx:id="reguaVertical" styleClass="vertical-ruler" spacing="21">
+                    <Label text="1"/><Label text="2"/><Label text="3"/><Label text="4"/><Label text="5"/><Label text="6"/><Label text="7"/><Label text="8"/><Label text="9"/><Label text="10"/>
+                </VBox>
+                <ScrollPane fitToWidth="true" hbarPolicy="AS_NEEDED" vbarPolicy="AS_NEEDED" HBox.hgrow="ALWAYS" styleClass="document-scroll">
+                    <content>
+                        <VBox alignment="TOP_CENTER" spacing="24" styleClass="page-surround">
+                            <VBox fx:id="paginaCapa" styleClass="paper,document-page" alignment="TOP_CENTER" spacing="13" minWidth="595" prefWidth="794" maxWidth="794" minHeight="1050" prefHeight="1122">
+                                <ImageView fitWidth="195" fitHeight="145" preserveRatio="true"><image><Image url="@../images/documento/logo_ufv.png"/></image></ImageView>
+                                <Label text="UNIVERSIDADE FEDERAL DE VIÇOSA · CAMPUS FLORESTAL" styleClass="cover-heading"/>
+                                <Label text="CIÊNCIA DA COMPUTAÇÃO - BANCO DE DADOS" styleClass="cover-heading"/>
+                                <Region prefHeight="95"/>
+                                <Label text="CCF 313 - PROGRAMAÇÃO ORIENTADA A OBJETOS" styleClass="cover-heading"/>
+                                <Label text="TP1" styleClass="cover-title"/>
+                                <Region prefHeight="95"/>
+                                <Label text="Mateus Henrique Machado Braz - [6594]" styleClass="cover-name"/>
+                                <Label text="Gean Augusto Lino de Oliveira - [6578]" styleClass="cover-name"/>
+                                <Label text="Thomaz Augusto Araujo Silva - [6577]" styleClass="cover-name"/>
+                                <Label text="Jordane Andrade Soares - [5106]" styleClass="cover-name"/>
+                                <Label text="Luiz Henrique Laudares - [6596]" styleClass="cover-name"/>
+                                <Label text="Rafael de Matos Silva - [6575]" styleClass="cover-name"/>
+                                <Label text="passu" styleClass="cover-name"/>
+                                <Region VBox.vgrow="ALWAYS"/>
+                                <Label text="Florestal - MG" styleClass="cover-name"/>
+                            </VBox>
+                            <VBox fx:id="paginaIntegrantes1" styleClass="paper,document-page" spacing="19" minWidth="595" prefWidth="794" maxWidth="794" minHeight="1050" prefHeight="1122">
+                                <Label text="2" maxWidth="Infinity" alignment="CENTER_RIGHT" styleClass="page-number"/>
+                                <Label text="17 de Novembro de 2026" styleClass="document-date"/>
+                                <Region prefHeight="16"/>
+<HBox alignment="TOP_LEFT" spacing="18" styleClass="person-row"><ImageView fitWidth="125" fitHeight="125" preserveRatio="true"><image><Image url="@../images/documento/rafael.png"/></image></ImageView><VBox spacing="5" HBox.hgrow="ALWAYS"><Label text="Rafael de Matos Silva" wrapText="true" styleClass="person-name"/><TextArea fx:id="descricaoRafael" text="Responsável pelo desenvolvimento da interface de seleção de professores, implementação e estruturação do tabuleiro e das células, criação do sistema de cafeteiras e produção de café, além de melhorias na modelagem orientada a objetos, validações das classes e organização dos diagramas UML." wrapText="true" prefHeight="130" styleClass="person-description"/></VBox></HBox>
+<HBox alignment="TOP_LEFT" spacing="18" styleClass="person-row"><ImageView fitWidth="125" fitHeight="125" preserveRatio="true"><image><Image url="@../images/documento/gean.png"/></image></ImageView><VBox spacing="5" HBox.hgrow="ALWAYS"><Label text="Gean Augusto Lino de Oliveira" wrapText="true" styleClass="person-name"/></VBox></HBox>
+<HBox alignment="TOP_LEFT" spacing="18" styleClass="person-row"><ImageView fitWidth="125" fitHeight="125" preserveRatio="true"><image><Image url="@../images/documento/thomaz.png"/></image></ImageView><VBox spacing="5" HBox.hgrow="ALWAYS"><Label text="Thomaz Augusto Araujo Silva" wrapText="true" styleClass="person-name"/></VBox></HBox>
+<HBox alignment="TOP_LEFT" spacing="18" styleClass="person-row"><ImageView fitWidth="125" fitHeight="125" preserveRatio="true"><image><Image url="@../images/documento/passu.png"/></image></ImageView><VBox spacing="5" HBox.hgrow="ALWAYS"><Label text="Passu alves" wrapText="true" styleClass="person-name"/></VBox></HBox>
+                            </VBox>
+                            <VBox fx:id="paginaIntegrantes2" styleClass="paper,document-page" spacing="38" minWidth="595" prefWidth="794" maxWidth="794" minHeight="1050" prefHeight="1122">
+                                <Label text="3" maxWidth="Infinity" alignment="CENTER_RIGHT" styleClass="page-number"/>
+<HBox alignment="TOP_LEFT" spacing="18" styleClass="person-row"><ImageView fitWidth="125" fitHeight="125" preserveRatio="true"><image><Image url="@../images/documento/mateus.png"/></image></ImageView><VBox spacing="5" HBox.hgrow="ALWAYS"><Label text="Mateus Henrique Machado Braz" wrapText="true" styleClass="person-name"/></VBox></HBox>
+<HBox alignment="TOP_LEFT" spacing="18" styleClass="person-row"><ImageView fitWidth="125" fitHeight="125" preserveRatio="true"><image><Image url="@../images/documento/jordane.png"/></image></ImageView><VBox spacing="5" HBox.hgrow="ALWAYS"><Label text="Jordane Andrade Soares" wrapText="true" styleClass="person-name"/></VBox></HBox>
+<HBox alignment="TOP_LEFT" spacing="18" styleClass="person-row"><ImageView fitWidth="125" fitHeight="125" preserveRatio="true"><image><Image url="@../images/documento/luiz.png"/></image></ImageView><VBox spacing="5" HBox.hgrow="ALWAYS"><Label text="Luiz Henrique Laudares" wrapText="true" styleClass="person-name"/></VBox></HBox>
+                                <Label text="Anotações" styleClass="document-date"/>
+                                <TextArea fx:id="editor" wrapText="true" prefHeight="160" styleClass="document-editor,notes-editor" promptText="Escreva suas anotações aqui..."/>
+                            </VBox>
+                        </VBox>
+                    </content>
+                </ScrollPane>
+            </HBox>
+        </center>
+        <bottom>
+            <HBox styleClass="status-bar" alignment="CENTER_LEFT" spacing="20">
+                <Label text="Pág 1"/>
+                <Label text="Seção 1"/>
+                <Label text="1/3"/>
+                <Label fx:id="statusPosicao" text="Lin 1   Col 1"/>
+                <Region HBox.hgrow="ALWAYS"/>
+                <Label fx:id="statusArquivo" text="Documento1"/>
+                <Label text="Português (Brasil)"/>
+            </HBox>
+        </bottom>
+    </BorderPane>
+</StackPane>

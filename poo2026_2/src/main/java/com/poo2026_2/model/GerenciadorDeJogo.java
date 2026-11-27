@@ -1,601 +1,122 @@
 package com.poo2026_2.model;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.poo2026_2.model.utilizaveis.Cafeteira;
-import com.poo2026_2.model.utilizaveis.Lucas;
-import com.poo2026_2.model.utilizaveis.Cafe;
-import com.poo2026_2.model.utilizaveis.Nacif;
-import com.poo2026_2.model.utilizaveis.Thais;
 import com.poo2026_2.model.zumbis.Zumbi;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Random;
-
 /**
- * Motor do jogo: guarda o estado de uma partida e a atualiza a cada "tick".
- * Quem chama atualizar(deltaTime) e o JogoController (via AnimationTimer).
+ * Estado de uma partida: a fase carregada, o tabuleiro e o café do jogador.
  *
- * Unidade de posicao: CASAS do tabuleiro. A coluna c ocupa [c, c+1), entao o
- * centro da coluna c e c + 0.5. Velocidades sao em casas por segundo.
- * 
- * @author thoma
+ * Guarda também os zumbis e os tiros que estão em campo, para a camada
+ * visual (visuaisProva, visuaisZumbis, visuaisTiros) poder desenhá-los.
  */
 public class GerenciadorDeJogo {
- 
-    /** Tolerancia (em casas) para o tiro acertar o zumbi. */
-    private static final double RAIO_ACERTO = 0.4;
 
-    /** Alcance do ataque corpo a corpo do Lucas, em casas. */
-    private static final double ALCANCE_LUCAS = 1.0;
- 
-    /**
-     * true: o cafe produzido ja entra direto no saldo do jogador.
-     * false: o Cafe fica em cafesNoChao ate o jogador clicar (coletarCafe).
-     * 
-     * private static final boolean COLETA_AUTOMATICA = false;
-    */
- 
-    private Fase faseAtual;
-    private Tabuleiro tabuleiro;
+    private final Fase fase;
+    private final Tabuleiro tabuleiro;
     private int cafe;
-    private List<Zumbi> zumbis;
-    private List<Tiro> tiros;
-    private List<Cafe> cafesNoChao;
-    private boolean jogoAtivo;
-    private boolean vitoria;
-    private boolean terminou;
-    private final Random random = new Random();
-    private final List<EventoExplosao> explosoesPendentes = new ArrayList<>();
- 
-    // ===================== CONSTRUTOR =====================
+    private final List<Zumbi> zumbis = new ArrayList<>();
+    private final List<Tiro> tiros = new ArrayList<>();
 
-    public GerenciadorDeJogo(Fase faseAtual, Tabuleiro tabuleiro) {
-        if (faseAtual == null) {
-            throw new IllegalArgumentException("A fase atual nao pode ser nula.");
+    public GerenciadorDeJogo(Fase fase, Tabuleiro tabuleiro) {
+        if (fase == null) {
+            throw new IllegalArgumentException("A fase nao pode ser nula.");
         }
-
         if (tabuleiro == null) {
             throw new IllegalArgumentException("O tabuleiro nao pode ser nulo.");
-        } 
-
-        this.faseAtual = faseAtual;
+        }
+        this.fase = fase;
         this.tabuleiro = tabuleiro;
-        this.cafe = faseAtual.getCafeInicial();
-        this.zumbis = new ArrayList<>();
-        this.tiros = new ArrayList<>();
-        this.cafesNoChao = new ArrayList<>();
-        this.jogoAtivo = false;
-        this.vitoria = false;
-        this.terminou = false;
-    }
- 
-    /** Liga o jogo */
-    public void iniciarJogo() {
-        if (!terminou) {
-        jogoAtivo = true;
-    }
-    }
- 
-    /** Um passo da simulacao. deltaTime em segundos. */
-    public void atualizar(double deltaTime) {
-        if (!jogoAtivo || terminou || deltaTime <= 0 || !Double.isFinite(deltaTime)) {
-            return;
-        }
-
-        gerarZumbisDaOnda(deltaTime);
-        atualizarZumbis(deltaTime);
-
-        // Atualiza a recarga individual de cada um dos Lucas
-        for (Professor professor : listarProfessores()) {
-            if (professor instanceof Lucas lucas) {
-                lucas.atualizarRecarga(deltaTime);
-            }
-        }
-
-        professoresAtacam(deltaTime);
-        atualizarTiros(deltaTime);
-        verificarColisoes(deltaTime);
-        gerarCafe(deltaTime);
-        atualizarCafesNoChao(deltaTime);
-        verificarVitoria();
-    }
- 
-    public void pausar() {
-        jogoAtivo = false;
-    }
- 
-    public void continuar() {
-        // so retoma se a partida ainda nao acabou
-        if (!terminou) {
-            jogoAtivo = true;
-        }
-    }
- 
-    public void encerrar() {
-        jogoAtivo = false;
-        terminou = true;
-        vitoria = false;
-        zumbis.clear();
-        tiros.clear();
-        cafesNoChao.clear();
-        tabuleiro.limpar();   // tira professores e cafeteiras dos pisos
+        this.cafe = fase.getCafeInicial();
     }
 
-    public void reiniciarJogo() {
-        jogoAtivo = false;
-        cafe = faseAtual.getCafeInicial();
-        vitoria = false;
-        terminou = false;
-        zumbis.clear();
-        tiros.clear();
-        cafesNoChao.clear();
-        tabuleiro.limpar();
-        faseAtual.reiniciar();
-        jogoAtivo = true;
+    public Fase getFase() {
+        return fase;
     }
 
-    // ===================== PISO (professores e cafeteiras) =====================
- 
-    /**
-     * Instala o professor no piso se ele for valido, estiver livre e houver
-     * cafe suficiente. So gasta o cafe se a instalacao der certo.
-     */
-    public boolean adicionarProfessor(Professor professor, int linha, int coluna) {
-        if (professor == null) {
-            return false;
-        }
-        return instalarNoPiso(professor, professor.getCustoCafe(), linha, coluna);
-    }
- 
-    public boolean adicionarCafeteira(Cafeteira cafeteira, int linha, int coluna) {
-        if (cafeteira == null) {
-            return false;
-        }
-        return instalarNoPiso(cafeteira, cafeteira.getCustoCafe(), linha, coluna);
-    }
- 
-    /** Tira quem estiver no piso (professor ou cafeteira). */
-    public void removerDoPiso(int linha, int coluna) {
-        removerOcupanteDoPiso(linha, coluna);
+    public Tabuleiro getTabuleiro() {
+        return tabuleiro;
     }
 
-    /** Retorna quem ocupa o piso, ou null se estiver vazio. */
-    public Entidade getOcupante(int linha, int coluna) {
-        return tabuleiro.getOcupante(linha, coluna);
-    }
- 
-    private boolean instalarNoPiso(Entidade entidade, int custo, int linha, int coluna) {
-        if (cafe < custo) {
-            return false;
-        }
-        if (!tentarInstalarNoPiso(entidade, linha, coluna)) {
-            return false;   // piso invalido ou ocupado: nao gasta nada
-        }
-        gastarCafe(custo);
-        return true;
-    }
- 
-    // ===================== CAFE =====================
- 
-    public void adicionarCafe(int quantidade) {
-        if (quantidade > 0) {
-            cafe += quantidade;
-        }
-    }
- 
-    /** @return true se havia cafe suficiente e ele foi descontado */
-    public boolean gastarCafe(int quantidade) {
-        if (quantidade < 0 || cafe < quantidade) {
-            return false;
-        }
-        cafe -= quantidade;
-        return true;
-    }
- 
-    public int getCafe() {
-        return cafe;
-    }
- 
-    /**
-     * Percorre as cafeteiras do tabuleiro: se podeProduzir(deltaTime), chama
-     * produzirCafe() e entrega o Cafe.
-     */
-    public void gerarCafe(double deltaTime) {
-        for (Cafeteira cafeteira : listarCafeteiras()) {
-            if (!cafeteira.estaVivo()) {
-                continue;
-            }
+    // ===================== ZUMBIS E TIROS =====================
 
-            if (!cafeteira.podeProduzir(deltaTime)) {
-                continue;
-            }
-
-            Cafe produzido = cafeteira.produzirCafe();
-
-            if (produzido != null) {
-                produzido.setPosicaoX(cafeteira.getColuna() + 0.5);
-                produzido.setPosicaoY(cafeteira.getLinha() + 0.5);
-                cafesNoChao.add(produzido);
-            }
-        }
+    /** Zumbis em campo (lista viva: quem remove um zumbi morto mexe nela direto). */
+    public List<Zumbi> getZumbis() {
+        return zumbis;
     }
 
-    /** Diminui o tempo de vida dos cafes no chao e remove os que "esfriaram". */
-    private void atualizarCafesNoChao(double deltaTime) {
-
-        Iterator<Cafe> it = cafesNoChao.iterator();
-
-        while (it.hasNext()) {
-            if (!it.next().atualizar(deltaTime)) {
-                it.remove();
-            }
-        }
+    /** Tiros em campo (lista viva: quem remove um tiro inativo mexe nela direto). */
+    public List<Tiro> getTiros() {
+        return tiros;
     }
- 
-    /** Jogador clicou no cafe do chao: soma ao saldo. */
-    public void coletarCafe(Cafe cafeColetado) {
 
-        if (cafesNoChao.remove(cafeColetado)) {
-            adicionarCafe(cafeColetado.getQuantidade());
-        }
-    }
- 
-    public List<Cafe> getCafesNoChao() {
-        return Collections.unmodifiableList(new ArrayList<>(cafesNoChao));
-    }
- 
-    // ===================== ZUMBIS =====================
- 
-    /** Coloca o zumbi na borda direita do tabuleiro e o adiciona a partida. */
     public void adicionarZumbi(Zumbi zumbi) {
-        if (zumbi == null) {
-            return;
-        }
-        zumbi.setPosicaoX(getColunas() + 0.8);// logo fora da tela, a direita
-        zumbis.add(zumbi);
-    }
- 
-    public void removerZumbi(Zumbi zumbi) {
-        zumbis.remove(zumbi);
-    }
- 
-    /**
-     * Move cada zumbi (mover()) e remove os que morreram (!estaVivo()).
-     * Quem chegou ao fim do tabuleiro conta para a derrota.
-     */
-    public void atualizarZumbis(double deltaTime) {
-        Iterator<Zumbi> it = zumbis.iterator();
-        while (it.hasNext()) {
-            Zumbi z = it.next();
-            if (!z.estaVivo()) {
-                it.remove();
-                continue;
-            }
-            z.mover(deltaTime);
-        }
-    }
- 
-    // ===================== PROFESSORES ATIRAM OU USAM HABILIDADES =====================
- 
-    /**
-     * Cada professor dispara quando a cadencia permite E ha algum zumbi vivo
-     * na sua linha, a frente dele (a direita).
-     */
-
-    private void professoresAtacam(double deltaTime) {
-        List<Zumbi> zumbisSoLeitura = Collections.unmodifiableList(zumbis);
-
-        for (Professor professor : listarProfessores()) {
-            if (!professor.estaVivo()) {
-                continue;
-            }
-
-            // Lucas possui uma recarga própria para sua habilidade de hitkill.
-            if (professor instanceof Lucas lucas) {
-                lucas.atualizarRecarga(deltaTime);
-                if (lucas.habilidadePronta()) {
-                    Zumbi alvo = encontrarZumbiParaLucas(lucas);
-                    if (alvo != null) {
-                        lucas.habilidadeEspecial(alvo);
-                    }
-                }
-                continue;
-            }
-
-            // Nacif explode quando sua recarga termina e se sacrifica.
-            if (professor instanceof Nacif nacif) {
-                if (nacif.podeAtacar(deltaTime)) {
-                    explosoesPendentes.add(new EventoExplosao(nacif.getLinha(), nacif.getColuna()));
-                    nacif.explodir(zumbis);
-                }
-                continue;
-            }
-
-            // Thais dispara simultaneamente nas três linhas próximas.
-            if (professor instanceof Thais thais) {
-                if (thais.podeAtacar(deltaTime)
-                        && thais.haZumbiNasTresLinhas(thais, zumbis)) {
-                    int primeiraLinha = Math.max(0, thais.getLinha() - 1);
-                    int ultimaLinha = Math.min(tabuleiro.getLinhas() - 1, thais.getLinha() + 1);
-                    for (Tiro tiro : thais.atacarTresLinhas(primeiraLinha, ultimaLinha)) {
-                        adicionarTiro(tiro);
-                    }
-                    thais.reiniciarCadencia();
-                }
-                continue;
-            }
-
-            professor.agir(zumbisSoLeitura);
-            if (!professor.atira() || !professor.podeAtacar(deltaTime)
-                    || !haZumbiNaFrente(professor)) {
-                continue;
-            }
-
-            for (Tiro tiro : professor.atacar()) {
-                int linhaDoTiro = (int) tiro.getY();
-                if (linhaDoTiro < 0 || linhaDoTiro >= tabuleiro.getLinhas()) {
-                    continue;
-                }
-                tiro.setX(professor.getColuna() + 0.5);
-                adicionarTiro(tiro);
-            }
+        if (zumbi != null) {
+            zumbis.add(zumbi);
         }
     }
 
-    // Explosoes visuais do Nacif: a view consome a lista de explosoes pendentes e a limpa.
-    public List<EventoExplosao> consumirExplosoesPendentes() {
-
-        List<EventoExplosao> eventos = new ArrayList<>(explosoesPendentes);
-        explosoesPendentes.clear();
-        return eventos;
-    }
-
-    // Busca os zumbis para o Lucas eliminar
-    private Zumbi encontrarZumbiParaLucas(Lucas lucas) {
-
-        double xProfessor = lucas.getColuna() + 0.5;
-
-        Zumbi alvo = null;
-
-        for (Zumbi zumbi : zumbis) {
-
-            if (!zumbi.estaVivo() || zumbi.getLinha() != lucas.getLinha()) {
-                continue;
-            }
-
-            double distancia = zumbi.getPosicaoX() - xProfessor;
-
-            if (distancia >= 0 && distancia <= ALCANCE_LUCAS) {
-
-                // Escolhe o zumbi mais próximo.
-                if (alvo == null ||
-                    zumbi.getPosicaoX() < alvo.getPosicaoX()) {
-
-                    alvo = zumbi;
-                }
-            }
-        }
-
-        return alvo;
-    }
-
-    private boolean haZumbiNaFrente(Professor professor) {
-        double xProfessor = professor.getColuna() + 0.5;
-
-        for (Zumbi z : zumbis) {
-            if (z.estaVivo()
-                    && Math.abs(z.getLinha() - professor.getLinha()) <= professor.getAlcanceEmLinhas()
-                    && z.getPosicaoX() >= xProfessor) {
-                return true;
-            }
-        }
-
-        return false;
-    }
- 
-    // ===================== TIROS =====================
- 
     public void adicionarTiro(Tiro tiro) {
         if (tiro != null) {
             tiros.add(tiro);
         }
     }
- 
-    public void removerTiro(Tiro tiro) {
-        tiros.remove(tiro);
-    }
- 
-    /** Move cada tiro (mover()) e remove os inativos ou fora do tabuleiro. */
-    public void atualizarTiros(double deltaTime) {
-        Iterator<Tiro> it = tiros.iterator();
-        while (it.hasNext()) {
-            Tiro t = it.next();
-            t.mover(deltaTime);
-            if (!t.isAtivo() || t.getX() > getColunas() + 1) {
-                it.remove();
-            }
-        }
-    }
- 
-    // ===================== COLISOES =====================
- 
-    /**
-     * 1) tiro x zumbi: mesma linha e posicoes proximas -> tiro.atingir(zumbi).
-     * 2) zumbi x piso: zumbi chegou num piso ocupado (professor ou
-     *    cafeteira, ambos sao Entidade) -> iniciarAtaque() e o ocupante
-     *    recebe dano (a cada mordida). Se morreu, remove do piso e
-     *    pararAtaque().
-     */
-    public void verificarColisoes(double deltaTime) {
-        colisaoTiroZumbi();
-        colisaoZumbiPiso(deltaTime);
-    }
- 
-    private void colisaoTiroZumbi() {
-        for (Tiro tiro : tiros) {
-            if (!tiro.isAtivo()) {
-                continue;
-            }
-            Zumbi alvo = null;
-            for (Zumbi z : zumbis) {
-                if (!z.estaVivo() || z.getLinha() != (int) tiro.getY()) {
-                    continue;
-                }
-                if (Math.abs(z.getPosicaoX() - tiro.getX()) <= RAIO_ACERTO) {
-                    // se houver mais de um ao alcance, acerta o mais proximo da saida
-                    if (alvo == null || z.getPosicaoX() < alvo.getPosicaoX()) {
-                        alvo = z;
-                    }
-                }
-            }
-            if (alvo != null) {
-                tiro.atingir(alvo);
-            }
-        }
-    }
- 
-    private void colisaoZumbiPiso(double deltaTime) {
-        for (Zumbi z : zumbis) {
-            if (!z.estaVivo()) {
-                continue;
-            }
 
-            int coluna = (int) Math.floor(z.getPosicaoX());
-            Entidade ocupante = (coluna >= 0 && coluna < getColunas()) ? ocupanteDoPiso(z.getLinha(), coluna) : null;
- 
-            if (ocupante == null || !ocupante.estaVivo()) {
-                z.pararAtaque();
-                continue;
-            }
-
-            z.iniciarAtaque();
-            z.atacar(ocupante, deltaTime);
-
-            if (!ocupante.estaVivo()) {
-                removerDoPiso(z.getLinha(), coluna);
-                z.pararAtaque();
-            }
-        }
-    }
- 
-    // ===================== VITORIA / DERROTA =====================
-    public void verificarVitoria() {
-        if (terminou) {
-            return;
-        }
-
-        // verifica se não há mais zumbis (vitoria)
-        if (faseConcluida() && zumbis.isEmpty()) {
-            vitoria = true;
-            terminou = true;
-            jogoAtivo = false;
-        }
-    }
- 
-    /**
-     * Derrota = algum zumbi cruzou o tabuleiro inteiro (posicaoX <= 0).
-     * Se for o caso: vitoria = false e jogoAtivo = false.
-     */
-    public void verificarDerrota() {
-        if (terminou) {
-            return;
-        }
-
-        // verifica se algum zumbi passou (derrota)  
-        for (Zumbi z : zumbis) {
-            if (z.estaVivo() && z.getPosicaoX() <= 0) {
-                vitoria = false;
-                terminou = true;
-                jogoAtivo = false;
-                return;
-            }
-        }
+    /** Tira da partida os zumbis mortos e os tiros que já acertaram ou saíram. */
+    public void limparInativos() {
+        zumbis.removeIf(z -> !z.estaVivo());
+        tiros.removeIf(t -> !t.isAtivo());
     }
 
-    public boolean terminou() {
-        return terminou;
+    // ===================== CAFÉ =====================
+
+    public int getCafe() {
+        return cafe;
     }
- 
-    // ===================== GETTERS PARA A VIEW =====================
- 
-    public boolean isJogoAtivo() {
-        return jogoAtivo;
+
+    public void adicionarCafe(int quantidade) {
+        if (quantidade <= 0) {
+            throw new IllegalArgumentException("A quantidade de cafe tem que ser positiva.");
+        }
+        cafe += quantidade;
     }
- 
-    public boolean isVitoria() {
-        return vitoria;
+
+    public boolean podePagar(int custo) {
+        return cafe >= custo;
     }
- 
-    public List<Zumbi> getZumbis() {
-        return Collections.unmodifiableList(new ArrayList<>(zumbis));
+
+    // ===================== TABULEIRO =====================
+
+    /** Instala o professor se a casa estiver livre e houver café. Só cobra se instalar. */
+    public boolean adicionarProfessor(Professor professor, int linha, int coluna) {
+        return professor != null
+                && instalar(professor, professor.getCustoCafe(), linha, coluna);
     }
- 
-    public List<Tiro> getTiros() {
-        return Collections.unmodifiableList(new ArrayList<>(tiros));
+
+    public boolean adicionarCafeteira(Cafeteira cafeteira, int linha, int coluna) {
+        return cafeteira != null
+                && instalar(cafeteira, cafeteira.getCustoCafe(), linha, coluna);
     }
- 
-    // ====================================================================
-    // Tudo que depende das classes ainda nao prontas está abaixo
-    // =====================================================================
- 
-    /** Quantidade de colunas do tabuleiro. */
-    private int getColunas() {
-        return tabuleiro.getColunas();
-    }
- 
-    /** Todos os professores instalados nos pisos. */
-    private List<Professor> listarProfessores() {
-        return Collections.unmodifiableList(new ArrayList<>(tabuleiro.getProfessores()));
-    }
- 
-    /** Todas as cafeteiras instaladas nos pisos. */
-    private List<Cafeteira> listarCafeteiras() {
-        return Collections.unmodifiableList(new ArrayList<>(tabuleiro.getCafeteiras()));
-    }
- 
-    /** Quem esta no piso (linha, coluna), ou null se vazio/invalido. */
-    private Entidade ocupanteDoPiso(int linha, int coluna) {
+
+    /** Quem ocupa a casa, ou null se estiver vazia. */
+    public Entidade getOcupante(int linha, int coluna) {
         return tabuleiro.getOcupante(linha, coluna);
     }
- 
-    /** Instala a entidade no piso. @return false se invalido ou ocupado. */
-    private boolean tentarInstalarNoPiso(Entidade entidade, int linha, int coluna) {
-        return tabuleiro.instalar(entidade, linha, coluna);
-    }
- 
-    private void removerOcupanteDoPiso(int linha, int coluna) {
+
+    public void removerDoPiso(int linha, int coluna) {
         tabuleiro.remover(linha, coluna);
     }
- 
-    /** Gera os zumbis da onda atual em intervalos fixos. */
-    private void gerarZumbisDaOnda(double deltaTime) {
-        Onda onda = faseAtual.getOndaAtual();
 
-        if (onda == null) {
-            return;
+    private boolean instalar(Entidade entidade, int custo, int linha, int coluna) {
+        if (!podePagar(custo)) {
+            return false;
         }
-
-        onda.atualizar(deltaTime);
-
-        // O while permite gerar mais de um zumbi se houver
-        // tempo acumulado suficiente em uma mesma atualizacao.
-        while (onda.podeGerarZumbi()) {
-            int linha = random.nextInt(tabuleiro.getLinhas());
-
-            Zumbi zumbi = onda.criarZumbi(linha);
-
-            if (zumbi != null) {
-                adicionarZumbi(zumbi);
-            }
-
-            onda.gerarZumbi();
+        if (!tabuleiro.instalar(entidade, linha, coluna)) {
+            return false; // casa inválida ou ocupada: não gasta nada
         }
-    }
- 
-    /** true quando a Fase ja gerou todas as ondas. */
-    private boolean faseConcluida() {
-        return faseAtual.estaConcluida();
+        cafe -= custo;
+        return true;
     }
 }

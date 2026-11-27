@@ -3,26 +3,26 @@ package com.poo2026_2.controller;
 import com.poo2026_2.audio.AudioManager;
 import com.poo2026_2.model.ConfiguracoesJogo;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Slider;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
 import javafx.stage.Screen;
-import javafx.application.Platform;
-import javafx.scene.input.KeyEvent;
-import javafx.scene.layout.AnchorPane;
 
 public class ExtrasController implements ControladorTela {
 
-    @FXML
-    private AnchorPane raiz;
     @FXML
     private ComboBox<String> comboResolucao;
     @FXML
     private Slider sliderMusica;
     @FXML
     private Slider sliderEfeitos;
+    @FXML
+    private Slider sliderVozes;
     @FXML
     private CheckBox checkMudo;
 
@@ -46,30 +46,19 @@ public class ExtrasController implements ControladorTela {
                 ConfiguracoesJogo.getVolumeEfeitos() * 100
         );
 
+        sliderVozes.setValue(
+                ConfiguracoesJogo.getVolumeVozes() * 100
+        );
+
         checkMudo.setSelected(
                 ConfiguracoesJogo.isMudo()
         );
-
-        // Atalhos do teclado
-        Platform.runLater(() -> {
-            raiz.setFocusTraversable(true);
-            raiz.requestFocus();
-        });
-
-        raiz.addEventFilter(KeyEvent.KEY_PRESSED, event -> {
-            switch (event.getCode()) {
-                case ENTER:
-                    aplicar(null);
-                    event.consume();
-                    break;
-
-                case ESCAPE:
-                    voltar(null);
-                    event.consume();
-                    break;
-
-                default:
-                    break;
+        comboResolucao.sceneProperty().addListener((obs, antiga, nova) -> {
+            if (antiga != null) {
+                antiga.removeEventFilter(KeyEvent.KEY_PRESSED, aoApertarTecla);
+            }
+            if (nova != null) {
+                nova.addEventFilter(KeyEvent.KEY_PRESSED, aoApertarTecla);
             }
         });
     }
@@ -92,7 +81,7 @@ public class ExtrasController implements ControladorTela {
             "1600x900",
             "1920x1080",
             "2560x1440",
-            "3840x2160", 
+            "3840x2160",
             "Tela cheia"
         };
 
@@ -138,9 +127,12 @@ public class ExtrasController implements ControladorTela {
 
         ConfiguracoesJogo.setVolumeEfeitos(sliderEfeitos.getValue() / 100.0);
 
+        ConfiguracoesJogo.setVolumeVozes(sliderVozes.getValue() / 100.0);
+
         ConfiguracoesJogo.setMudo(checkMudo.isSelected());
 
         AudioManager.aplicarVolumeMusica();
+        AudioManager.aplicarVolumeVozes();
 
         Stage stage = gerenciadorDeTelas.getStage();
         if (escolha.equals("Tela cheia")) {
@@ -149,9 +141,7 @@ public class ExtrasController implements ControladorTela {
 
             stage.setFullScreen(true);
 
-        } 
-        
-        else {
+        } else {
 
             ConfiguracoesJogo.setTelaCheia(false);
 
@@ -171,8 +161,16 @@ public class ExtrasController implements ControladorTela {
         }
     }
 
+    private final EventHandler<KeyEvent> aoApertarTecla = e -> {
+        // se a lista de resolucoes esta aberta, o ESC so fecha a lista
+        if (e.getCode() == KeyCode.ESCAPE && !comboResolucao.isShowing()) {
+            e.consume();
+            gerenciadorDeTelas.fecharConfiguracoes();
+        }
+    };
+
     @FXML
     private void voltar(ActionEvent event) {
-        gerenciadorDeTelas.voltarMenu();
+        gerenciadorDeTelas.fecharConfiguracoes();
     }
 }

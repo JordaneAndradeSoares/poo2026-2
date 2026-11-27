@@ -1,0 +1,93 @@
+{
+  "_ajuda": [
+    "Exemplos de configuracao. Este arquivo NAO e lido pelo jogo: copie o que quiser para dentro de \"fases\" em niveis.json.",
+    "Veja o campo _ajuda de niveis.json para a explicacao de cada campo."
+  ],
+  "fases": [
+    {
+      "_comentario": "Com ondas: pausa de 20 s entre elas, onda misturada, onda grande no fim.",
+      "numero": 1,
+      "nome": "Exemplo com ondas",
+      "cafeInicial": 200,
+      "temOndas": true,
+      "ondas": [
+        {
+          "nome": "Aquecimento",
+          "inicio": 10,
+          "intervalo": 6,
+          "zumbis": {
+            "CALOURO": 5
+          }
+        },
+        {
+          "nome": "Mistura",
+          "inicio": 55,
+          "duracao": 30,
+          "ordem": "aleatoria",
+          "zumbis": {
+            "CALOURO": 4,
+            "VIBE_CODER": 3,
+            "TROTE": 1
+          }
+        },
+        {
+          "nome": "Onda final",
+          "inicio": 100,
+          "intervalo": 2.5,
+          "grande": true,
+          "zumbis": {
+            "CALOURO_BLINDADO": 3,
+            "FORMANDO": 1,
+            "CALOURO": 6
+          }
+        }
+      ]
+    },
+    {
+      "_comentario": "Sem ondas: zumbis saem sem parar por 3 minutos, 5 calouros para cada trote em media.",
+      "numero": 2,
+      "nome": "Exemplo sem ondas",
+      "cafeInicial": 200,
+      "temOndas": false,
+      "continuo": {
+        "inicio": 8,
+        "duracao": 180,
+        "intervalo": 5,
+        "zumbis": {
+          "CALOURO": 5,
+          "VIBE_CODER": 3,
+          "TROTE": 1
+        }
+      }
+    },
+    {
+      "_comentario": "Ondas que se sobrepoem: a 2a comeca antes da 1a terminar (inicio explicito). 'semente' deixa o sorteio sempre igual.",
+      "numero": 3,
+      "nome": "Exemplo com sobreposicao",
+      "cafeInicial": 250,
+      "semente": 42,
+      "temOndas": true,
+      "ondas": [
+        {
+          "nome": "Fluxo de calouros",
+          "inicio": 10,
+          "intervalo": 4,
+          "zumbis": {
+            "CALOURO": 20
+          }
+        },
+        {
+          "nome": "Os viciados chegam",
+          "inicio": 30,
+          "intervalo": 9,
+          "ordem": "aleatoria",
+          "grande": true,
+          "zumbis": {
+            "VICIADO": 4,
+            "TROTE": 3
+          }
+        }
+      ]
+    }
+  ]
+}

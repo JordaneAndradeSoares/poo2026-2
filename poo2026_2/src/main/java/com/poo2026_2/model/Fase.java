@@ -4,15 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.poo2026_2.controller.SelecaoNivelController;
-import com.poo2026_2.model.utilizaveis.*;
-import com.poo2026_2.model.zumbis.Calouro;
-import com.poo2026_2.model.zumbis.CalouroBlindado;
-import com.poo2026_2.model.zumbis.CalouroProtegido;
-import com.poo2026_2.model.zumbis.Doutorando;
-import com.poo2026_2.model.zumbis.Formando;
-import com.poo2026_2.model.zumbis.Trote;
-import com.poo2026_2.model.zumbis.VibeCoder;
-import com.poo2026_2.model.zumbis.Viciado;
 
 import java.util.Collections;
 
@@ -21,98 +12,15 @@ public class Fase {
     private int numero;
     private String nome;
     private int cafeInicial;
-    private List<Onda> ondas;
-    private int indiceOndaAtual;
+    private Cronograma cronograma;
 
     private List<Class<? extends Professor>> professorDisponiveis;
     
     // =================================================================
 
-    private static Fase criarFase1() {
-
-        Fase fase = new Fase(1, "Início do semestre", 150);
-
-        fase.adicionarProfessorDisponivel(Daniel.class);
-        fase.adicionarProfessorDisponivel(Fabricio.class);
-        fase.adicionarProfessorDisponivel(Glaucia.class);
-        fase.adicionarProfessorDisponivel(Lucas.class);
-        fase.adicionarProfessorDisponivel(Marcus.class);
-        fase.adicionarProfessorDisponivel(Nacif.class);
-        fase.adicionarProfessorDisponivel(Philipe.class);
-        fase.adicionarProfessorDisponivel(Thais.class);
-
-        fase.adicionarOnda(new Onda(1, 4, 6.0, Calouro::new));
-        fase.adicionarOnda(new Onda(2, 5, 6.0, Calouro::new));
-        fase.adicionarOnda(new Onda(3, 3, 7.0, CalouroBlindado::new));
-        fase.adicionarOnda(new Onda(4, 4, 6.0, CalouroProtegido::new));
-
-        return fase;
-    }
-
-    private static Fase criarFase2() {
-
-        Fase fase = new Fase(2, "Semana de provas", 200);
-
-        fase.adicionarProfessorDisponivel(Daniel.class);
-        fase.adicionarProfessorDisponivel(Fabricio.class);
-        fase.adicionarProfessorDisponivel(Glaucia.class);
-        fase.adicionarProfessorDisponivel(Lucas.class);
-        fase.adicionarProfessorDisponivel(Marcus.class);
-        fase.adicionarProfessorDisponivel(Nacif.class);
-        fase.adicionarProfessorDisponivel(Philipe.class);
-        fase.adicionarProfessorDisponivel(Thais.class);
-        
-        fase.adicionarOnda(new Onda(1, 5, 5.0, CalouroBlindado::new));
-        fase.adicionarOnda(new Onda(2, 4, 5.0, Trote::new));
-        fase.adicionarOnda(new Onda(3, 4, 5.0, CalouroProtegido::new));
-        fase.adicionarOnda(new Onda(4, 3, 5.0, Doutorando::new));
-        fase.adicionarOnda(new Onda(5, 4, 4.0, Formando::new));
-        fase.adicionarOnda(new Onda(6, 3, 4.0, VibeCoder::new));
-
-        return fase;
-    }
-
-    private static Fase criarFase3() {
-
-        Fase fase = new Fase(3, "Fim do semestre", 250);
-
-        fase.adicionarProfessorDisponivel(Daniel.class);
-        fase.adicionarProfessorDisponivel(Fabricio.class);
-        fase.adicionarProfessorDisponivel(Glaucia.class);
-        fase.adicionarProfessorDisponivel(Lucas.class);
-        fase.adicionarProfessorDisponivel(Marcus.class);
-        fase.adicionarProfessorDisponivel(Nacif.class);
-        fase.adicionarProfessorDisponivel(Philipe.class);
-        fase.adicionarProfessorDisponivel(Thais.class);
-
-        fase.adicionarOnda(new Onda(1, 5, 4.0, Calouro::new));
-        fase.adicionarOnda(new Onda(2, 4, 4.0, CalouroBlindado::new));
-        fase.adicionarOnda(new Onda(3, 4, 4.0, CalouroProtegido::new));
-        fase.adicionarOnda(new Onda(4, 4, 3.5, Trote::new));
-        fase.adicionarOnda(new Onda(5, 3, 3.5, Doutorando::new));
-        fase.adicionarOnda(new Onda(6, 4, 3.0, Formando::new));
-        fase.adicionarOnda(new Onda(7, 4, 3.0, VibeCoder::new));
-        fase.adicionarOnda(new Onda(8, 3, 3.0, Viciado::new));
-
-        return fase;
-    }
-        
+    /** Monta a fase escolhida na tela de selecao, lendo o niveis.json. */
     public static Fase criarFaseSelecionada() {
-        int numero = SelecaoNivelController.faseSelecionada;
-
-        switch (numero) {
-            case 1:
-                return criarFase1();
-
-            case 2:
-                return criarFase2();
-
-            case 3:
-                return criarFase3();
-
-            default:
-                return criarFase1();
-        }
+        return CatalogoNiveis.obter(SelecaoNivelController.faseSelecionada).criarFase();
     }
 
     // =================================================================
@@ -132,9 +40,7 @@ public class Fase {
         this.nome = nome;
         this.cafeInicial = cafeInicial;
         
-        ondas = new ArrayList<>();
         professorDisponiveis = new ArrayList<>();
-        indiceOndaAtual = 0;
     }
 
     public int getNumero() {
@@ -149,19 +55,19 @@ public class Fase {
         return cafeInicial;
     }
 
-    public List<Onda> getOndas() {
-        return Collections.unmodifiableList(new ArrayList<>(ondas));
-    }
-
-    public void adicionarOnda(Onda onda) {
-        if (onda == null) {
-            throw new IllegalArgumentException("A onda nao pode ser nula.");
+    /** A linha do tempo da fase: quando nasce cada zumbi. */
+    public Cronograma getCronograma() {
+        if (cronograma == null) {
+            throw new IllegalStateException("A fase " + numero + " ainda nao tem cronograma.");
         }
-        ondas.add(onda);
+        return cronograma;
     }
 
-    public void removerOnda(Onda onda) {
-        ondas.remove(onda);
+    public void setCronograma(Cronograma cronograma) {
+        if (cronograma == null) {
+            throw new IllegalArgumentException("O cronograma nao pode ser nulo.");
+        }
+        this.cronograma = cronograma;
     }
 
     public List<Class<? extends Professor>> getProfessorDisponiveis() {
@@ -184,32 +90,14 @@ public class Fase {
         professorDisponiveis.remove(professor);
     }
 
-    public Onda getOndaAtual() {
-        while (indiceOndaAtual < ondas.size() && ondas.get(indiceOndaAtual).estaConcluida()) {
-            indiceOndaAtual++;
-        }
-
-        if (indiceOndaAtual >= ondas.size()) {
-            return null;
-        }
-
-        return ondas.get(indiceOndaAtual);
-    }
-
+    /** A fase acaba quando o ultimo zumbi ja nasceu (e o jogador derrotou todos). */
     public boolean estaConcluida() {
-
-        if (ondas.isEmpty()) {
-            return false;
-        }
-
-        return getOndaAtual() == null;
+        return cronograma != null && cronograma.estaConcluido();
     }
 
     public void reiniciar() {
-        indiceOndaAtual = 0;
-
-        for (Onda onda : ondas) {
-            onda.reiniciar();
+        if (cronograma != null) {
+            cronograma.reiniciar();
         }
     }
 }

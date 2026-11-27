@@ -12,7 +12,7 @@ public class Daniel extends Professor {
 
     private static final int CUSTO_CAFE = 100;
     private static final double TEMPO_DE_RECARGA = 8;  
-    private static final double CADENCIA = 1.5;        
+    private static final double CADENCIA = 1.425;        
 
     private static final int DANO = 20;
     private static final double VELOCIDADE_TIRO = 5.0;
@@ -28,11 +28,7 @@ public class Daniel extends Professor {
             DANO,
             "/images/tiros/c.png",
             "nenhum",
-            "/audio/tiros/c.mp3"); // fonte (acesso em 22/10/2026): https://www.myinstants.com/pt/instant/shot-gun-32807/
-    }
-
-    public static int getCustoCafeDaniel() {
-        return CUSTO_CAFE;
+            "/audio/tiros/tiro3.mp3");
     }
 
     public double getTempoDeRecarga() {

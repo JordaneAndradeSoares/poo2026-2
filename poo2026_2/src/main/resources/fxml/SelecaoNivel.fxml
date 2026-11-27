@@ -1,66 +1,222 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import java.net.URL?>
-
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.shape.Circle?>
+<?import javafx.scene.shape.Line?>
+<?import javafx.scene.shape.SVGPath?>
 <?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
 
-<AnchorPane id="AnchorPane"
-            styleClass="mainFxmlClass"
-            xmlns:fx="http://javafx.com/fxml/1"
-            xmlns="http://javafx.com/javafx/26"
-            fx:controller="com.poo2026_2.controller.SelecaoNivelController">
+<!--
+    Selecao de nivel: palco fixo de 1920x1080 (escalado pelo controller
+    para caber na janela, igual ao Menu). Coordenadas em pixels do palco.
+
+    Os 7 nos sao os 7 professores desbloqueaveis (o Daniel ja comeca liberado),
+    em caminho de zigue-zague: vencer a fase N libera o professor do no N.
+    O que cada fase contem (zumbis, cafe) vem de /niveis/niveis.json; aqui so
+    ha o desenho. Estado de cada no (controller): concluido = foto colorida +
+    icone de repetir, atual = borda dourada, bloqueado = cadeado.
+-->
+<StackPane fx:id="root" styleClass="selecao-root" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.poo2026_2.controller.SelecaoNivelController">
 
     <stylesheets>
-        <URL value="@/styles/selecaonivel.css" />
+        <URL value="@../styles/selecaonivel.css" />
     </stylesheets>
 
-    <StackPane AnchorPane.topAnchor="0.0"
-               AnchorPane.bottomAnchor="0.0"
-               AnchorPane.leftAnchor="0.0"
-               AnchorPane.rightAnchor="0.0">
+    <Pane fx:id="palco" maxHeight="1080.0" maxWidth="1920.0" minHeight="1080.0" minWidth="1920.0" prefHeight="1080.0" prefWidth="1920.0">
 
-        <VBox alignment="CENTER"
-              spacing="40.0">
+        <!-- LINHAS PONTILHADAS (linhaN liga o nivel N ao N+1) -->
 
-            <!-- TÍTULO -->
-            <Label  text="Seleção de nível"
-                    styleClass="titulo-selecao" />
+        <Line id="linha1" styleClass="linha-caminho" startX="247" startY="658" endX="344" endY="450" mouseTransparent="true" />
+        <Line id="linha2" styleClass="linha-caminho" startX="491" startY="445" endX="632" endY="700" mouseTransparent="true" />
+        <Line id="linha3" styleClass="linha-caminho" startX="758" startY="687" endX="821" endY="481" mouseTransparent="true" />
+        <Line id="linha4" styleClass="linha-caminho" startX="1010" startY="405" endX="1077" endY="442" mouseTransparent="true" />
+        <Line id="linha5" styleClass="linha-caminho" startX="1342" startY="626" endX="1447" endY="715" mouseTransparent="true" />
+        <Line id="linha6" styleClass="linha-caminho" startX="1605" startY="662" endX="1666" endY="385" mouseTransparent="true" />
 
-            <!-- BOTÕES DAS FASES -->
-            <HBox alignment="CENTER" spacing="20.0">
+        <!-- NIVEIS (foto do professor, cadeado e icone de repetir sao ajustados pelo controller) -->
 
-                <Button text="Fase 1"
-                        prefHeight="92.0" prefWidth="180.0"
-                        fx:id="btnNivel1"
-                        onAction="#selecionarFase1"
-                        styleClass="botao-fase1" />
+        <StackPane id="nivel1" userData="1" styleClass="nivel-no" layoutX="29" layoutY="655"
+                   minWidth="300.0" maxWidth="300.0" prefWidth="300.0" minHeight="300.0" maxHeight="300.0" prefHeight="300.0"
+                   onMouseClicked="#aoClicarNivel" onMouseEntered="#aoEntrarNivel" onMouseExited="#aoSairNivel">
+            <StackPane minWidth="300.0" maxWidth="300.0" prefWidth="300.0" minHeight="300.0" maxHeight="300.0" prefHeight="300.0">
+                <clip>
+                    <Circle centerX="150.0" centerY="150.0" radius="150.0" />
+                </clip>
+                <Circle styleClass="nivel-fundo" radius="150.0" />
+                <ImageView styleClass="nivel-foto" fitWidth="300.0" fitHeight="300.0" preserveRatio="true" smooth="true" />
+            </StackPane>
+            <Circle styleClass="nivel-borda" radius="147.0" mouseTransparent="true" />
 
-                <Button text="Fase 2"
-                        prefHeight="92.0" prefWidth="180.0"
-                        fx:id="btnNivel2"
-                        onAction="#selecionarFase2"
-                        styleClass="botao-fase2" />
+            <Label styleClass="nivel-numero" text="1" prefWidth="68.0" prefHeight="68.0" minWidth="68.0" minHeight="68.0" maxWidth="68.0" maxHeight="68.0" alignment="CENTER" StackPane.alignment="TOP_RIGHT" translateX="6.0" translateY="6.0" mouseTransparent="true" />
 
-                <Button text="Fase 3"
-                        prefHeight="92.0" prefWidth="180.0"
-                        fx:id="btnNivel3"
-                        onAction="#selecionarFase3"
-                        styleClass="botao-fase3" />
+            <ImageView styleClass="nivel-cadeado" fitWidth="150.0" preserveRatio="true" smooth="true" StackPane.alignment="BOTTOM_LEFT" translateX="-44.0" translateY="44.0" mouseTransparent="true">
+                <image>
+                    <Image url="@../images/game/itens/cadeado.png" />
+                </image>
+            </ImageView>
 
+        </StackPane>
+
+        <StackPane id="nivel2" userData="2" styleClass="nivel-no" layoutX="262" layoutY="153"
+                   minWidth="300.0" maxWidth="300.0" prefWidth="300.0" minHeight="300.0" maxHeight="300.0" prefHeight="300.0"
+                   onMouseClicked="#aoClicarNivel" onMouseEntered="#aoEntrarNivel" onMouseExited="#aoSairNivel">
+            <StackPane minWidth="300.0" maxWidth="300.0" prefWidth="300.0" minHeight="300.0" maxHeight="300.0" prefHeight="300.0">
+                <clip>
+                    <Circle centerX="150.0" centerY="150.0" radius="150.0" />
+                </clip>
+                <Circle styleClass="nivel-fundo" radius="150.0" />
+                <ImageView styleClass="nivel-foto" fitWidth="300.0" fitHeight="300.0" preserveRatio="true" smooth="true" />
+            </StackPane>
+            <Circle styleClass="nivel-borda" radius="147.0" mouseTransparent="true" />
+
+            <Label styleClass="nivel-numero" text="2" prefWidth="68.0" prefHeight="68.0" minWidth="68.0" minHeight="68.0" maxWidth="68.0" maxHeight="68.0" alignment="CENTER" StackPane.alignment="TOP_RIGHT" translateX="6.0" translateY="6.0" mouseTransparent="true" />
+
+            <ImageView styleClass="nivel-cadeado" fitWidth="150.0" preserveRatio="true" smooth="true" StackPane.alignment="BOTTOM_LEFT" translateX="-44.0" translateY="44.0" mouseTransparent="true">
+                <image>
+                    <Image url="@../images/game/itens/cadeado.png" />
+                </image>
+            </ImageView>
+
+        </StackPane>
+
+        <StackPane id="nivel3" userData="3" styleClass="nivel-no" layoutX="561" layoutY="692"
+                   minWidth="300.0" maxWidth="300.0" prefWidth="300.0" minHeight="300.0" maxHeight="300.0" prefHeight="300.0"
+                   onMouseClicked="#aoClicarNivel" onMouseEntered="#aoEntrarNivel" onMouseExited="#aoSairNivel">
+            <StackPane minWidth="300.0" maxWidth="300.0" prefWidth="300.0" minHeight="300.0" maxHeight="300.0" prefHeight="300.0">
+                <clip>
+                    <Circle centerX="150.0" centerY="150.0" radius="150.0" />
+                </clip>
+                <Circle styleClass="nivel-fundo" radius="150.0" />
+                <ImageView styleClass="nivel-foto" fitWidth="300.0" fitHeight="300.0" preserveRatio="true" smooth="true" />
+            </StackPane>
+            <Circle styleClass="nivel-borda" radius="147.0" mouseTransparent="true" />
+
+            <Label styleClass="nivel-numero" text="3" prefWidth="68.0" prefHeight="68.0" minWidth="68.0" minHeight="68.0" maxWidth="68.0" maxHeight="68.0" alignment="CENTER" StackPane.alignment="TOP_RIGHT" translateX="6.0" translateY="6.0" mouseTransparent="true" />
+
+            <ImageView styleClass="nivel-cadeado" fitWidth="150.0" preserveRatio="true" smooth="true" StackPane.alignment="BOTTOM_LEFT" translateX="-44.0" translateY="44.0" mouseTransparent="true">
+                <image>
+                    <Image url="@../images/game/itens/cadeado.png" />
+                </image>
+            </ImageView>
+
+        </StackPane>
+
+        <StackPane id="nivel4" userData="4" styleClass="nivel-no" layoutX="718" layoutY="176"
+                   minWidth="300.0" maxWidth="300.0" prefWidth="300.0" minHeight="300.0" maxHeight="300.0" prefHeight="300.0"
+                   onMouseClicked="#aoClicarNivel" onMouseEntered="#aoEntrarNivel" onMouseExited="#aoSairNivel">
+            <StackPane minWidth="300.0" maxWidth="300.0" prefWidth="300.0" minHeight="300.0" maxHeight="300.0" prefHeight="300.0">
+                <clip>
+                    <Circle centerX="150.0" centerY="150.0" radius="150.0" />
+                </clip>
+                <Circle styleClass="nivel-fundo" radius="150.0" />
+                <ImageView styleClass="nivel-foto" fitWidth="300.0" fitHeight="300.0" preserveRatio="true" smooth="true" />
+            </StackPane>
+            <Circle styleClass="nivel-borda" radius="147.0" mouseTransparent="true" />
+
+            <Label styleClass="nivel-numero" text="4" prefWidth="68.0" prefHeight="68.0" minWidth="68.0" minHeight="68.0" maxWidth="68.0" maxHeight="68.0" alignment="CENTER" StackPane.alignment="TOP_RIGHT" translateX="6.0" translateY="6.0" mouseTransparent="true" />
+
+            <ImageView styleClass="nivel-cadeado" fitWidth="150.0" preserveRatio="true" smooth="true" StackPane.alignment="BOTTOM_LEFT" translateX="-44.0" translateY="44.0" mouseTransparent="true">
+                <image>
+                    <Image url="@../images/game/itens/cadeado.png" />
+                </image>
+            </ImageView>
+
+        </StackPane>
+
+        <StackPane id="nivel5" userData="5" styleClass="nivel-no" layoutX="1069" layoutY="371"
+                   minWidth="300.0" maxWidth="300.0" prefWidth="300.0" minHeight="300.0" maxHeight="300.0" prefHeight="300.0"
+                   onMouseClicked="#aoClicarNivel" onMouseEntered="#aoEntrarNivel" onMouseExited="#aoSairNivel">
+            <StackPane minWidth="300.0" maxWidth="300.0" prefWidth="300.0" minHeight="300.0" maxHeight="300.0" prefHeight="300.0">
+                <clip>
+                    <Circle centerX="150.0" centerY="150.0" radius="150.0" />
+                </clip>
+                <Circle styleClass="nivel-fundo" radius="150.0" />
+                <ImageView styleClass="nivel-foto" fitWidth="300.0" fitHeight="300.0" preserveRatio="true" smooth="true" />
+            </StackPane>
+            <Circle styleClass="nivel-borda" radius="147.0" mouseTransparent="true" />
+
+            <Label styleClass="nivel-numero" text="5" prefWidth="68.0" prefHeight="68.0" minWidth="68.0" minHeight="68.0" maxWidth="68.0" maxHeight="68.0" alignment="CENTER" StackPane.alignment="TOP_RIGHT" translateX="6.0" translateY="6.0" mouseTransparent="true" />
+
+            <ImageView styleClass="nivel-cadeado" fitWidth="150.0" preserveRatio="true" smooth="true" StackPane.alignment="BOTTOM_LEFT" translateX="-44.0" translateY="44.0" mouseTransparent="true">
+                <image>
+                    <Image url="@../images/game/itens/cadeado.png" />
+                </image>
+            </ImageView>
+
+        </StackPane>
+
+        <StackPane id="nivel6" userData="6" styleClass="nivel-no" layoutX="1420" layoutY="670"
+                   minWidth="300.0" maxWidth="300.0" prefWidth="300.0" minHeight="300.0" maxHeight="300.0" prefHeight="300.0"
+                   onMouseClicked="#aoClicarNivel" onMouseEntered="#aoEntrarNivel" onMouseExited="#aoSairNivel">
+            <StackPane minWidth="300.0" maxWidth="300.0" prefWidth="300.0" minHeight="300.0" maxHeight="300.0" prefHeight="300.0">
+                <clip>
+                    <Circle centerX="150.0" centerY="150.0" radius="150.0" />
+                </clip>
+                <Circle styleClass="nivel-fundo" radius="150.0" />
+                <ImageView styleClass="nivel-foto" fitWidth="300.0" fitHeight="300.0" preserveRatio="true" smooth="true" />
+            </StackPane>
+            <Circle styleClass="nivel-borda" radius="147.0" mouseTransparent="true" />
+
+            <Label styleClass="nivel-numero" text="6" prefWidth="68.0" prefHeight="68.0" minWidth="68.0" minHeight="68.0" maxWidth="68.0" maxHeight="68.0" alignment="CENTER" StackPane.alignment="TOP_RIGHT" translateX="6.0" translateY="6.0" mouseTransparent="true" />
+
+            <ImageView styleClass="nivel-cadeado" fitWidth="150.0" preserveRatio="true" smooth="true" StackPane.alignment="BOTTOM_LEFT" translateX="-44.0" translateY="44.0" mouseTransparent="true">
+                <image>
+                    <Image url="@../images/game/itens/cadeado.png" />
+                </image>
+            </ImageView>
+
+        </StackPane>
+
+        <StackPane id="nivel7" userData="7" styleClass="nivel-no" layoutX="1551" layoutY="77"
+                   minWidth="300.0" maxWidth="300.0" prefWidth="300.0" minHeight="300.0" maxHeight="300.0" prefHeight="300.0"
+                   onMouseClicked="#aoClicarNivel" onMouseEntered="#aoEntrarNivel" onMouseExited="#aoSairNivel">
+            <StackPane minWidth="300.0" maxWidth="300.0" prefWidth="300.0" minHeight="300.0" maxHeight="300.0" prefHeight="300.0">
+                <clip>
+                    <Circle centerX="150.0" centerY="150.0" radius="150.0" />
+                </clip>
+                <Circle styleClass="nivel-fundo" radius="150.0" />
+                <ImageView styleClass="nivel-foto" fitWidth="300.0" fitHeight="300.0" preserveRatio="true" smooth="true" />
+            </StackPane>
+            <Circle styleClass="nivel-borda" radius="147.0" mouseTransparent="true" />
+
+            <Label styleClass="nivel-numero" text="7" prefWidth="68.0" prefHeight="68.0" minWidth="68.0" minHeight="68.0" maxWidth="68.0" maxHeight="68.0" alignment="CENTER" StackPane.alignment="TOP_RIGHT" translateX="6.0" translateY="6.0" mouseTransparent="true" />
+
+            <ImageView styleClass="nivel-cadeado" fitWidth="150.0" preserveRatio="true" smooth="true" StackPane.alignment="BOTTOM_LEFT" translateX="-44.0" translateY="44.0" mouseTransparent="true">
+                <image>
+                    <Image url="@../images/game/itens/cadeado.png" />
+                </image>
+            </ImageView>
+
+        </StackPane>
+
+        <!-- POP-UP DO PROFESSOR (aparece no lado oposto ao no sob o mouse; posicao ajustada pelo controller) -->
+        <VBox fx:id="painelInfo" styleClass="painel-info" visible="false" layoutX="890.0" layoutY="900.0" prefWidth="520.0" minWidth="520.0" maxWidth="520.0" mouseTransparent="true">
+            <HBox alignment="CENTER" spacing="12.0">
+                <VBox spacing="6.0" minWidth="330.0" prefWidth="330.0" maxWidth="330.0">
+                    <Label fx:id="infoTitulo" styleClass="info-titulo" text="Professor" />
+                    <Label fx:id="infoDetalhe" styleClass="info-detalhe" wrapText="true" text="Poder do professor" />
+                    <Label fx:id="infoEstado" styleClass="info-estado" wrapText="true" text="Estado" />
+                </VBox>
+                <StackPane minWidth="126.0" prefWidth="126.0" maxWidth="126.0" alignment="CENTER">
+                    <ImageView fx:id="infoArma" fitWidth="120.0" fitHeight="120.0" preserveRatio="true" smooth="true" />
+                </StackPane>
             </HBox>
-
-            <!-- BOTÃO VOLTAR -->
-            <Button fx:id="btnVoltar"
-                    prefHeight="112.0"
-                    prefWidth="384.0"
-                    onAction="#voltar"
-                    styleClass="botao-voltar" />
-
         </VBox>
-    </StackPane>
-</AnchorPane>
+
+        <!-- BOTAO VOLTAR -->
+        <Button fx:id="btnVoltar" styleClass="botao-voltar" layoutX="65.0" layoutY="31.0" prefWidth="154.0" prefHeight="154.0" minWidth="154.0" minHeight="154.0" maxWidth="154.0" maxHeight="154.0" onAction="#voltar" focusTraversable="false" mnemonicParsing="false">
+            <graphic>
+                <SVGPath styleClass="botao-voltar-icone" scaleX="4.4" scaleY="4.4" content="M12.5 8c-2.65 0-5.05.99-6.9 2.6L2 7v9h9l-3.62-3.62c1.39-1.16 3.16-1.88 5.12-1.88 3.54 0 6.55 2.31 7.6 5.5l2.37-.78C21.08 11.03 17.15 8 12.5 8z" />
+            </graphic>
+        </Button>
+
+    </Pane>
+</StackPane>

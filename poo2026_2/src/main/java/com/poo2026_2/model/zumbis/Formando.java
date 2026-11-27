@@ -8,6 +8,6 @@ package com.poo2026_2.model.zumbis;
 public class Formando extends Zumbi {
 
     public Formando(int linha) {
-        super(100, linha, 0.6, 10);
+        super(5000, linha, VELOCIDADE_PADRAO, DANO_HITKILL);
     }
 }

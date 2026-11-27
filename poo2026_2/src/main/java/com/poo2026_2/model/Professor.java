@@ -14,7 +14,7 @@ import com.poo2026_2.model.zumbis.Zumbi;
  * @author thoma Professor generico. Cada professor concreto define o seu tiro
  * (ou o seu comportamento proprio, no caso de tanque, bomba e corpo a corpo).
  */
-public abstract class Professor extends Entidade {
+public abstract class Professor extends Entidade implements Instalavel {
 
     /** Vida que todo professor tem, a menos que o construtor diga outra. */
     public static final int VIDA_PADRAO = 300;
@@ -51,29 +51,15 @@ public abstract class Professor extends Entidade {
         return cadenciaTiro;
     }
 
-    /** Indica se este professor utiliza disparos convencionais. */
+    /** true se o professor dispara. */
     public boolean atira() {
         return cadenciaTiro > 0;
     }
 
-    /** Cada professor que atira define o seu próprio projétil. */
+    /** Cada professor que atira diz qual tiro dispara. */
     public Tiro criarTiro() {
         throw new UnsupportedOperationException(getClass().getSimpleName() + " nao dispara tiros.");
     }
-
-    /** Atualiza a recarga e informa se o professor já pode atacar. */
-    public boolean podeAtacar(double deltaTime) {
-        if (deltaTime > 0 && Double.isFinite(deltaTime)) {
-            tempoDesdeUltimoTiro += deltaTime;
-        }
-        return estaCarregado();
-    }
-
-    /** Reinicia a recarga após uma habilidade ou disparo. */
-    public void reiniciarCadencia() {
-        reiniciarCarga();
-    }
-
 
     /** Todos os tiros de um disparo. */
     public List<Tiro> criarTiros() {
@@ -120,6 +106,11 @@ public abstract class Professor extends Entidade {
 
     protected void carregarTotalmente() {
         tempoDesdeUltimoTiro = cadenciaTiro;
+    }
+
+    /** Segundos que faltam para a carga ficar completa (0 se ja esta carregado). */
+    public double getTempoRestanteDeCarga() {
+        return Math.max(0.0, cadenciaTiro - tempoDesdeUltimoTiro);
     }
 
     /**

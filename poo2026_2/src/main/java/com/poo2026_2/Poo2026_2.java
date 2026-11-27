@@ -6,6 +6,8 @@ import javafx.application.Application;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.scene.image.Image;
+import javafx.scene.input.KeyCombination;
+import javafx.scene.text.Font;
 
 public class Poo2026_2 extends Application {
 
@@ -13,25 +15,24 @@ public class Poo2026_2 extends Application {
 
     @Override
     public void start(Stage stage) {
+        carregarFontes();
         stage.getIcons().add(
-            new Image(getClass().getResourceAsStream("/images/logo_game.png"))
-        );
+                new Image(getClass().getResourceAsStream("/images/logo_game.png")));
         stage.setTitle("Professores vs Zumbiversitários");
-
 
         stage.setResizable(false);
 
         double[] resolucao = obterResolucaoValida(
-                ConfiguracoesJogo.getResolucao()
-        );
+                ConfiguracoesJogo.getResolucao());
 
         stage.setWidth(resolucao[0]);
         stage.setHeight(resolucao[1]);
 
-        GerenciadorDeTelas gerenciadorDeTelas =
-                new GerenciadorDeTelas(stage);
+        GerenciadorDeTelas gerenciadorDeTelas = new GerenciadorDeTelas(stage);
 
         gerenciadorDeTelas.mudarTela("Menu.fxml");
+        stage.setFullScreenExitKeyCombination(KeyCombination.NO_MATCH);
+        stage.setFullScreenExitHint("");
 
         stage.setFullScreen(ConfiguracoesJogo.isTelaCheia());
 
@@ -43,15 +44,15 @@ public class Poo2026_2 extends Application {
         }
     }
 
-    /* Verifica se a resolução salva cabe no monitor.
-     * Se não couber, utiliza a maior resolução 16:9 disponível.*/
+    /*
+     * Verifica se a resolução salva cabe no monitor.
+     * Se não couber, utiliza a maior resolução 16:9 disponível.
+     */
     public static double[] obterResolucaoValida(String resolucao) {
 
-        double larguraMonitor =
-                Screen.getPrimary().getVisualBounds().getWidth();
+        double larguraMonitor = Screen.getPrimary().getVisualBounds().getWidth();
 
-        double alturaMonitor =
-                Screen.getPrimary().getVisualBounds().getHeight();
+        double alturaMonitor = Screen.getPrimary().getVisualBounds().getHeight();
 
         double largura;
         double altura;
@@ -70,9 +71,9 @@ public class Poo2026_2 extends Application {
 
         /* Verifica se a resolução escolhida cabe no monitor. */
         if (largura <= larguraMonitor &&
-            altura <= alturaMonitor) {
+                altura <= alturaMonitor) {
 
-            return new double[]{largura, altura};
+            return new double[] { largura, altura };
         }
 
         /* Se não couber, calcula a maior área 16:9 possível dentro do monitor. */
@@ -85,10 +86,19 @@ public class Poo2026_2 extends Application {
             larguraMaxima = alturaMaxima * ASPECTO;
         }
 
-        return new double[]{
+        return new double[] {
                 Math.floor(larguraMaxima),
                 Math.floor(alturaMaxima)
         };
+    }
+
+    private void carregarFontes() {
+        String[] arquivos = {
+                "Poppins-Regular", "Poppins-Bold", "Poppins-Italic", "Poppins-BoldItalic"
+        };
+        for (String nome : arquivos) {
+            Font.loadFont(getClass().getResourceAsStream("/fonts/" + nome + ".ttf"), 12);
+        }
     }
 
     public static void main(String[] args) {

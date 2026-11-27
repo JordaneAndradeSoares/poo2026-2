@@ -8,7 +8,61 @@ import com.poo2026_2.model.Entidade;
  * @author thoma
  */
 public abstract class Zumbi extends Entidade {
+    /** Intervalo padrao entre mordidas (cadencia de 1 s). */
     protected static final double INTERVALO_ATAQUE = 1.0;
+    /** Velocidade padrao de todos os zumbis, em casas por segundo. */
+    public static final double VELOCIDADE_PADRAO = 0.2;
+    /** Dano padrao de uma mordida. */
+    public static final int DANO_PADRAO = 100;
+    /**
+     * Dano de "hitkill": maior que a vida de qualquer professor (o Marcus tem
+     * 4000).
+     */
+    public static final int DANO_HITKILL = 100_000;
+    /* Dano do nacif */
+    public static final int DANO_MEELE = 1370;
+    // imunidades a efeitos de status
+    private boolean imuneLentidao = false;
+    private boolean imuneQueimadura = false;
+    private boolean imuneParalisia = false;
+
+    protected void setImuneLentidao(boolean imune) {
+        this.imuneLentidao = imune;
+        if (imune) { // limpa algum efeito que já estivesse ativo
+            tempoLentidao = 0;
+            fatorLentidao = 1.0;
+        }
+    }
+
+    protected void setImuneQueimadura(boolean imune) {
+        this.imuneQueimadura = imune;
+        if (imune) {
+            tempoQueimadura = 0;
+            danoQueimaduraPorSegundo = 0;
+            danoQueimaduraAcumulado = 0;
+        }
+    }
+
+    protected void setImuneParalisia(boolean imune) {
+        this.imuneParalisia = imune;
+        if (imune) {
+            tempoParalisia = 0;
+        }
+    }
+
+    public boolean isImuneLentidao() {
+        return imuneLentidao;
+    }
+
+    public boolean isImuneQueimadura() {
+        return imuneQueimadura;
+    }
+
+    public boolean isImuneParalisia() {
+        return imuneParalisia;
+    }
+
+    private double intervaloAtaque = INTERVALO_ATAQUE;
     private double tempoDesdeMordida;
     private double velocidade;
     private int dano;
@@ -21,6 +75,7 @@ public abstract class Zumbi extends Entidade {
     private double danoQueimaduraPorSegundo = 0.0;
     private double tempoQueimadura = 0.0;
     private double danoQueimaduraAcumulado = 0.0;
+    private double tempoParalisia = 0.0;
 
     public Zumbi(int vida, int linha, double velocidade, int dano) {
         super(vida, linha, 0);
@@ -31,7 +86,7 @@ public abstract class Zumbi extends Entidade {
         if (velocidade <= 0 || !Double.isFinite(velocidade)) {
             throw new IllegalArgumentException("A velociadade tem que ser maior que zero.");
         }
-        
+
         this.velocidade = velocidade;
         this.dano = dano;
         this.posicaoX = 0;
@@ -55,6 +110,18 @@ public abstract class Zumbi extends Entidade {
         this.dano = dano;
     }
 
+    /** Muda a cadencia da mordida (segundos entre uma mordida e a proxima). */
+    protected void setIntervaloAtaque(double intervaloAtaque) {
+        if (intervaloAtaque <= 0 || !Double.isFinite(intervaloAtaque)) {
+            throw new IllegalArgumentException("O intervalo de ataque tem que ser positivo.");
+        }
+        this.intervaloAtaque = intervaloAtaque;
+    }
+
+    public double getIntervaloAtaque() {
+        return intervaloAtaque;
+    }
+
     public double getPosicaoX() {
         return posicaoX;
     }
@@ -75,7 +142,7 @@ public abstract class Zumbi extends Entidade {
     /** O zumbi anda para a esquerda enquanto nao estiver atacando. */
     public void mover(double deltaTime) {
         atualizarEfeitos(deltaTime);
-        if (!atacando && estaVivo()) {
+        if (!atacando && estaVivo() && !estaParalisado()) {
             posicaoX -= getVelocidadeEfetiva() * deltaTime;
         }
     }
@@ -85,18 +152,40 @@ public abstract class Zumbi extends Entidade {
         if (reducao <= 0 || reducao >= 1 || duracao <= 0 || !Double.isFinite(duracao)) {
             throw new IllegalArgumentException("Lentidao invalida: reducao entre 0 e 1 e duracao positiva.");
         }
+        if (imuneLentidao) return ;
         double novoFator = 1.0 - reducao;
         fatorLentidao = estaLento() ? Math.min(fatorLentidao, novoFator) : novoFator;
         tempoLentidao = Math.max(tempoLentidao, duracao);
     }
 
-    /** Queima o zumbi: danoPorSegundo. Nao acumula: um novo acerto so renova o tempo. */
+    /**
+     * Queima o zumbi: danoPorSegundo. Nao acumula: um novo acerto so renova o
+     * tempo.
+     */
     public void aplicarQueimadura(double danoPorSegundo, double duracao) {
         if (danoPorSegundo <= 0 || !Double.isFinite(danoPorSegundo) || duracao <= 0 || !Double.isFinite(duracao)) {
             throw new IllegalArgumentException("Queimadura invalida: dano e duracao tem que ser positivos.");
         }
-        danoQueimaduraPorSegundo = estaQueimando() ? Math.max(danoQueimaduraPorSegundo, danoPorSegundo) : danoPorSegundo;
+        if (imuneQueimadura) return;
+        danoQueimaduraPorSegundo = estaQueimando() ? Math.max(danoQueimaduraPorSegundo, danoPorSegundo)
+                : danoPorSegundo;
         tempoQueimadura = Math.max(tempoQueimadura, duracao);
+    }
+
+    /**
+     * Paralisa o zumbi: ele nao anda nem morde. Nao acumula: um novo acerto so
+     * renova o tempo.
+     */
+    public void aplicarParalisia(double duracao) {
+        if (duracao <= 0 || !Double.isFinite(duracao)) {
+            throw new IllegalArgumentException("Paralisia invalida: a duracao tem que ser positiva.");
+        }
+        if (imuneParalisia) return;
+        tempoParalisia = Math.max(tempoParalisia, duracao);
+    }
+
+    public boolean estaParalisado() {
+        return tempoParalisia > 0;
     }
 
     public boolean estaLento() {
@@ -108,6 +197,10 @@ public abstract class Zumbi extends Entidade {
     }
 
     private void atualizarEfeitos(double deltaTime) {
+        if (tempoParalisia > 0) {
+            tempoParalisia = Math.max(0, tempoParalisia - deltaTime);
+        }
+
         if (tempoLentidao > 0) {
             tempoLentidao = Math.max(0, tempoLentidao - deltaTime);
         }
@@ -138,14 +231,15 @@ public abstract class Zumbi extends Entidade {
     }
 
     public boolean atacar(Entidade alvo, double deltaTime) {
+        if (estaParalisado()) {
+            return false; // paralisado nao morde
+        }
         tempoDesdeMordida += deltaTime;
-
-        if (tempoDesdeMordida >= INTERVALO_ATAQUE) {
+        if (tempoDesdeMordida >= intervaloAtaque) {
             tempoDesdeMordida = 0;
             alvo.receberDano(dano);
             return true;
         }
-
         return false;
     }
 }

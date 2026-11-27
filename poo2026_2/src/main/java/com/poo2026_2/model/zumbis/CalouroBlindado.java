@@ -8,6 +8,6 @@ package com.poo2026_2.model.zumbis;
 public class CalouroBlindado extends Zumbi {
 
     public CalouroBlindado(int linha) {
-        super(100, linha, 0.6, 10);
+        super(1370, linha, VELOCIDADE_PADRAO, DANO_PADRAO);
     }
 }

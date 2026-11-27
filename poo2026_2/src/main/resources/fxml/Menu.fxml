@@ -1,65 +1,74 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.String?>
 <?import java.net.URL?>
 <?import javafx.scene.Group?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
-<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
 
+<!--
+    Menu: um palco fixo de 1920x1080 (tamanho do fundo) que o
+    MenuController escala para caber na janela mantendo a proporcao.
+    Todas as coordenadas abaixo sao em pixels desse palco.
+
+    Faixa livre no centro, entre os personagens:
+        professores terminam em x = 673, zumbis comecam em x = 1216
+    - titulo: x 600..1320, y 70..410  (area reservada para a sua arte)
+    - botoes: x 730..1190, y 470..904
+-->
 <StackPane fx:id="root" styleClass="menu-root" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.poo2026_2.controller.MenuController">
 
     <stylesheets>
         <URL value="@../styles/menu.css" />
     </stylesheets>
 
-    <!-- IMAGEM DE FUNDO -->
-    <ImageView fitHeight="${root.height}" fitWidth="${root.width}" pickOnBounds="true" preserveRatio="false">
-        <image>
-            <Image url="@../images/menu/menu-background.png" />
-        </image>
-    </ImageView>
+    <Pane fx:id="palco" maxHeight="1080.0" maxWidth="1920.0" minHeight="1080.0" minWidth="1920.0" prefHeight="1080.0" prefWidth="1920.0">
 
-    <!-- FUNDO NOTURNO (aparece so durante o trovao; controlado pelo MenuController) -->
-    <ImageView fx:id="fundoNoite" fitHeight="${root.height}" fitWidth="${root.width}" mouseTransparent="true" preserveRatio="false" visible="false">
-        <image>
-            <Image url="@../images/menu/menu-background-night.png" />
-        </image>
-    </ImageView>
+        <ImageView fitHeight="1080.0" fitWidth="1920.0" mouseTransparent="true" preserveRatio="false">
+            <image>
+                <Image url="@../images/menu/menu-background.png" />
+            </image>
+        </ImageView>
 
-    <AnchorPane fx:id="painelBotoes" maxHeight="720.0" maxWidth="1280.0" minHeight="720.0" minWidth="1280.0" pickOnBounds="false" prefHeight="720.0" prefWidth="1280.0">
+        <ImageView fx:id="fundoNoite" fitHeight="1080.0" fitWidth="1920.0" mouseTransparent="true" preserveRatio="false" visible="false">
+            <image>
+                <Image url="@../images/menu/menu-background-night.png" />
+            </image>
+        </ImageView>
 
-        <!--
-            Origem do vapor do cafe, alinhada com a borda da xicara na
-            imagem de fundo (coordenadas no canvas de referencia 1280x720).
-            As baforadas sao criadas e animadas em codigo (MenuController).
-        -->
-        <Group fx:id="vaporCafeEsquerda" layoutX="220.0" layoutY="480.0" mouseTransparent="true" />
-        <Group fx:id="vaporCafeDireita" layoutX="240.0" layoutY="480.0" mouseTransparent="true" />
+        <Group fx:id="vaporCaneca1" layoutX="126.0" layoutY="104.0" mouseTransparent="true" />
+        <Group fx:id="vaporCaneca2" layoutX="224.0" layoutY="108.0" mouseTransparent="true" />
+        <Group fx:id="vaporCaneca3" layoutX="320.0" layoutY="110.0" mouseTransparent="true" />
 
-        <!--JOGAR -->
-        <Button fx:id="btnJogar" layoutX="822.0" layoutY="113.0" onAction="#iniciarJogo" prefHeight="112.0" prefWidth="384.0" styleClass="menu-btn, menu-btn-play" />
+        <Pane fx:id="camadaPersonagens" mouseTransparent="true" prefHeight="1080.0" prefWidth="1920.0" />
 
-        <!--CONFIGURAÇÕES-->
-        <Button fx:id="btnConfiguracoes" layoutX="823.0" layoutY="225.0" onAction="#abrirConfiguracoes" prefHeight="112.0" prefWidth="384.0" styleClass="menu-btn, menu-btn-config" />
+        <StackPane fx:id="areaTitulo" layoutX="600.0" layoutY="70.0" mouseTransparent="true" prefHeight="340.0" prefWidth="720.0">
+            <children>
+                <VBox fx:id="tituloProvisorio" alignment="CENTER" spacing="6.0" styleClass="titulo-provisorio">
+                    <children>
+                        <!-->
+                            colocar a logo-game.png aqui, com um tamanho definido pra ficar legal       
+                        -->
+                    </children>
+                </VBox>
+                <ImageView fx:id="imgTitulo" fitHeight="340.0" fitWidth="720.0" pickOnBounds="false" preserveRatio="true" />
+            </children>
+        </StackPane>
 
-        <!-- CRÉDITOS -->
-        <Button fx:id="btnCreditos" layoutX="823.0" layoutY="335.0" onAction="#abrirCreditos" prefHeight="112.0" prefWidth="384.0" styleClass="menu-btn, menu-btn-creditos" />
+        <!-- BOTOES (4 de 460x92, espacados de 22) -->
+        <VBox alignment="TOP_CENTER" layoutX="730.0" layoutY="470.0" spacing="22.0">
+            <children>
+                <Button fx:id="btnJogar" onAction="#iniciarJogo" prefHeight="92.0" prefWidth="460.0" styleClass="menu-btn" text="Jogar" />
+                <Button fx:id="btnConfiguracoes" onAction="#abrirConfiguracoes" prefHeight="92.0" prefWidth="460.0" styleClass="menu-btn" text="Configurações" />
+                <Button fx:id="btnCreditos" onAction="#abrirCreditos" prefHeight="92.0" prefWidth="460.0" styleClass="menu-btn" text="Créditos" />
+                <Button fx:id="btnSair" onAction="#sair" prefHeight="92.0" prefWidth="460.0" styleClass="menu-btn" text="Sair" />
+            </children>
+        </VBox>
 
-        <!-- SAIR -->
-        <Button fx:id="btnSair" layoutX="822.0" layoutY="447.0" onAction="#sair" prefHeight="112.0" prefWidth="384.0" styleClass="menu-btn, menu-btn-sair" />
-        
-        <!-- DIRETO JOGO 
-        <Button fx:id="btnJogo" layoutX="42.0" layoutY="276.0" mnemonicParsing="false" onAction="#irJogo" prefHeight="123.0" prefWidth="455.0" stylesheets="@../styles/menu.css">
-        
-        <styleClass>
-            <String fx:value="menu-btn-teste" />
-        <String fx:value="menu-btn" />
-        </styleClass></Button>
-        -->
-
-    </AnchorPane>
+    </Pane>
 
 </StackPane>

@@ -1,253 +1,190 @@
-/*
- * Empty Stylesheet file.
- */
+/* ===== Tela do jogo ===== */
 
+.jogo-raiz {
+    -fx-background-color: black;
+}
+
+/* ---------- Tabuleiro (o xadrez vem da imagem de fundo) ---------- */
 .celula {
-    -fx-background-color: rgba(255, 255, 255, 0.10);
-    -fx-border-color: rgba(0, 0, 0, 0.50);
-    -fx-border-width: 1;
-}
-
-/* destaque ao passar o mouse */
-.celula:hover {
-    -fx-background-color: rgba(255, 255, 255, 0.14);
-    -fx-border-color: rgba(255, 255, 255, 0.55);
-    -fx-cursor: hand;
-}
-
-/* sprite temporario para testar o clique */
-.sprite-teste {
-    -fx-background-color: #2e7d32;
-    -fx-text-fill: WHITE;
-    -fx-font-size: 36px;
-    -fx-font-weight: bold;
-    -fx-min-width: 90;
-    -fx-min-height: 90;
-    -fx-alignment: center;
-    -fx-background-radius: 45;
-}
-
-/* BOTÃO VOLTAR (IMAGEM) */
-.botao-voltar {
-    -fx-min-width: 160px;
-    -fx-pref-width: 160px;
-    -fx-max-width: 160px;
-
-    -fx-min-height: 50px;
-    -fx-pref-height: 50px;
-    -fx-max-height: 50px;
-
-    -fx-effect: none;
-    -fx-border-color: transparent;
     -fx-background-color: transparent;
-    -fx-background-insets: 0;
-    -fx-padding: 0;
+}
 
-    -fx-text-fill: transparent;
-    -fx-content-display: graphic-only;
+/* só destaca a casa quando há um card escolhido */
+.celula-alvo {
     -fx-cursor: hand;
+}
 
-    -fx-background-image: url("../images/menu/buttons/voltar_normal.png");
-    -fx-background-repeat: no-repeat;
-    -fx-background-position: center;
-    -fx-background-size: 100% 100%;
+.celula-alvo:hover {
+    -fx-background-color: rgba(255, 255, 255, 0.30);
+}
+
+/* ---------- Cards dos personagens ---------- */
+.cartao {
+    -fx-background-color: #fff3d6;
+    -fx-background-radius: 14;
+    -fx-border-color: #111111;
+    -fx-border-width: 4;
+    -fx-border-radius: 14;
+    -fx-cursor: hand;
+}
+
+.cartao:hover {
+    -fx-scale-x: 1.04;
+    -fx-scale-y: 1.04;
+}
+
+.cartao:selecionado {
+    -fx-border-color: #f4a23a;
+    -fx-scale-x: 1.06;
+    -fx-scale-y: 1.06;
+    -fx-effect: dropshadow(gaussian, rgba(244, 162, 58, 0.95), 22, 0.45, 0, 0);
+}
+
+/* declarado depois de .cartao:hover para vencer o empate */
+.cartao-bloqueado {
+    -fx-cursor: default;
+}
+
+.cartao-bloqueado:hover {
+    -fx-scale-x: 1;
+    -fx-scale-y: 1;
+}
+
+/* cortina da recarga */
+.cartao-cortina {
+    -fx-background-color: rgba(0, 0, 0, 0.60);
+    -fx-background-radius: 10;
+}
+
+/* etiqueta de preço */
+.cartao-preco {
+    -fx-background-color: #fdeaf2;
+    -fx-background-radius: 16;
+    -fx-padding: 0 12 0 12;
+    -fx-text-fill: #1a1a1a;
+    -fx-font-size: 30px;
+    -fx-font-weight: bold;
+}
+
+/* ---------- Café ---------- */
+.texto-cafe {
+    -fx-text-fill: #111111;
+    -fx-font-size: 52px;
+    -fx-font-weight: bold;
+}
+
+/* ---------- Botão voltar ---------- */
+.botao-voltar {
+    -fx-background-color: #4a2c1a;
+    -fx-background-radius: 12;
+    -fx-text-fill: #fff3d6;
+    -fx-font-size: 20px;
+    -fx-font-weight: bold;
+    -fx-cursor: hand;
 }
 
 .botao-voltar:hover {
-    -fx-effect: none;
-    -fx-background-image: url("../images/menu/buttons/voltar_hover.png");
+    -fx-background-color: #f4a23a;
+    -fx-text-fill: #4a2c1a;
 }
 
 .botao-voltar:pressed {
-    -fx-translate-y: 1px;
+    -fx-translate-y: 2;
 }
 
-.voltar-resultado:pressed {
-    -fx-scale-x: 0.95;
-    -fx-scale-y: 0.95;
+
+/* ---------- Linha do tempo da fase (canto inferior direito) ---------- */
+.linha-tempo {
+    -fx-background-color: rgba(42, 26, 16, 0.88);
+    -fx-background-radius: 18;
+    -fx-border-color: #111111;
+    -fx-border-width: 3;
+    -fx-border-radius: 18;
 }
 
-/* BOTÕES DE SELEÇÃO DOS PERSONAGENS */
-.botao-personagem {
-    -fx-pref-height: 42px;
-    -fx-font-size: 16px;
+.linha-tempo-texto {
+    -fx-text-fill: #fff3d6;
+    -fx-font-size: 20px;
     -fx-font-weight: bold;
+}
+
+.linha-tempo-botao {
+    -fx-background-color: #4a2c1a;
+    -fx-background-radius: 10;
+    -fx-text-fill: #fff3d6;
+    -fx-font-size: 18px;
+    -fx-font-weight: bold;
+    -fx-padding: 2 14 2 14;
+    -fx-cursor: hand;
+    -fx-focus-color: transparent;
+    -fx-faint-focus-color: transparent;
+}
+
+.linha-tempo-botao:hover {
+    -fx-background-color: #6b4128;
+}
+
+/* declarado depois de :hover para vencer o empate */
+.linha-tempo-botao:selected {
+    -fx-background-color: #f4a23a;
+    -fx-text-fill: #111111;
+}
+
+/* ---------- Botoes redondos (voltar / configuracoes / pausar) ---------- */
+.botao-redondo {
+    -fx-background-color: #000000;
+    -fx-background-radius: 100;
+    -fx-padding: 0;
     -fx-cursor: hand;
 }
 
-.botao-personagem:hover {
-    -fx-scale-x: 1.05;
-    -fx-scale-y: 1.05;
+.botao-redondo-icone {
+    -fx-fill: #d0d0d0;
 }
 
-.botao-personagem:pressed {
-    -fx-scale-x: 0.97;
-    -fx-scale-y: 0.97;
+.botao-redondo:hover {
+    -fx-background-color: #4a2c1a;
+    -fx-scale-x: 1.06;
+    -fx-scale-y: 1.06;
 }
 
-/* MOSTRADOR DA QUANTIDADE DE CAFÉ */
-.painel-cafe {
-    -fx-background-color: linear-gradient(to bottom, brown, black);
-    -fx-border-color: #d5ad60;
-    -fx-border-width: 2;
-    -fx-border-radius: 12;
-    -fx-background-radius: 12;
-    -fx-padding: 8 16 8 12;
-    -fx-effect: dropshadow(three-pass-box,rgba(0, 0, 0, 0.65), 8, 0.2, 2, 3);
+.botao-redondo:hover .botao-redondo-icone {
+    -fx-fill: #ffffff;
 }
 
-.texto-cafe {
-    -fx-text-fill: #ffe58a;
-    -fx-font-size: 22px;
-    -fx-font-weight: bold;
+.botao-redondo:pressed {
+    -fx-scale-x: 0.96;
+    -fx-scale-y: 0.96;
 }
 
-/* VISUAL DAS DICAS */
-
-/* Painel principal da dica */
-.tooltip {
-    -fx-background-color: #172536;
-    -fx-background-insets: 0;
-    -fx-background-radius: 8px;
-    -fx-border-color: #52738D;
-    -fx-border-width: 1.5px;
-    -fx-border-radius: 8px;
-    -fx-padding: 0;
-    -fx-effect: dropshadow(
-        three-pass-box,
-        rgba(0, 0, 0, 0.65),
-        12,
-        0.2,
-        2,
-        4
-    );
+.botao-redondo:focused {
+    -fx-focus-color: transparent;
+    -fx-faint-focus-color: transparent;
 }
 
-/* Organização interna */
-.dica-painel {
-    -fx-background-color: transparent;
-
-    -fx-min-width: 300px;
-    -fx-pref-width: 300px;
-    -fx-max-width: 300px;
-
-    -fx-min-height: 300px;
-    -fx-pref-height: 300px;
-    -fx-max-height: 300px;
-
-    -fx-spacing: 10px;
-    -fx-padding: 15px;
-}
-
-/* Nome do professor */
-.dica-titulo {
-    -fx-text-fill: ORANGE;
-    -fx-font-size: 19px;
-    -fx-font-weight: bold;
-}
-
-/* Linguagem de programação */
-.dica-linguagem {
-    -fx-text-fill: BLUE;
-    -fx-font-size: 11px;
-    -fx-font-weight: bold;
-}
-
-/* Categoria da habilidade */
-.dica-categoria {
-    -fx-text-fill: BLUE;
-    -fx-font-size: 10px;
-}
-
-/* Títulos das seções */
-.dica-subtitulo {
-    -fx-text-fill: BLUE;
-    -fx-font-size: 11px;
-    -fx-font-weight: bold;
-}
-
-/* Descrição da habilidade */
-.dica-descricao {
-    -fx-text-fill: WHITE;
-    -fx-font-size: 12px;
-    -fx-wrap-text: true;
-    -fx-max-width: 250px;
-}
-
-/* Texto do custo de café */
-.dica-custo {
-    -fx-text-fill: ORANGE;
-    -fx-font-size: 12px;
-    -fx-font-weight: bold;
-}
-
-/* Valor do custo */
-.dica-valor {
-    -fx-text-fill: YELLOW;
-    -fx-font-size: 18px;
-    -fx-font-weight: bold;
-}
-
-/* TELA DE RESULTADO */
-.camada-resultado {
-    -fx-background-color: BLUE;
-}
-
+/* ===== TELA DE RESULTADO ===== */
+.camada-resultado { -fx-background-color: BLUE; }
 .painel-resultado {
     -fx-background-color: transparent;
     -fx-border-color: transparent;
     -fx-effect: none;
     -fx-padding: 50;
 }
-
-.rosto-resultado {
-    -fx-font-family: "Segoe UI";
-    -fx-font-size: 90px;
-    -fx-text-fill: WHITE;
-    -fx-effect: none;
-}
-
-.titulo-resultado {
-    -fx-font-family: "Segoe UI";
-    -fx-font-size: 42px;
-    -fx-font-weight: normal;
-    -fx-text-fill: WHITE;
-    -fx-effect: none;
-}
-
-.mensagem-resultado {
-    -fx-font-family: "Segoe UI";
-    -fx-font-size: 23px;
-    -fx-text-fill: WHITE;
-}
-
-.recompensa-resultado {
-    -fx-font-family: "Segoe UI";
-    -fx-font-size: 20px;
-    -fx-text-fill: WHITE;
-}
+.rosto-resultado   { -fx-font-family: "Segoe UI"; -fx-font-size: 130px; -fx-text-fill: WHITE; }
+.titulo-resultado  { -fx-font-family: "Segoe UI"; -fx-font-size: 56px;  -fx-text-fill: WHITE; }
+.recompensa-resultado { -fx-font-family: "Segoe UI"; -fx-font-size: 28px; -fx-text-fill: WHITE; }
 
 .mensagem-dialogo {
     -fx-font-family: "Consolas", "Monospace", sans-serif;
-    -fx-font-size: 14px;
+    -fx-font-size: 20px;
     -fx-font-weight: bold;
     -fx-text-fill: WHITE;
-
-    -fx-min-width: 800px;
-    -fx-pref-width: 800px;
-    -fx-max-width: 800px;
-
-    -fx-min-height: 180px;
-    -fx-pref-height: 200px;
-
+    -fx-min-width: 800px; -fx-pref-width: 800px; -fx-max-width: 800px;
+    -fx-min-height: 180px; -fx-pref-height: 260px;
     -fx-wrap-text: true;
-    -fx-alignment: center-left;
 }
 
-/* BOTÕES DA TELA DE RESULTADO */
-.jogar-novamente,
-.proxima-fase,
-.voltar-resultado {
+.jogar-novamente, .proxima-fase, .voltar-resultado {
     -fx-background-color: transparent;
     -fx-border-color: WHITE;
     -fx-border-width: 1;
@@ -255,12 +192,10 @@
     -fx-border-radius: 0;
     -fx-text-fill: WHITE;
     -fx-font-family: "Segoe UI";
-    -fx-font-size: 17px;
+    -fx-font-size: 22px;
     -fx-padding: 12 25;
     -fx-cursor: hand;
 }
-
-/* EFEITO DE HOVER DERROTA */
 .camada-resultado .jogar-novamente:hover,
 .camada-resultado .voltar-resultado:hover {
     -fx-background-color: DARKBLUE;
@@ -268,7 +203,19 @@
     -fx-scale-y: 1.08;
 }
 
-/* EFEITO DE HOVER DOS BOTÕES DA VITÓRIA */
+/* ===== VITÓRIA (sobrescreve o azul) ===== */
+.vitoria { -fx-background-color: BLACK; }
+.vitoria .mensagem-dialogo,
+.vitoria .rosto-resultado,
+.vitoria .titulo-resultado,
+.vitoria .recompensa-resultado { -fx-text-fill: LIME; }
+.vitoria .jogar-novamente,
+.vitoria .proxima-fase,
+.vitoria .voltar-resultado {
+    -fx-background-color: BLACK;
+    -fx-border-color: LIME;
+    -fx-text-fill: LIME;
+}
 .vitoria .jogar-novamente:hover,
 .vitoria .proxima-fase:hover,
 .vitoria .voltar-resultado:hover {
@@ -277,27 +224,4 @@
     -fx-text-fill: LIME;
     -fx-scale-x: 1.08;
     -fx-scale-y: 1.08;
-}
-
-/* COR DA VITÓRIA */
-.vitoria {
-    -fx-background-color: BLACK;
-}
-
-/* Texto verde na tela de vitória */
-.vitoria .mensagem-dialogo,
-.vitoria .rosto-resultado,
-.vitoria .titulo-resultado,
-.vitoria .mensagem-resultado,
-.vitoria .recompensa-resultado {
-    -fx-text-fill: LIME;
-}
-
-/* Botões da tela de vitória */
-.vitoria .jogar-novamente,
-.vitoria .proxima-fase,
-.vitoria .voltar-resultado {
-    -fx-background-color: BLACK;
-    -fx-border-color: LIME;
-    -fx-text-fill: LIME;
 }

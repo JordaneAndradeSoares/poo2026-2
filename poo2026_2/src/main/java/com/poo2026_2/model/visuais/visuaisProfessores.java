@@ -6,13 +6,20 @@ import java.util.Map;
 
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
+import javafx.scene.effect.DropShadow;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.StackPane;
+import javafx.scene.paint.Color;
 import javafx.util.Duration;
 
 import com.poo2026_2.model.Entidade;
 import com.poo2026_2.model.GerenciadorDeJogo;
+import com.poo2026_2.model.TipoPersonagem;
+import com.poo2026_2.model.utilizaveis.Lucas;
+import com.poo2026_2.view.SpriteAnimado;
+import com.poo2026_2.view.SpriteLucas;
+
 public class visuaisProfessores {
 
     // remove do tabuleiro os professores/cafeteiras mortos e seus visuais
@@ -50,69 +57,113 @@ public class visuaisProfessores {
 
     // =================================================================
 
-    public void adicionarCafeteiraVisual(StackPane celula, GerenciadorDeJogo gerenciadorDeJogo, Map<ImageView, Timeline> animacoes, Runnable atualizarQuantidadeDeCafe) {
+    /**
+     * Coloca na casa o visual de um professor (a cafeteira tem o seu proprio
+     * metodo). Cada personagem usa a caixa e o ajuste vertical do seu
+     * TipoPersonagem; o Lucas usa a animacao guiada pelo estado do modelo.
+     */
+    public void adicionarProfessorVisual(StackPane celula, TipoPersonagem tipo, Entidade ocupante, Map<ImageView, Timeline> animacoes) {
 
-        URL recursoVazia = getClass().getResource("/images/professores/cafeteiraVazia.png");
-        URL recursoCheia = getClass().getResource("/images/professores/cafeteiraCheia.png");
+        ImageView visual;
+        Timeline timeline;
 
-        if (recursoVazia == null || recursoCheia == null) {
+        if (ocupante instanceof Lucas lucas) {
 
-            System.err.println("Não foi possível encontrar as imagens da cafeteira.");
-            return;
+            SpriteLucas sprite = new SpriteLucas(lucas);
+            sprite.setCaixa(tipo.getLarguraCaixa(), tipo.getAlturaCaixa());
+            visual = sprite.getView();
+            timeline = sprite.getTimeline();
+            sprite.play();
+
+        } else {
+
+            // loop 1->N, 24 fps, cada frame segurado 2 ticks
+            SpriteAnimado sprite = new SpriteAnimado(
+                    tipo.getPadraoFrames(), 1, tipo.getQuantidadeDeFrames());
+            sprite.setCaixa(tipo.getLarguraCaixa(), tipo.getAlturaCaixa());
+            visual = sprite.getView();
+            timeline = sprite.getTimeline();
+            sprite.play();
         }
 
-        Image cafeteiraVazia = new Image(recursoVazia.toExternalForm());
-        Image cafeteiraCheia = new Image(recursoCheia.toExternalForm());
+        visual.setTranslateY(tipo.getAjusteY());
 
-        ImageView visual = new ImageView(cafeteiraVazia);
-        visual.setFitWidth(90);
-        visual.setFitHeight(110);
-        visual.setPreserveRatio(true);
+        celula.getChildren().add(visual);
+        animacoes.put(visual, timeline);
+    }
+
+    // =================================================================
+
+    /** Café entregue ao jogador a cada coleta. */
+    private static final int CAFE_POR_COLETA = 50;
+    /** Segundos até a cafeteira ficar pronta para coletar. */
+    private static final double SEGUNDOS_ATE_PRONTA = 5;
+    /** Segundos até a cafeteira "perder" o café não coletado e recomeçar. */
+    private static final double SEGUNDOS_CICLO = 15;
+
+    /**
+     * A cafeteira fica sempre animada (12 frames, loop, 24 fps). Quando o café
+     * fica pronto ela ganha um brilho dourado; clicar nela coleta o café.
+     */
+    public void adicionarCafeteiraVisual(StackPane celula, GerenciadorDeJogo gerenciadorDeJogo, Map<ImageView, Timeline> animacoes, Runnable atualizarQuantidadeDeCafe) {
+
+        TipoPersonagem tipo = TipoPersonagem.CAFETEIRA;
+
+        SpriteAnimado sprite = new SpriteAnimado(
+                tipo.getPadraoFrames(), 1, tipo.getQuantidadeDeFrames());
+
+        ImageView visual = sprite.getView();
+        sprite.setCaixa(tipo.getLarguraCaixa(), tipo.getAlturaCaixa());
+        visual.setTranslateY(tipo.getAjusteY());
         visual.setSmooth(false);
 
         celula.getChildren().add(visual);
+        animacoes.put(visual, sprite.getTimeline());
+        sprite.play();
 
-        visual.getProperties().put("cheia", false);
+        DropShadow brilho = new DropShadow(24, Color.GOLD);
+        boolean[] pronta = {false};
 
         Timeline ciclo = new Timeline(
 
-            new KeyFrame(Duration.seconds(5), evento -> {
-                visual.setImage(cafeteiraCheia);
-                visual.getProperties().put("cheia", true);
+            new KeyFrame(Duration.seconds(SEGUNDOS_ATE_PRONTA), evento -> {
+                pronta[0] = true;
+                visual.setEffect(brilho);
             }),
 
-            new KeyFrame(Duration.seconds(15), evento -> {
-                visual.setImage(cafeteiraVazia);
-                visual.getProperties().put("cheia", false);
+            new KeyFrame(Duration.seconds(SEGUNDOS_CICLO), evento -> {
+                pronta[0] = false;
+                visual.setEffect(null);
             })
         );
 
         ciclo.setCycleCount(Timeline.INDEFINITE);
         ciclo.playFromStart();
 
-        animacoes.put(visual, ciclo);
+        // o ciclo morre junto com o visual (cafeteira destruída ou casa limpa)
+        visual.parentProperty().addListener((obs, antigo, novoPai) -> {
+            if (novoPai == null) {
+                ciclo.stop();
+            }
+        });
 
         visual.setOnMouseClicked(evento -> {
 
-            boolean cheia = (boolean) visual.getProperties().get("cheia");
+            // Impede que o clique chegue ao evento da célula.
+            evento.consume();
 
-            if (!cheia) {
-                evento.consume();
+            if (!pronta[0]) {
                 return;
             }
 
-            // Coleta do café.
-            gerenciadorDeJogo.adicionarCafe(50);
+            gerenciadorDeJogo.adicionarCafe(CAFE_POR_COLETA);
 
             // Reinicia a produção.
-            visual.setImage(cafeteiraVazia);
-            visual.getProperties().put("cheia", false);
+            pronta[0] = false;
+            visual.setEffect(null);
             ciclo.playFromStart();
 
             atualizarQuantidadeDeCafe.run();
-
-            // Impede que o clique chegue ao evento da célula.
-            evento.consume();
         });
     }
 }
