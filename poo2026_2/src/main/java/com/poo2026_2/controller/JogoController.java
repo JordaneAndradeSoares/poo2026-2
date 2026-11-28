@@ -15,7 +15,9 @@ import java.util.concurrent.atomic.AtomicInteger;
 import javafx.animation.FadeTransition;
 import javafx.animation.PauseTransition;
 import javafx.animation.SequentialTransition;
+import javafx.scene.shape.Polygon;
 import com.poo2026_2.audio.AudioManager;
+import com.poo2026_2.model.CatalogoNiveis;
 import com.poo2026_2.model.Entidade;
 import com.poo2026_2.model.ConfiguracoesJogo;
 import com.poo2026_2.model.Cronograma;
@@ -106,6 +108,7 @@ import javafx.geometry.Point2D;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.VBox;
 
 /**
  * Tela do jogo. Carrega a fase escolhida na seleção de níveis (café inicial e
@@ -306,6 +309,38 @@ public class JogoController implements ControladorTela, Initializable {
     private Pane camadaAcao;
     @FXML
     private Pane camadaLinhaDoTempo;
+    @FXML
+    private ImageView imagemTituloVitoria;
+    @FXML
+    private VBox painelVitoriaPadrao;
+    @FXML
+    private VBox painelVitoriaFinal;
+    @FXML
+    private Button btnVoltarFinal;
+    @FXML
+    private Button btnJogarNovamenteFinal;
+    @FXML
+    private Pane camadaConfetes;
+    @FXML
+    private Label lblTerminalTexto;
+    @FXML
+    private VBox painelDerrota;
+    @FXML
+    private Label lblMensagemDerrota;
+    @FXML
+    private Button btnJogarNovamenteDerrota;
+    @FXML
+    private Button btnVoltarDerrota;
+    @FXML
+    private Label lblRostoDerrota;
+    @FXML
+    private Label lblTituloDerrota;
+    @FXML
+    private ImageView imagemQRCodeDerrota;
+
+    private final List<Animation> animacoesConfetes = new ArrayList<>();
+
+    private Timeline geradorConfetes;
 
     private GerenciadorDeTelas gerenciadorDeTelas;
     private GerenciadorDeJogo gerenciador;
@@ -353,7 +388,7 @@ public class JogoController implements ControladorTela, Initializable {
     private Button btnVoltarResultado;
     private Timeline digitacao;
 
-    private static final int TOTAL_FASES = 8;
+    private static final int TOTAL_FASES = 7;
 
     /**
      * Velocidade do jogo (1, 1.25, 1.5 ou 2). E estatica para valer tambem na
@@ -2133,7 +2168,10 @@ public class JogoController implements ControladorTela, Initializable {
         if (animacaoIntro != null) {
             animacaoIntro.stop();
         }
+
         pararSomLaser();
+        pararConfetes();
+
         animacoes.forEach(Animation::stop);
         animacoes.clear();
         animacoesDaEntidade.values().forEach(lista -> lista.forEach(Animation::stop));
@@ -2362,82 +2400,335 @@ public class JogoController implements ControladorTela, Initializable {
 
     private void esconder(javafx.scene.Node... nos) {
         for (javafx.scene.Node n : nos) {
-            n.setVisible(false);
-            n.setManaged(false);
+            if (n != null) {
+                n.setVisible(false);
+                n.setManaged(false);
+            }
         }
     }
 
     private void mostrar(javafx.scene.Node... nos) {
         for (javafx.scene.Node n : nos) {
-            n.setVisible(true);
-            n.setManaged(true);
+            if (n != null) {
+                n.setVisible(true);
+                n.setManaged(true);
+            }
         }
     }
 
-    private void mostrarVitoria() {
-        AudioManager.tocarEfeito("/audio/vitoria.mp3");
-        camadaResultado.getStyleClass().add("vitoria");
+    private void iniciarDigitacaoVitoriaPadrao() {
 
-        esconder(lblRostoResultado, lblTituloResultado, lblMensagemResultado, QRCode,
-                btnJogarNovamente, btnProximaFase, btnVoltarResultado);
-        mostrar(mensagemLabel);
-        mensagemLabel.setText("");
+        String textoInicial = "Inicializando próxima fase...\n"
+                            + "Carregando personagens...\n"
+                            + "Verificando habilidades...\n"
+                            + "Preparando tabuleiro...\n\n"
+                            + "Todas as verificações concluídas!\n"
+                            + "Fase seguinte liberada!\n";
 
-        String mensagem = "Inicializando próxima fase...\nCarregando personagens...\n"
-                + "Verificando habilidades...\nPreparando tabuleiro...\n\n"
-                + "Todas as verificações concluídas!\nFase seguinte liberada!\n\nBUILD SUCCESS :)";
+        String textoFinal = "BUILD SUCCESS :)";
 
-        AtomicInteger indice = new AtomicInteger(0);
-        digitacao = new Timeline(new KeyFrame(Duration.millis(10),
-                e -> mensagemLabel.setText(mensagem.substring(0, indice.incrementAndGet()))));
-        digitacao.setCycleCount(mensagem.length());
-        digitacao.setOnFinished(e -> {
-            mostrar(btnJogarNovamente, btnVoltarResultado);
-            if (SelecaoNivelController.faseSelecionada < TOTAL_FASES) {
-                mostrar(btnProximaFase);
-            }
-        });
+        int[] indice = {0};
 
-        camadaResultado.setVisible(true);
+        digitacao = new Timeline(
+
+            new KeyFrame(Duration.millis(6), evento -> {
+
+                if (indice[0] < textoInicial.length()) {
+
+                    indice[0]++;
+
+                    lblTerminalTexto.setText(textoInicial.substring(0, indice[0]));
+
+                } else {
+
+                    int indiceFinal = indice[0] - textoInicial.length();
+
+                    if (indiceFinal < textoFinal.length()) {
+
+                        indice[0]++;
+
+                        lblMensagemResultado.setText(textoFinal.substring(0, indiceFinal + 1));
+
+                    } else {
+
+                        digitacao.stop();
+
+                        // Só mostra os botões quando todo o texto terminar.
+                        mostrar(btnJogarNovamente, btnProximaFase, btnVoltarResultado);
+                    }
+                }
+            })
+        );
+
+        digitacao.setCycleCount(Animation.INDEFINITE);
         digitacao.play();
     }
 
-    private void mostrarDerrota() {
-        AudioManager.tocarEfeito("/audio/faah.mp3");
-
-        lblRostoResultado.setText(":(");
-        lblTituloResultado.setText("DERROTA!");
-        lblMensagemResultado.setText("MAS VOCÊ AINDA PODE TENTAR NOVAMENTE!");
-
-        esconder(mensagemLabel, btnProximaFase);
-        mostrar(QRCode, btnJogarNovamente, btnVoltarResultado);
+    private void mostrarVitoria() {
 
         camadaResultado.setVisible(true);
+        camadaResultado.setManaged(true);
+
+        camadaResultado.getStyleClass().remove("vitoria-padrao");
+        camadaResultado.getStyleClass().remove("derrota");
+
+        esconder(
+            painelVitoriaPadrao,
+            painelVitoriaFinal,
+            painelDerrota
+        );
+
+        if (digitacao != null) {
+            digitacao.stop();
+        }
+
+        boolean faseFinal = SelecaoNivelController.faseSelecionada >= CatalogoNiveis.quantidade();
+
+        camadaResultado.setVisible(true);
+        camadaResultado.setManaged(true);
+
+        camadaResultado.getStyleClass().remove("vitoria-padrao");
+
+        esconder(painelVitoriaPadrao, painelVitoriaFinal);
+
+        if (faseFinal) {
+
+            AudioManager.tocarEfeito("/audio/vitoria-final.mp3");
+
+            if (!camadaResultado.getStyleClass().contains("vitoria")) {
+                camadaResultado.getStyleClass().add("vitoria");
+            }
+
+            mostrar(painelVitoriaFinal);
+            mostrar(btnJogarNovamenteFinal, btnVoltarFinal);
+
+            esconder(btnProximaFase);
+
+            iniciarConfetes();
+
+        } else {
+
+            AudioManager.tocarEfeito("/audio/vitoria.mp3");
+
+            camadaResultado.getStyleClass().remove("vitoria");
+            camadaResultado.getStyleClass().add("vitoria-padrao");
+
+            pararConfetes();
+
+            mostrar(painelVitoriaPadrao);
+
+            // Limpa os textos anteriores.
+            lblTerminalTexto.setText("");
+            lblMensagemResultado.setText("");
+
+            // Esconde os botões até a digitação terminar.
+            esconder(
+                btnJogarNovamente,
+                btnProximaFase,
+                btnVoltarResultado
+            );
+
+            iniciarDigitacaoVitoriaPadrao();
+        }
+    }
+
+    private void mostrarDerrota() {
+
+        pararConfetes();
+
+        if (digitacao != null) {
+            digitacao.stop();
+        }
+
+        // Remove estilos das telas de vitória.
+        camadaResultado.getStyleClass().remove("vitoria");
+        camadaResultado.getStyleClass().remove("vitoria-padrao");
+
+        // Ativa exclusivamente o estilo da derrota.
+        if (!camadaResultado.getStyleClass().contains("derrota")) {
+            camadaResultado.getStyleClass().add("derrota");
+        }
+
+        // Esconde os painéis de vitória.
+        esconder(
+            painelVitoriaPadrao,
+            painelVitoriaFinal,
+            painelDerrota
+        );
+
+        // Preenche os elementos exclusivos da derrota.
+        lblRostoDerrota.setText(":(");
+        lblTituloDerrota.setText("DERROTA!");
+        lblMensagemDerrota.setText(
+            "MAS VOCÊ AINDA PODE TENTAR NOVAMENTE!"
+        );
+
+        mostrar(
+            painelDerrota,
+            btnJogarNovamenteDerrota,
+            btnVoltarDerrota
+        );
+
+        camadaResultado.setManaged(true);
+        camadaResultado.setVisible(true);
+
+        AudioManager.tocarEfeito("/audio/faah.mp3");
+    }
+
+    /* ===== ANIMAÇÃO DOS CONFETES ===== */
+
+    private void iniciarConfetes() {
+
+        pararConfetes();
+
+        Random random = new Random();
+
+        double largura = camadaConfetes.getWidth();
+        double altura = camadaConfetes.getHeight();
+
+        if (largura <= 0 || altura <= 0) {
+            largura = camadaResultado.getWidth();
+            altura = camadaResultado.getHeight();
+        }
+
+        final double larguraTela = largura;
+        final double alturaTela = altura;
+
+        // Cria uma quantidade inicial para a tela já começar cheia.
+        for (int i = 0; i < 45; i++) {
+            criarConfete(larguraTela, alturaTela, random, true);
+        }
+
+        // Continua criando novos confetes enquanto a vitória estiver aberta.
+        geradorConfetes = new Timeline(
+            new KeyFrame(Duration.millis(120), evento -> {
+                criarConfete(larguraTela, alturaTela, random, false);
+            })
+        );
+
+        geradorConfetes.setCycleCount(Animation.INDEFINITE);
+        geradorConfetes.play();
+    }
+
+    private void criarConfete(
+            double largura,
+            double altura,
+            Random random,
+            boolean distribuido) {
+
+        Color[] cores = {
+            Color.GOLD,
+            Color.YELLOW,
+            Color.ORANGE,
+            Color.RED,
+            Color.LIME,
+            Color.DEEPSKYBLUE,
+            Color.HOTPINK
+        };
+
+        double larguraConfete = 6 + random.nextInt(7);
+        double alturaConfete = 10 + random.nextInt(10);
+
+        Polygon confete = new Polygon(
+            larguraConfete / 2, 0,
+            larguraConfete, alturaConfete / 2,
+            larguraConfete / 2, alturaConfete,
+            0, alturaConfete / 2
+        );
+
+        confete.setFill(cores[random.nextInt(cores.length)]);
+        confete.setRotate(random.nextInt(360));
+
+        confete.setLayoutX(random.nextDouble() * largura);
+
+        // Os primeiros confetes ficam distribuídos pela tela.
+        // Os próximos sempre começam acima dela.
+        if (distribuido) {
+            confete.setLayoutY(random.nextDouble() * altura - altura);
+        } else {
+            confete.setLayoutY(-alturaConfete);
+        }
+
+        camadaConfetes.getChildren().add(confete);
+
+        TranslateTransition queda = new TranslateTransition(
+            Duration.seconds(5 + random.nextDouble() * 3),
+            confete
+        );
+
+        queda.setFromY(0);
+        queda.setToY(altura + alturaConfete + 100 - confete.getLayoutY());
+
+        queda.setFromX(0);
+        queda.setToX(-40 + random.nextDouble() * 80);
+
+        queda.setCycleCount(1);
+
+        queda.setOnFinished(evento -> {
+            camadaConfetes.getChildren().remove(confete);
+            animacoesConfetes.remove(queda);
+        });
+
+        animacoesConfetes.add(queda);
+        queda.play();
+    }
+
+    private void pararConfetes() {
+
+        // Interrompe a criação de novos confetes.
+        if (geradorConfetes != null) {
+            geradorConfetes.stop();
+            geradorConfetes = null;
+        }
+
+        // Interrompe todos os confetes que ainda estão caindo.
+        for (Animation animacao : animacoesConfetes) {
+            animacao.stop();
+        }
+
+        animacoesConfetes.clear();
+
+        if (camadaConfetes != null) {
+            camadaConfetes.getChildren().clear();
+        }
     }
 
     @FXML
     private void jogarNovamente() {
+
+        pararConfetes();
+
         if (digitacao != null)
             digitacao.stop();
+
         repetirSoContagem = true; // pula a intro, só 3-2-1
         encerrarTela();
+
         gerenciadorDeTelas.mudarTela("Jogo.fxml");
     }
 
     @FXML
     private void proximaFase() {
+
         if (digitacao != null)
             digitacao.stop();
+
         encerrarTela();
+
         SelecaoNivelController.faseSelecionada++;
         gerenciadorDeTelas.mudarTela("Jogo.fxml");
     }
 
     @FXML
     private void voltarDoResultado() {
+
+        pararConfetes();
+
         if (digitacao != null)
             digitacao.stop();
+
         encerrarTela();
+
         gerenciadorDeTelas.voltarMenu();
     }
 

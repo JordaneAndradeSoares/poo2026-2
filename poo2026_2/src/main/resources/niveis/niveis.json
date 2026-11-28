@@ -374,21 +374,21 @@
           "nome": "Calouro Blindado",
           "intervalo": 0.25,
           "zumbis": {
-            "CALOURO_BLINDADO": 14
+            "CALOURO_BLINDADO": 11
           }
         },
         {
           "nome": "Trote",
           "intervalo": 0.5,
           "zumbis": {
-            "TROTE": 12
+            "TROTE": 10
           }
         },
         {
           "nome": "Viciado",
           "intervalo": 4.0,
           "zumbis": {
-            "VICIADO": 14
+            "VICIADO": 10
           }
         },
         {

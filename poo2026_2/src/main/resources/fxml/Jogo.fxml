@@ -88,36 +88,146 @@
                         content="M6 19h4V5H6v14zm8-14v14h4V5h-4z" />
             </graphic>
             </Button>
-        <StackPane fx:id="camadaResultado" layoutX="0" layoutY="0"
-                  prefWidth="1920" prefHeight="1080" visible="false"
-                  alignment="CENTER" styleClass="camada-resultado">
-            <VBox alignment="CENTER_LEFT" spacing="20" prefWidth="900" maxWidth="900"
-                  styleClass="painel-resultado">
 
-                  <Label fx:id="lblRostoResultado" styleClass="rosto-resultado" maxWidth="Infinity"/>
-                  <Label fx:id="lblTituloResultado" styleClass="titulo-resultado" maxWidth="Infinity"/>
-                  <Label fx:id="lblMensagemResultado" styleClass="recompensa-resultado" maxWidth="Infinity"/>
+            <StackPane  fx:id="camadaResultado"
+                        layoutX="0" layoutY="0"
+                        prefWidth="1920" prefHeight="1080"
+                        visible="false"
+                        alignment="CENTER"
+                        styleClass="camada-resultado">
 
-                  <!-- texto digitado (só na vitória) -->
-                  <Label fx:id="mensagemLabel" styleClass="mensagem-dialogo"
-                        maxWidth="900" wrapText="true" alignment="CENTER_LEFT"/>
+                  <!-- VITÓRIA PADRÃO -->
+                  <VBox fx:id="painelVitoriaPadrao"
+                        styleClass="painel-vitoria-padrao"
+                        alignment="CENTER_LEFT"
+                        spacing="25"
+                        visible="false"
+                        managed="false"
+                        StackPane.alignment="CENTER_LEFT"
+                        translateX="140">
 
-                  <HBox spacing="30">
-                        <ImageView fx:id="QRCode" fitWidth="150" fitHeight="150"
-                              preserveRatio="true" pickOnBounds="true">
-                        <image><Image url="@../images/game/itens/QRCode.png"/></image>
-                        </ImageView>
+                        <VBox spacing="12">
+                              <Label fx:id="lblTerminalTexto"
+                                    styleClass="texto-terminal"
+                                    text=""/>
 
-                        <VBox spacing="20">
-                        <Button fx:id="btnJogarNovamente" text="Jogar novamente"
-                                    onAction="#jogarNovamente" styleClass="jogar-novamente"/>
-                        <Button fx:id="btnProximaFase" text="Próxima fase"
-                                    onAction="#proximaFase" styleClass="proxima-fase"/>
-                        <Button fx:id="btnVoltarResultado" text="Voltar"
-                                    onAction="#voltarDoResultado" styleClass="voltar-resultado"/>
+                              <Label fx:id="lblMensagemResultado"
+                                    styleClass="texto-terminal"
+                                    text=""/>
                         </VBox>
-                  </HBox>
-            </VBox>
+
+                        <VBox spacing="18" alignment="CENTER_LEFT">
+
+                              <Button fx:id="btnJogarNovamente"
+                                    text="Jogar novamente"
+                                    styleClass="botao-terminal"
+                                    visible="false"
+                                    managed="false"
+                                    onAction="#jogarNovamente"/>
+
+                              <Button fx:id="btnProximaFase"
+                                    text="Próxima fase"
+                                    styleClass="botao-terminal"
+                                    visible="false"
+                                    managed="false"
+                                    onAction="#proximaFase"/>
+
+                              <Button fx:id="btnVoltarResultado"
+                                    text="Voltar"
+                                    styleClass="botao-terminal"
+                                    visible="false"
+                                    managed="false"
+                                    onAction="#voltarDoResultado"/>
+
+                        </VBox>
+
+                  </VBox>
+
+                  <!-- VITÓRIA FINAL -->
+                  <VBox fx:id="painelVitoriaFinal"
+                        styleClass="painel-vitoria"
+                        alignment="CENTER"
+                        spacing="35"
+                        visible="false"
+                        managed="false">
+                        
+                        <Label text="JOGO TERMINADO!"
+                              styleClass="mensagem-vitoria"/>
+
+                        <Button fx:id="btnJogarNovamenteFinal"
+                              text="JOGAR NOVAMENTE"
+                              styleClass="jogar-novamente-final"
+                              onAction="#jogarNovamente"/>
+
+                        <Button fx:id="btnVoltarFinal"
+                              text="VOLTAR AO MENU"
+                              styleClass="voltar-final"
+                              onAction="#voltarDoResultado"/>
+
+                  </VBox>
+
+                  <!-- TELA DE DERROTA -->
+                  <VBox fx:id="painelDerrota"
+                        styleClass="painel-derrota"
+                        alignment="CENTER_LEFT"
+                        spacing="28"
+                        visible="false"
+                        managed="false"
+                        StackPane.alignment="CENTER_LEFT"
+                        translateX="150">
+
+                        <!-- Carinha triste -->
+                        <Label fx:id="lblRostoDerrota"
+                              text=":("
+                              styleClass="rosto-derrota"/>
+
+                        <!-- Título -->
+                        <Label fx:id="lblTituloDerrota"
+                              text="DERROTA!"
+                              styleClass="titulo-derrota"/>
+
+                        <!-- Mensagem -->
+                        <Label fx:id="lblMensagemDerrota"
+                              text="MAS VOCÊ AINDA PODE TENTAR NOVAMENTE!"
+                              styleClass="mensagem-derrota"
+                              wrapText="true"/>
+
+                        <!-- QR Code e botões lado a lado -->
+                        <HBox alignment="CENTER_LEFT" spacing="55">
+
+                              <ImageView fx:id="imagemQRCodeDerrota"
+                                          fitWidth="300"
+                                          fitHeight="300"
+                                          preserveRatio="true">
+                                    <image>
+                                          <Image url="@../images/game/itens/QRCode.png"/>
+                                    </image>
+                              </ImageView>
+
+                              <VBox alignment="CENTER_LEFT" spacing="28">
+
+                                    <Button fx:id="btnJogarNovamenteDerrota"
+                                          text="Jogar novamente"
+                                          styleClass="botao-derrota botao-derrota-largo"
+                                          onAction="#jogarNovamente"/>
+
+                                    <Button fx:id="btnVoltarDerrota"
+                                          text="Voltar"
+                                          styleClass="botao-derrota botao-derrota-curto"
+                                          onAction="#voltarDoResultado"/>
+
+                              </VBox>
+
+                        </HBox>
+
+                  </VBox>
+                  
+                  <!-- CONFETES -->
+                  <Pane fx:id="camadaConfetes"
+                        prefWidth="1920"
+                        prefHeight="1080"
+                        mouseTransparent="true"/>
+
             </StackPane>
     </Pane>
 </StackPane>
